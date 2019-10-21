@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 
 public class BacktraceTest {
     @Test public void testSomeLibraryMethod() {
-        Backtrace classUnderTest = new Backtrace();
+        BacktraceClient classUnderTest = new BacktraceClient();
         assertTrue("someLibraryMethod should return 'true'", classUnderTest.someLibraryMethod());
     }
 }

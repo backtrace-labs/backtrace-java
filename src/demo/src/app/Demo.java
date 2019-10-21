@@ -1,9 +1,9 @@
 package app;
 
-import backtrace.io.Backtrace;
+import backtrace.io.BacktraceClient;
 
 public class Demo {
     public static void main(String[] args) {
-        new Backtrace().test();
+        new BacktraceClient().test();
     }
 }
