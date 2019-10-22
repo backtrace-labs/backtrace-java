@@ -9,10 +9,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class BacktraceClient {
     private Backtrace backtrace;
-    private ConcurrentLinkedQueue queue;
 
     public BacktraceClient(){
-        backtrace = new Backtrace(queue);
+        backtrace = new Backtrace();
     }
     public boolean someLibraryMethod() {
         return true;
@@ -23,7 +22,7 @@ public class BacktraceClient {
     }
 
     public void send(String message) {
-        throw new NotImplementedException();
+        backtrace.addElement(1);
     }
 
 

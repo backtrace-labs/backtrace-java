@@ -1,6 +1,5 @@
 package backtrace.io;
 
-import com.google.gson.annotations.SerializedName;
 
 import java.util.UUID;
 
@@ -10,23 +9,21 @@ import java.util.UUID;
  */
 public class BacktraceStackFrame {
 
-    private static transient String LOG_TAG = BacktraceStackFrame.class.getSimpleName();
-
     /**
      * Function where exception occurs
      */
-    @SerializedName("funcName")
+//    @SerializedName("funcName")
     public String functionName;
     /**
      * Line number in source code where exception occurs
      */
-    @SerializedName("line")
+//    @SerializedName("line")
     public Integer line = null;
 
     /**
      * Source code file name where exception occurs
      */
-    @SerializedName("sourceCode")
+//    @SerializedName("sourceCode")
     public String sourceCode;
 
     /**

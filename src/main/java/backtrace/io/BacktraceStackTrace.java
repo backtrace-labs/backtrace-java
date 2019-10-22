@@ -8,8 +8,6 @@ import java.util.ArrayList;
  */
 public class BacktraceStackTrace {
 
-    private static transient String LOG_TAG = BacktraceStackTrace.class.getSimpleName();
-
     /**
      * Current exception
      */
@@ -42,7 +40,6 @@ public class BacktraceStackTrace {
         StackTraceElement[] stackTraceElements = this.exception != null ?
                 this.exception.getStackTrace() : Thread.currentThread().getStackTrace();
         if (stackTraceElements == null || stackTraceElements.length == 0) {
-            BacktraceLogger.w(LOG_TAG, "StackTraceElements are null or empty");
             return;
         }
         setStacktraceInformation(stackTraceElements);
