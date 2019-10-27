@@ -9,14 +9,11 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class BacktraceClient implements Closeable {
+public class BacktraceClient {
     private Backtrace backtrace;
 
     public BacktraceClient(){
         backtrace = new Backtrace();
-    }
-    public boolean someLibraryMethod() {
-        return true;
     }
 
     public void send(String message) {
@@ -27,8 +24,4 @@ public class BacktraceClient implements Closeable {
         backtrace.addElement(report);
     }
 
-    @Override
-    public void close() throws IOException {
-        System.out.println("Closing..");
-    }
 }

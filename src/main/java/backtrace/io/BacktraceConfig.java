@@ -1,9 +1,8 @@
 package backtrace.io;
 
-
-public class BacktraceCredentials {
-    private String endpointUrl;
-    private String submissionToken;
+public class BacktraceConfig {
+    private BacktraceCredentials credentials;
+    private BacktraceDatabaseConfig databaseConfig;
 
     /**
      * Initialize Backtrace credentials
@@ -11,9 +10,8 @@ public class BacktraceCredentials {
      * @param endpointUrl endpoint url address
      * @param submissionToken server access token
      */
-    public BacktraceCredentials(String endpointUrl, String submissionToken) {
-        this.endpointUrl = endpointUrl;
-        this.submissionToken = submissionToken;
+    public BacktraceConfig(String endpointUrl, String submissionToken) {
+        credentials = new BacktraceCredentials(endpointUrl, submissionToken);
     }
 
     /**
@@ -22,7 +20,7 @@ public class BacktraceCredentials {
      * @return endpoint url
      */
     public String getEndpointUrl() {
-        return endpointUrl;
+        return credentials.getEndpointUrl();
     }
 
     /**
@@ -31,8 +29,7 @@ public class BacktraceCredentials {
      * @return access token
      */
     public String getSubmissionToken() {
-        return submissionToken;
+        return credentials.getSubmissionToken();
     }
-
 
 }
