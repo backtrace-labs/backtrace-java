@@ -5,9 +5,11 @@ package backtrace.io;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class BacktraceClient {
+public class BacktraceClient implements Closeable {
     private Backtrace backtrace;
 
     public BacktraceClient(){
@@ -17,17 +19,16 @@ public class BacktraceClient {
         return true;
     }
 
-    public void test(){
-        System.out.println("Backtrace.io");
-    }
-
     public void send(String message) {
-        backtrace.addElement(1);
+        backtrace.addElement(message);
     }
 
-
-    public void send(Throwable throwable) {
-        throw new NotImplementedException();
+    public void send(BacktraceReport report ){
+        backtrace.addElement(report);
     }
 
+    @Override
+    public void close() throws IOException {
+        System.out.println("Closing..");
+    }
 }
