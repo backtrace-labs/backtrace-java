@@ -45,7 +45,7 @@ public class BacktraceData {
      * Name of the client that is sending this error report.
      */
     @SerializedName("agent")
-    public final String agent = "backtrace-android";
+    public final String agent = "backtrace-java";
 
     /**
      * Version of the android library
@@ -63,7 +63,7 @@ public class BacktraceData {
      * Application thread details
      */
     @SerializedName("threads")
-    Map<String, ThreadInformation> threadInformationMap;
+    private Map<String, ThreadInformation> threadInformationMap;
 
     /**
      * Get a main thread name
@@ -92,10 +92,6 @@ public class BacktraceData {
      */
     public transient BacktraceReport report;
 
-    /**
-     * Current application context
-     */
-    public transient Context context;
 
     /**
      * Create instance of report data
@@ -108,7 +104,6 @@ public class BacktraceData {
         if (report == null) {
             return;
         }
-        this.context = context;
         this.report = report;
 
         setReportInformation();
