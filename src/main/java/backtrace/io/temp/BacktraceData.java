@@ -2,7 +2,7 @@ package backtrace.io.temp;
 
 
 
-import backtrace.io.BacktraceReport;
+import backtrace.io.temp.BacktraceReport;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -96,7 +96,6 @@ public class BacktraceData {
     /**
      * Create instance of report data
      *
-     * @param context          current application context
      * @param report           current report
      * @param clientAttributes attributes which should be added to BacktraceData object
      */
@@ -116,9 +115,10 @@ public class BacktraceData {
      *
      * @return paths to attachments
      */
-    public List<String> getAttachments() {
-        return FileHelper.filterOutFiles(this.context, report.attachmentPaths);
-    }
+    // TODO:
+//    public List<String> getAttachments() {
+//        return FileHelper.filterOutFiles(report.attachmentPaths);
+//    }
 
     /***
      * Set annotations object
@@ -132,7 +132,7 @@ public class BacktraceData {
                 this.attributes.containsKey("error.message")) {
             exceptionMessage = this.attributes.get("error.message");
         }
-        this.annotations = Annotations.getAnnotations(exceptionMessage, complexAttributes);
+//        this.annotations = Annotations.getAnnotations(exceptionMessage, complexAttributes); // TODO:
     }
 
     /**
@@ -141,36 +141,39 @@ public class BacktraceData {
      * @param clientAttributes
      */
     private void setAttributes(Map<String, Object> clientAttributes) {
-
-        BacktraceAttributes backtraceAttributes = new BacktraceAttributes(this.context, this.report,
-                clientAttributes);
-        this.attributes = backtraceAttributes.attributes;
-
-        DeviceAttributesHelper deviceAttributesHelper = new DeviceAttributesHelper(this.context);
-        this.attributes.putAll(deviceAttributesHelper.getDeviceAttributes());
-
-        setAnnotations(backtraceAttributes.getComplexAttributes());
+        // TODO:
+//
+//        BacktraceAttributes backtraceAttributes = new BacktraceAttributes(this.report,
+//                clientAttributes);
+//        this.attributes = backtraceAttributes.attributes;
+//
+//        DeviceAttributesHelper deviceAttributesHelper = new DeviceAttributesHelper(this.context);
+//        this.attributes.putAll(deviceAttributesHelper.getDeviceAttributes());
+//
+//        setAnnotations(backtraceAttributes.getComplexAttributes());
     }
 
     /**
      * Set report information such as report identifier (UUID), timestamp, classifier
      */
     private void setReportInformation() {
-        uuid = report.uuid.toString();
-        timestamp = report.timestamp;
-        classifiers = report.exceptionTypeReport ? new String[]{report.classifier} : null;
-        langVersion = System.getProperty("java.version"); //TODO: Fix problem with read Java version
-        agentVersion = BuildConfig.VERSION_NAME;
+        // TODO:
+//        uuid = report.uuid.toString();
+//        timestamp = report.timestamp;
+//        classifiers = report.exceptionTypeReport ? new String[]{report.classifier} : null;
+//        langVersion = System.getProperty("java.version"); //TODO: Fix problem with read Java version
+//        agentVersion = BuildConfig.VERSION_NAME;
     }
 
     /**
      * Set information about all threads
      */
     private void setThreadsInformation() {
-        ThreadData threadData = new ThreadData(report.diagnosticStack);
-        this.mainThread = threadData.getMainThread();
-        this.threadInformationMap = threadData.threadInformation;
-        SourceCodeData sourceCodeData = new SourceCodeData(report.diagnosticStack);
-        this.sourceCode = sourceCodeData.data.isEmpty() ? null : sourceCodeData.data;
+        // TODO:
+//        ThreadData threadData = new ThreadData(report.diagnosticStack);
+//        this.mainThread = threadData.getMainThread();
+//        this.threadInformationMap = threadData.threadInformation;
+//        SourceCodeData sourceCodeData = new SourceCodeData(report.diagnosticStack);
+//        this.sourceCode = sourceCodeData.data.isEmpty() ? null : sourceCodeData.data;
     }
 }

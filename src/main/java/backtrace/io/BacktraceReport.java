@@ -1,12 +1,18 @@
 package backtrace.io;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-public class BacktraceReport {
+public class BacktraceReport implements Serializable {
 
-    private CountDownLatch status;
+
+    private long timestamp;
     public String message;
+
+    private transient CountDownLatch status;
     public BacktraceReport(){
         this(null);
     }
@@ -16,9 +22,19 @@ public class BacktraceReport {
         this.message = message;
     }
 
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
     protected void setAsSent(){
         // TODO: add check for status
         status.countDown();
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        status = new CountDownLatch(1);
     }
 
     public void waitUntilSent(){

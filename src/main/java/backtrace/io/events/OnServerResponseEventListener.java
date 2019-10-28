@@ -1,6 +1,7 @@
 package backtrace.io.events;
 
-import backtraceio.library.models.BacktraceResult;
+
+import backtrace.io.temp.BacktraceResult;
 
 /**
  * Interface definition for a callback to be invoked when server return response from Backtrace API

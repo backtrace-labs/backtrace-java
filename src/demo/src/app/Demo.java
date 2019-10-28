@@ -19,6 +19,4 @@ public class Demo {
         }
         System.out.println("[Main Thread] end.");
     }
-
-
 }
