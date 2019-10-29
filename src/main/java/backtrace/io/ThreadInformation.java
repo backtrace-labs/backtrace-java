@@ -1,5 +1,6 @@
-package backtrace.io.temp;
+package backtrace.io;
 
+import backtrace.io.temp.BacktraceStackFrame;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class ThreadInformation {
      * @param stack         exception stack information
      * @param currentThread is current thread flag
      */
-    public ThreadInformation(Thread thread, ArrayList<BacktraceStackFrame> stack, Boolean currentThread) {
+    ThreadInformation(Thread thread, ArrayList<BacktraceStackFrame> stack, Boolean currentThread) {
         this(thread.getName().toLowerCase(), currentThread, stack);
     }
 }
