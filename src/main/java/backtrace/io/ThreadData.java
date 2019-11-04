@@ -1,6 +1,7 @@
 package backtrace.io;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,19 +10,19 @@ import java.util.Map;
 /**
  * Generate information about application threads
  */
-public class ThreadData {
+public class ThreadData implements Serializable {
 
     /**
      * All collected application threads information
      */
-    public HashMap<String, ThreadInformation> threadInformation = new HashMap<>();
+    HashMap<String, ThreadInformation> threadInformation = new HashMap<>();
 
     /**
      * Get main thread id
      *
      * @return main thread id
      */
-    public String getMainThread() {
+    String getMainThread() {
         return mainThread;
     }
 
@@ -36,7 +37,7 @@ public class ThreadData {
      *
      * @param exceptionStack current BacktraceReport exception stack
      */
-    public ThreadData(ArrayList<BacktraceStackFrame> exceptionStack) {
+    ThreadData(ArrayList<StackFrame> exceptionStack) {
         generateCurrentThreadInformation(exceptionStack);
         processThreads();
     }
@@ -46,7 +47,7 @@ public class ThreadData {
      *
      * @param exceptionStack current BacktraceReport exception stack
      */
-    private void generateCurrentThreadInformation(ArrayList<BacktraceStackFrame> exceptionStack) {
+    private void generateCurrentThreadInformation(ArrayList<StackFrame> exceptionStack) {
         Thread currThread = Thread.currentThread();
         mainThread = currThread.getName().toLowerCase();
         this.threadInformation.put(mainThread,
@@ -72,14 +73,13 @@ public class ThreadData {
             }
 
             StackTraceElement[] stack = entry.getValue();
-            ArrayList<BacktraceStackFrame> stackFrame = new ArrayList<>();
+            ArrayList<StackFrame> stackFrame = new ArrayList<>();
             if (stack != null && stack.length != 0) {
                 for (StackTraceElement stackTraceElement : stack) {
-                    stackFrame.add(new BacktraceStackFrame(stackTraceElement));
+                    stackFrame.add(new StackFrame(stackTraceElement));
                 }
             }
-            this.threadInformation.put(threadName, new ThreadInformation(thread, stackFrame,
-                    false));
+            this.threadInformation.put(threadName, new ThreadInformation(thread, stackFrame, false));
         }
     }
 }

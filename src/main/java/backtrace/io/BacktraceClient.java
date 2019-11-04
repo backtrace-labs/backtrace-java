@@ -8,7 +8,7 @@ public class BacktraceClient {
         backtrace = new Backtrace(config);
     }
 
-    public void send(BacktraceReport report ){
+    public void send(BacktraceReport report){
         backtrace.send(report);
     }
 }

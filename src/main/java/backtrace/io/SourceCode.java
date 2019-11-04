@@ -3,11 +3,13 @@ package backtrace.io;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 
 /**
  * Single instance of source data frame
  */
-public class SourceCode {
+public class SourceCode implements Serializable {
     /**
      * Line number in source code where exception occurs
      */
@@ -21,7 +23,7 @@ public class SourceCode {
     public String sourceCodeFileName;
 
 
-    public SourceCode(BacktraceStackFrame stackFrame) {
+    public SourceCode(StackFrame stackFrame) {
         this.sourceCodeFileName = stackFrame.sourceCodeFileName;
         this.startLine = stackFrame.line;
     }

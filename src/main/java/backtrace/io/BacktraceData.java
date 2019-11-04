@@ -19,71 +19,83 @@ public class BacktraceData implements Serializable {
      * server will reject request if uuid is already found
      */
     @SerializedName("uuid")
-    public String uuid;
+    @SuppressWarnings({"unused", "FieldCanBeLocal"})
+    private String uuid;
 
     /**
      * UTC timestamp in seconds
      */
     @SerializedName("timestamp")
-    public long timestamp;
+    @SuppressWarnings({"unused", "FieldCanBeLocal"})
+    private long timestamp;
 
     /**
      * Name of programming language/environment this error comes from.
      */
     @SerializedName("lang")
+    @SuppressWarnings({"unused", "FieldCanBeLocal"})
     public final String lang = "java";
 
     /**
      * Version of programming language/environment this error comes from.
      */
     @SerializedName("langVersion")
-    public String langVersion;
+    @SuppressWarnings({"unused", "FieldCanBeLocal"})
+    private String langVersion;
 
     /**
      * Name of the client that is sending this error report.
      */
     @SerializedName("agent")
+    @SuppressWarnings({"unused", "FieldCanBeLocal"})
     public final String agent = "backtrace-java";
 
     /**
      * Version of the android library
      */
     @SerializedName("agentVersion")
-    public String agentVersion;
+    @SuppressWarnings({"unused", "FieldCanBeLocal"})
+    private String agentVersion;
 
     /**
      * Get built-in attributes
      */
     @SerializedName("attributes")
-    public Map<String, Object> attributes;
+    @SuppressWarnings({"unused", "FieldCanBeLocal"})
+    private Map<String, Object> attributes;
 
     /**
      * Application thread details
      */
     @SerializedName("threads")
+    @SuppressWarnings({"unused", "FieldCanBeLocal"})
     private Map<String, ThreadInformation> threadInformationMap;
 
     /**
      * Get a main thread name
      */
     @SerializedName("mainThread")
-    public String mainThread;
+    @SuppressWarnings({"unused", "FieldCanBeLocal"})
+    private String mainThread;
 
     /**
      * Get a report classifiers. If user send custom message, then variable should be null
      */
     @SerializedName("classifiers")
-    public String[] classifiers;
+    @SuppressWarnings({"unused", "FieldCanBeLocal"})
+    private String[] classifiers;
 
     /**
      * Current host environment variables
      */
     @SerializedName("annotations")
+    @SuppressWarnings({"unused", "FieldCanBeLocal"})
     public Map<String, Object> annotations;
 
 
     @SerializedName("sourceCode")
-    public Map<String, SourceCode> sourceCode;
+    @SuppressWarnings({"unused", "FieldCanBeLocal"})
+    private Map<String, SourceCode> sourceCode;
 
     /**
      * Current BacktraceReport
@@ -118,56 +130,35 @@ public class BacktraceData implements Serializable {
 //        return FileHelper.filterOutFiles(report.attachmentPaths);
 //    }
 
-    /***
-     * Set annotations object
-     * @param complexAttributes
-     */
-    private void setAnnotations(Map<String, Object> complexAttributes) {
-
-        Object exceptionMessage = null;
-
-        if (this.attributes != null &&
-                this.attributes.containsKey("error.message")) {
-            exceptionMessage = this.attributes.get("error.message");
-        }
-//        this.annotations = Annotations.getAnnotations(exceptionMessage, complexAttributes); // TODO:
-    }
-
     /**
      * Set attributes and add complex attributes to annotations
      *
      * @param clientAttributes
      */
     private void setAttributes(Map<String, Object> clientAttributes) {
-        // TODO:
-//
-//        BacktraceAttributes backtraceAttributes = new BacktraceAttributes(this.report,
-//                clientAttributes);
-//        this.attributes = backtraceAttributes.attributes;
-//
-//        DeviceAttributesHelper deviceAttributesHelper = new DeviceAttributesHelper(this.context);
-//        this.attributes.putAll(deviceAttributesHelper.getDeviceAttributes());
-//
-//        setAnnotations(backtraceAttributes.getComplexAttributes());
+        Attributes attributes = new Attributes(report, clientAttributes);
+        this.attributes = attributes.getAttributes();
+        this.annotations = attributes.getAnnotations();
     }
+
 
     /**
      * Set report information such as report identifier (UUID), timestamp, classifier
      */
     private void setReportInformation() {
-        // TODO:
-        uuid = report.uuid.toString();
-        timestamp = report.timestamp;
-        classifiers = report.exceptionTypeReport ? new String[]{report.classifier} : null;
-        langVersion = System.getProperty("java.version"); //TODO: Fix problem with read Java version
-        agentVersion = "0.1"; // TODO: FIX
+        // TODO: log info
+        this.uuid = report.getUuid().toString();
+        this.timestamp = report.timestamp;
+        this.classifiers = report.exceptionTypeReport ? new String[]{report.classifier} : null;
+        this.langVersion = System.getProperty("java.version"); //TODO: Fix problem with read Java version
+        this.agentVersion = "0.1"; // TODO: FIX
     }
 
     /**
      * Set information about all threads
      */
     private void setThreadsInformation() {
-        // TODO:
+        // TODO: log info
         ThreadData threadData = new ThreadData(report.diagnosticStack);
         this.mainThread = threadData.getMainThread();
         this.threadInformationMap = threadData.threadInformation;

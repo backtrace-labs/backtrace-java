@@ -1,13 +1,15 @@
 package backtrace.io;
 
 
+import javax.print.attribute.standard.MediaSize;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
 /**
  * Backtrace stack trace
  */
-public class BacktraceStackTrace {
+public class StackTrace implements Serializable {
 
     /**
      * Current exception
@@ -17,19 +19,21 @@ public class BacktraceStackTrace {
     /**
      * Collection of stacktrace elements
      */
-    private ArrayList<BacktraceStackFrame> stackFrames = new ArrayList<>();
+    private ArrayList<StackFrame> stackFrames = new ArrayList<>();
+
+    private transient final static String NAME = "backtrace";
 
     /**
      * Create new instance of BacktraceStackTrace object
      *
      * @param exception current exception
      */
-    public BacktraceStackTrace(Exception exception) {
+    public StackTrace(Exception exception) {
         this.exception = exception;
         initialize();
     }
 
-    public ArrayList<BacktraceStackFrame> getStackFrames() {
+    public ArrayList<StackFrame> getStackFrames() {
         return stackFrames;
     }
 
@@ -52,12 +56,11 @@ public class BacktraceStackTrace {
         }
 
         for (StackTraceElement frame : frames) {
-            if (frame != null && frame.getFileName() != null &&
-                    frame.getFileName().startsWith("Backtrace")) {
+            if (frame != null && !frame.getClassName().isEmpty() &&
+                    frame.getClassName().toLowerCase().startsWith(NAME)) {
                 continue;
             }
-            BacktraceStackFrame backtraceStackFrame = new BacktraceStackFrame(frame);
-            this.stackFrames.add(backtraceStackFrame);
+            this.stackFrames.add(new StackFrame(frame));
         }
     }
 }

@@ -3,13 +3,14 @@ package backtrace.io;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 
 /**
  * Backtrace stack frame
  */
-public class BacktraceStackFrame {
+public class StackFrame implements Serializable {
 
     /**
      * Function where exception occurs
@@ -37,7 +38,7 @@ public class BacktraceStackFrame {
      * Create new instance of BacktraceStackFrame
      */
     @SuppressWarnings({"UnusedDeclaration"})
-    public BacktraceStackFrame() {
+    public StackFrame() {
     }
 
     /**
@@ -45,7 +46,7 @@ public class BacktraceStackFrame {
      *
      * @param frame single stacktrace element
      */
-    public BacktraceStackFrame(StackTraceElement frame) {
+    public StackFrame(StackTraceElement frame) {
         if (frame == null || frame.getMethodName() == null) {
             return;
         }

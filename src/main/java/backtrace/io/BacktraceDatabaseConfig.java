@@ -2,7 +2,7 @@ package backtrace.io;
 
 public class BacktraceDatabaseConfig {
     private String FILE_EXTENSION = "backtrace_report";
-    private String DATABASE_PATH = "./backtrace.io/";
+    private String DATABASE_PATH = ".backtrace.io/";
     private boolean SAVE_TO_DATABASE = true;
 
     /**

@@ -2,7 +2,7 @@ package backtrace.io;
 
 public class BacktraceConfig {
     private BacktraceCredentials credentials;
-    private BacktraceDatabaseConfig databaseConfig;
+    private BacktraceDatabaseConfig databaseConfig = new BacktraceDatabaseConfig();
     private final String FORMAT = "json";
     /**
      * Initialize Backtrace credentials

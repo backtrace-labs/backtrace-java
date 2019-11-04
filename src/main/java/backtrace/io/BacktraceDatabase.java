@@ -11,7 +11,7 @@ class BacktraceDatabase {
     private final BacktraceDatabaseConfig config;
 
 
-    BacktraceDatabase(BacktraceDatabaseConfig config) {
+    private BacktraceDatabase(BacktraceDatabaseConfig config) {
         this.config = config;
     }
 
@@ -31,7 +31,7 @@ class BacktraceDatabase {
     }
 
     private String getFileName(BacktraceReport report){
-        return report.getTimestamp() + "." + config.getFileExtension();
+        return report.getTimestamp() + "-" + report.getUuid() + "." + config.getFileExtension();
     }
 
 

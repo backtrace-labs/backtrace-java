@@ -4,24 +4,26 @@ package backtrace.io;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class BacktraceThread extends Thread {
+    private final static String THREAD_NAME = "backtrace-deamon";
 
     private ConcurrentLinkedQueue<BacktraceData> queue;
     private BacktraceDatabase database;
     private final BacktraceConfig config;
 
 
-    public BacktraceThread(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceData> queue){
+    private BacktraceThread(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceData> queue){
         super();
         this.database = BacktraceDatabase.init(config, queue);
         this.config = config;
         this.queue = queue;
     }
 
-    static BacktraceThread init(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceData> queue){
+    static void init(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceData> queue){
         BacktraceThread thread = new BacktraceThread(config, queue);
         thread.setDaemon(true);
+        thread.setName(THREAD_NAME);
         thread.start();
-        return thread;
+//        return thread;
     }
 
     @Override
@@ -32,10 +34,10 @@ public class BacktraceThread extends Thread {
                 continue;
             }
             try {
-                System.out.println("[BacktraceThread] " + backtraceData.report.message);
-                System.out.println("[BacktraceThread] Single pipeline..");
+//                System.out.println("[BacktraceThread] " + backtraceData.report.message);
+//                System.out.println("[BacktraceThread] Single pipeline..");
                 pipeline(backtraceData);
-                System.out.println("[BacktraceThread] Finished");
+//                System.out.println("[BacktraceThread] Finished");
             }
             catch (Exception e){
                 System.out.println("[BacktraceThread] Exception");
@@ -52,6 +54,6 @@ public class BacktraceThread extends Thread {
 
         backtraceData.report.setAsSent();
 
-        database.removeReport(backtraceData);
+//        database.removeReport(backtraceData); //TODO: remove only when success
     }
 }

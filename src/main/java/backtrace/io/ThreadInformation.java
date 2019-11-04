@@ -3,13 +3,14 @@ package backtrace.io;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
 /**
  * Get an information about single thread passed in constructor
  */
-public class ThreadInformation {
+public class ThreadInformation implements Serializable {
     /**
      * Thread name
      */
@@ -29,7 +30,7 @@ public class ThreadInformation {
      */
     @SerializedName("stack")
     @SuppressWarnings({"UnusedDeclaration"})
-    private ArrayList<BacktraceStackFrame> stack;
+    private ArrayList<StackFrame> stack;
 
     /**
      * Create new instance of ThreadInformation
@@ -38,9 +39,9 @@ public class ThreadInformation {
      * @param fault      denotes whether a thread is a faulting thread - in most cases main thread
      * @param stack      exception stack information
      */
-    private ThreadInformation(String threadName, Boolean fault, ArrayList<BacktraceStackFrame>
+    private ThreadInformation(String threadName, Boolean fault, ArrayList<StackFrame>
             stack) {
-        this.stack = stack == null ? new ArrayList<BacktraceStackFrame>() : stack;
+        this.stack = stack == null ? new ArrayList<StackFrame>() : stack;
         this.name = threadName;
         this.fault = fault;
     }
@@ -52,7 +53,7 @@ public class ThreadInformation {
      * @param stack         exception stack information
      * @param currentThread is current thread flag
      */
-    ThreadInformation(Thread thread, ArrayList<BacktraceStackFrame> stack, Boolean currentThread) {
+    ThreadInformation(Thread thread, ArrayList<StackFrame> stack, Boolean currentThread) {
         this(thread.getName().toLowerCase(), currentThread, stack);
     }
 }

@@ -13,27 +13,27 @@ public class BacktraceReport implements Serializable {
      * 16 bytes of randomness in human readable UUID format
      * server will reject request if uuid is already found
      */
-    public UUID uuid = UUID.randomUUID();
+    private UUID uuid = UUID.randomUUID();
 
     /**
      * UTC timestamp in seconds
      */
-    public long timestamp = System.currentTimeMillis() / 1000;
+    long timestamp = System.currentTimeMillis() / 1000;
 
     /**
      * Get information about report type. If value is true the BacktraceReport has an error
      */
-    public Boolean exceptionTypeReport = false;
+    Boolean exceptionTypeReport = false;
 
     /**
      * Get a report classification
      */
-    public String classifier = "";
+    String classifier = "";
 
     /**
      * Get an report attributes
      */
-    public Map<String, Object> attributes;
+    Map<String, Object> attributes;
 
     /**
      * Get a custom client message
@@ -48,12 +48,12 @@ public class BacktraceReport implements Serializable {
     /**
      * Get all paths to attachments
      */
-    public List<String> attachmentPaths;
+    List<String> attachmentPaths;
 
     /**
      * Current report exception stack
      */
-    public ArrayList<BacktraceStackFrame> diagnosticStack;
+    ArrayList<StackFrame> diagnosticStack;
 
     /**
      * Create new instance of Backtrace report to sending a report with custom client message
@@ -169,7 +169,7 @@ public class BacktraceReport implements Serializable {
         this.attachmentPaths = attachmentPaths == null ? new ArrayList<String>() : attachmentPaths;
         this.exception = exception;
         this.exceptionTypeReport = exception != null;
-        this.diagnosticStack = new BacktraceStackTrace(exception).getStackFrames();
+        this.diagnosticStack = new StackTrace(exception).getStackFrames();
         this.status = new CountDownLatch(1);
         if (this.exceptionTypeReport && exception != null) {
             this.classifier = exception.getClass().getCanonicalName();
@@ -199,6 +199,9 @@ public class BacktraceReport implements Serializable {
     }
 
 
+    public UUID getUuid() {
+        return uuid;
+    }
 
     ///////////////////////
 
