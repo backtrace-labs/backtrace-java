@@ -1,19 +1,16 @@
 package backtrace.io;
 
 
-
-import backtrace.io.temp.BacktraceReport;
-import backtrace.io.temp.SourceCode;
-import backtrace.io.temp.ThreadInformation;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.Map;
 
 
 /**
  * Serializable Backtrace API data object
  */
-public class BacktraceData {
+public class BacktraceData implements Serializable {
 
     private static transient String LOG_TAG = BacktraceData.class.getSimpleName();
 

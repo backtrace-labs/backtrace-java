@@ -4,16 +4,11 @@ package backtrace.io;
 public class BacktraceClient {
     private Backtrace backtrace;
 
-    public BacktraceClient(){
-        backtrace = new Backtrace();
-    }
-
-    public void send(String message) {
-        backtrace.addElement(message);
+    public BacktraceClient(BacktraceConfig config){
+        backtrace = new Backtrace(config);
     }
 
     public void send(BacktraceReport report ){
-        backtrace.addElement(report);
+        backtrace.send(report);
     }
-
 }

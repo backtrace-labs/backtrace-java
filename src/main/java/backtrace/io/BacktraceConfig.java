@@ -3,7 +3,7 @@ package backtrace.io;
 public class BacktraceConfig {
     private BacktraceCredentials credentials;
     private BacktraceDatabaseConfig databaseConfig;
-
+    private final String FORMAT = "json";
     /**
      * Initialize Backtrace credentials
      *
@@ -15,11 +15,19 @@ public class BacktraceConfig {
     }
 
     /**
+     *
+     * @return
+     */
+    public BacktraceDatabaseConfig getDatabaseConfig() {
+        return databaseConfig;
+    }
+
+    /**
      * Get URL to Backtrace server API
      *
      * @return endpoint url
      */
-    public String getEndpointUrl() {
+    private String getEndpointUrl() {
         return credentials.getEndpointUrl();
     }
 
@@ -28,8 +36,14 @@ public class BacktraceConfig {
      *
      * @return access token
      */
-    public String getSubmissionToken() {
+    private String getSubmissionToken() {
         return credentials.getSubmissionToken();
     }
 
+    /**
+     * Get Backtrace console server URL with parameters
+     */
+    String getServerUrl() {
+        return String.format("%spost?format=%s&token=%s", getEndpointUrl(), FORMAT, getSubmissionToken());
+    }
 }

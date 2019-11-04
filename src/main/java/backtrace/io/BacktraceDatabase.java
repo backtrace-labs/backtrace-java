@@ -4,35 +4,42 @@ import com.google.common.io.Files;
 
 import java.io.*;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class BacktraceDatabase {
-    private static final String FILE_EXTENSION = "backtrace_report";
-    private static final String DATABASE_PATH = "./backtrace";
-    private static boolean SAVE_TO_DATABASE = true;
+class BacktraceDatabase {
 
-    public BacktraceDatabase() {
+    private final BacktraceDatabaseConfig config;
 
+
+    BacktraceDatabase(BacktraceDatabaseConfig config) {
+        this.config = config;
+    }
+
+    static BacktraceDatabase init(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceData> queue){
+        BacktraceDatabase database = new BacktraceDatabase(config.getDatabaseConfig());
+        database.loadReports(queue);
+        return database;
     }
 
     private String getDatabaseDir(){
-        File currentDirFile = new File(".backtrace");
+        File currentDirFile = new File(config.getDatabasePath());
         return currentDirFile.getAbsolutePath();
     }
 
-    private String getFilePath(BacktraceReport report){
-        return getDatabaseDir() + "\\" + getFileName(report);
+    private String getFilePath(BacktraceReport backtraceReport){
+        return getDatabaseDir() + "\\" + getFileName(backtraceReport);
     }
 
     private String getFileName(BacktraceReport report){
-        return report.getTimestamp() + "." + FILE_EXTENSION;
+        return report.getTimestamp() + "." + config.getFileExtension();
     }
 
 
-    public void saveReport(BacktraceReport report){
-        String filePath = getFilePath(report);
+    void saveReport(BacktraceData backtraceData){
+        String filePath = getFilePath(backtraceData.report);
         try (FileOutputStream fileOutputStream = new FileOutputStream(filePath)) {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(report);
+            objectOutputStream.writeObject(backtraceData);
         }
         catch (Exception e){
             System.out.println(e);
@@ -40,8 +47,8 @@ public class BacktraceDatabase {
         }
     }
 
-    public void removeReport(BacktraceReport report){
-        File file = new File(getFilePath(report));
+    void removeReport(BacktraceData backtraceData){
+        File file = new File(getFilePath(backtraceData.report));
 
         if(!file.exists() || file.isDirectory()) {
             // TODO: log that
@@ -53,33 +60,31 @@ public class BacktraceDatabase {
         }
     }
 
-    protected void loadReports(final Queue<BacktraceReport> queue){
+    private void loadReports(final Queue<BacktraceData> queue){
         File databaseDir = new File(getDatabaseDir());
         File[] files = databaseDir.listFiles();
+        String fileExtension = config.getFileExtension();
         for (final File f : files) {
             String extension = Files.getFileExtension(f.getAbsolutePath());
 
-            if(!FILE_EXTENSION.equals(extension)){
+            if(!fileExtension.equals(extension)){
                 continue;
             }
 
-            BacktraceReport report = loadReport(f);
+            BacktraceData report = loadReport(f);
 
             if (report == null){
                 continue;
             }
 
             queue.add(report);
-//            report.setAsSent();
-            System.out.println(report.message);
         }
     }
 
-    private BacktraceReport loadReport(File file){
+    private BacktraceData loadReport(File file){
         try(FileInputStream fileInputStream = new FileInputStream(file)){
             ObjectInputStream reader = new ObjectInputStream(fileInputStream);
-            BacktraceReport report = (BacktraceReport)reader.readObject();
-            return report;
+            return (BacktraceData)reader.readObject();
         }
         catch (Exception e){
             System.out.println(e);

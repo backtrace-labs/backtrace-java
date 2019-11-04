@@ -1,7 +1,7 @@
 package backtrace.io;
 
 
-public class BacktraceCredentials {
+class BacktraceCredentials {
     private String endpointUrl;
     private String submissionToken;
 

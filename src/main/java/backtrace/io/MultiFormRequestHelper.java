@@ -10,7 +10,7 @@ import java.util.List;
 /***
  * Helper class for building multipart/form-data request
  */
-public class    MultiFormRequestHelper {
+public class MultiFormRequestHelper {
     private static final transient String LOG_TAG = MultiFormRequestHelper.class.getSimpleName();
 
     private static final String BOUNDARY = "*****";

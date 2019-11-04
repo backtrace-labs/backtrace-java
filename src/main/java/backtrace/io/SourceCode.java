@@ -1,6 +1,6 @@
 package backtrace.io;
 
-import backtrace.io.temp.BacktraceStackFrame;
+
 import com.google.gson.annotations.SerializedName;
 
 

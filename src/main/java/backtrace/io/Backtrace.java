@@ -1,29 +1,17 @@
 package backtrace.io;
 
-import java.util.concurrent.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 class Backtrace {
-    private ConcurrentLinkedQueue<BacktraceReport> queue;
-    private BacktraceThread thread;
+    private ConcurrentLinkedQueue<BacktraceData> queue;
 
-    Backtrace(){
-
+    Backtrace(BacktraceConfig config){
         queue = new ConcurrentLinkedQueue<>();
-        this.queue = queue;
-
-        thread = new BacktraceThread(queue);
-        thread.setDaemon(true);
-        thread.start();
+        BacktraceThread.init(config, queue);
     }
 
-    void addElement(String message) {
-        BacktraceReport report = new BacktraceReport(message);
-        System.out.println("[Main Thread] before adding to queue");
-        this.addElement(report);
-        System.out.println("[Main Thread] after adding to queue");
-    }
-
-    void addElement(BacktraceReport report) {
-        queue.add(report);
+    void send(BacktraceReport report){
+        BacktraceData backtraceData = new BacktraceData(report, null);
+        queue.add(backtraceData);
     }
 }

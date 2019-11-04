@@ -5,29 +5,37 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class BacktraceThread extends Thread {
 
-    private ConcurrentLinkedQueue<BacktraceReport> queue;
+    private ConcurrentLinkedQueue<BacktraceData> queue;
     private BacktraceDatabase database;
+    private final BacktraceConfig config;
 
-    public BacktraceThread(ConcurrentLinkedQueue<BacktraceReport> queue){
+
+    public BacktraceThread(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceData> queue){
         super();
+        this.database = BacktraceDatabase.init(config, queue);
+        this.config = config;
         this.queue = queue;
-        database = new BacktraceDatabase();
-        database.loadReports(this.queue);
+    }
+
+    static BacktraceThread init(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceData> queue){
+        BacktraceThread thread = new BacktraceThread(config, queue);
+        thread.setDaemon(true);
+        thread.start();
+        return thread;
     }
 
     @Override
     public void run(){
         while(true){
-            BacktraceReport report = queue.poll();
-            if (report == null){
+            BacktraceData backtraceData = queue.poll();
+            if (backtraceData == null){
                 continue;
             }
             try {
-                System.out.println("[BacktraceThread] " + report.message);
-                System.out.println("[BacktraceThread] Sleeping..");
-                pipeline(report);
-//                Thread.sleep(10000);
-                System.out.println("[BacktraceThread] 10000..");
+                System.out.println("[BacktraceThread] " + backtraceData.report.message);
+                System.out.println("[BacktraceThread] Single pipeline..");
+                pipeline(backtraceData);
+                System.out.println("[BacktraceThread] Finished");
             }
             catch (Exception e){
                 System.out.println("[BacktraceThread] Exception");
@@ -36,14 +44,14 @@ public class BacktraceThread extends Thread {
         }
     }
 
-    private void pipeline(BacktraceReport report){
-        database.saveReport(report);
-        sendHttp(report);
-        database.removeReport(report);
-    }
-    private void sendHttp(BacktraceReport report){
-        System.out.println(report.message);
-        report.setAsSent();
-        System.out.println("");
+    private void pipeline(BacktraceData backtraceData){
+        database.saveReport(backtraceData);
+        String json = BacktraceSerializeHelper.toJson(backtraceData);
+
+        BacktraceReportSender.sendReport(config.getServerUrl(), json, null, backtraceData.report, null); // TODO:
+
+        backtraceData.report.setAsSent();
+
+        database.removeReport(backtraceData);
     }
 }

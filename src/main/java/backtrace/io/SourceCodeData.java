@@ -1,7 +1,5 @@
 package backtrace.io;
 
-import backtrace.io.temp.BacktraceStackFrame;
-import backtrace.io.temp.SourceCode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
