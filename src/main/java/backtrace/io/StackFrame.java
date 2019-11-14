@@ -18,6 +18,8 @@ public class StackFrame implements Serializable {
     @SerializedName("funcName")
     @SuppressWarnings("FieldCanBeLocal")
     private String functionName;
+
+
     /**
      * Line number in source code where exception occurs
      */
@@ -58,5 +60,21 @@ public class StackFrame implements Serializable {
         this.sourceCodeFileName = frame.getFileName();
         this.sourceCode = UUID.randomUUID().toString();
         this.line = frame.getLineNumber() > 0 ? frame.getLineNumber() : null;
+    }
+
+    public String getFunctionName() {
+        return functionName;
+    }
+
+    public Integer getLine() {
+        return line;
+    }
+
+    public String getSourceCode() {
+        return sourceCode;
+    }
+
+    public String getSourceCodeFileName() {
+        return sourceCodeFileName;
     }
 }

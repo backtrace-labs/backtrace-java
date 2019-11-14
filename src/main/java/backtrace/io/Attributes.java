@@ -27,7 +27,7 @@ public class Attributes {
      * @param report           received Backtrace report
      * @param clientAttributes client's attributes (report and client)
      */
-    public Attributes(BacktraceReport report, Map<String, Object> clientAttributes) {
+    Attributes(BacktraceReport report, Map<String, Object> clientAttributes) {
         if (report != null) {
             this.splitClientAttributes(report, clientAttributes);
             this.setExceptionAttributes(report);

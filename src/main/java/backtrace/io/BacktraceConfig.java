@@ -19,7 +19,7 @@ public class BacktraceConfig {
      *
      * @return
      */
-    public BacktraceDatabaseConfig getDatabaseConfig() {
+    BacktraceDatabaseConfig getDatabaseConfig() {
         return databaseConfig;
     }
 

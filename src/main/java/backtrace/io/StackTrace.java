@@ -1,7 +1,5 @@
 package backtrace.io;
 
-
-import javax.print.attribute.standard.MediaSize;
 import java.io.Serializable;
 import java.util.ArrayList;
 

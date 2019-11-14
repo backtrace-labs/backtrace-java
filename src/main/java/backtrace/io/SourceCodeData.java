@@ -25,11 +25,11 @@ public class SourceCodeData implements Serializable {
         }
 
         for (StackFrame stackFrame : exceptionStack) {
-            if (stackFrame == null || stackFrame.sourceCode.equals("")) {
+            if (stackFrame == null || stackFrame.getSourceCode().equals("")) {
 //                BacktraceLogger.w(LOG_TAG, "Stack frame is null or sourceCode is empty");
                 continue;
             }
-            String id = stackFrame.sourceCode;
+            String id = stackFrame.getSourceCode();
             SourceCode value = new SourceCode(stackFrame);
             data.put(id, value);
         }
