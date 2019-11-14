@@ -6,14 +6,14 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class for sending and processing HTTP request
  */
 class ApiSender {
-
-    private static final String LOG_TAG = ApiSender.class.getSimpleName();
+    private static final transient Logger LOGGER = LoggerFactory.getLogger(ApiSender.class);
 
     /**
      * Send HTTP request for certain url server with information about device, error, attachments
@@ -45,7 +45,7 @@ class ApiSender {
             urlConnection.setRequestProperty("Content-Type",
                     MultiFormRequestHelper.getContentType());
 
-//            BacktraceLogger.d(LOG_TAG, "HttpURLConnection successfully initialized");
+            LOGGER.debug("HttpURLConnection successfully initialized");
             DataOutputStream request = new DataOutputStream(urlConnection.getOutputStream());
 
             MultiFormRequestHelper.addJson(request, json);
@@ -56,7 +56,7 @@ class ApiSender {
             request.close();
 
             int statusCode = urlConnection.getResponseCode();
-//            BacktraceLogger.d(LOG_TAG, "Received response status from Backtrace API for HTTP request is: " + Integer.toString(statusCode));
+            LOGGER.debug("Received response status from Backtrace API for HTTP request is: " + Integer.toString(statusCode));
 
             if (statusCode == HttpURLConnection.HTTP_OK) {
                 result = BacktraceSerializeHelper.fromJson(getResponse(urlConnection), BacktraceResult.class);
@@ -71,15 +71,15 @@ class ApiSender {
             }
 
         } catch (Exception e) {
-//            BacktraceLogger.e(LOG_TAG, "Sending HTTP request failed to Backtrace API", e);
+            LOGGER.error("Sending HTTP request failed to Backtrace API", e);
             result = BacktraceResult.OnError(report, e);
         } finally {
             if (urlConnection != null) {
                 try {
                     urlConnection.disconnect();
-//                    BacktraceLogger.d(LOG_TAG, "Disconnecting HttpUrlConnection successful");
+                    LOGGER.debug("Disconnecting HttpUrlConnection successful");
                 } catch (Exception e) {
-//                    BacktraceLogger.e(LOG_TAG, "Disconnecting HttpUrlConnection failed", e);
+                    LOGGER.error("Disconnecting HttpUrlConnection failed", e);
                     result = BacktraceResult.OnError(report, e);
                 }
             }
@@ -95,7 +95,7 @@ class ApiSender {
      * @throws IOException
      */
     private static String getResponse(HttpURLConnection urlConnection) throws IOException {
-//        BacktraceLogger.d(LOG_TAG, "Reading response from HTTP request");
+        LOGGER.debug("Reading response from HTTP request");
 
         InputStream inputStream;
         if (urlConnection.getResponseCode() < HttpURLConnection.HTTP_BAD_REQUEST) {

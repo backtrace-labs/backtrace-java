@@ -1,5 +1,8 @@
 package backtrace.io;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,6 +14,7 @@ import java.util.Scanner;
  */
 public class FileHelper {
 
+    private static final transient Logger LOGGER = LoggerFactory.getLogger(FileHelper.class);
     /***
      * Get file name with extension from file path
      * @param absolutePath absolute path to file

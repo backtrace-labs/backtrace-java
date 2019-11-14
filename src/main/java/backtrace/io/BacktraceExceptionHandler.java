@@ -1,6 +1,8 @@
 package backtrace.io;
 
 import backtrace.io.events.OnServerResponseEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -12,7 +14,7 @@ import java.util.concurrent.CountDownLatch;
  */
 public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandler {
 
-    private static transient String LOG_TAG = BacktraceExceptionHandler.class.getSimpleName();
+    private static final transient Logger LOGGER = LoggerFactory.getLogger(BacktraceExceptionHandler.class);
 
     private final Thread.UncaughtExceptionHandler rootHandler;
     private final CountDownLatch signal = new CountDownLatch(1);
@@ -20,7 +22,7 @@ public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandle
     private boolean blockThread;
 
     private BacktraceExceptionHandler(BacktraceClient client, boolean blockThread) {
-//        BacktraceLogger.d(LOG_TAG, "BacktraceExceptionHandler initialization"); // TODO:
+        LOGGER.debug("BacktraceExceptionHandler initialization");
         this.client = client;
         this.blockThread = blockThread;
         rootHandler = Thread.getDefaultUncaughtExceptionHandler();
@@ -69,11 +71,11 @@ public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandle
         OnServerResponseEvent callback = getCallbackToDefaultHandler(thread, throwable);
 
         if (throwable instanceof Exception) {
-//            BacktraceLogger.e(LOG_TAG, "Sending uncaught exception to Backtrace API", throwable);
+            LOGGER.error("Sending uncaught exception to Backtrace API", throwable);
             this.client.send(new BacktraceReport((Exception) throwable), callback);
-//            BacktraceLogger.d(LOG_TAG, "Uncaught exception sent to Backtrace API");
+            LOGGER.debug("Uncaught exception sent to Backtrace API");
         }
-//        BacktraceLogger.d(LOG_TAG, "Default uncaught exception handler");
+        LOGGER.debug("Default uncaught exception handler");
         if (!blockThread){
             return;
         }
@@ -81,7 +83,7 @@ public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandle
         try {
             signal.await();
         } catch (Exception ex) {
-//            BacktraceLogger.e(LOG_TAG, "Exception during waiting for response", ex);
+            LOGGER.error("Exception during waiting for response", ex);
         }
     }
 
@@ -89,7 +91,7 @@ public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandle
         return new OnServerResponseEvent() {
             @Override
             public void onEvent(BacktraceResult backtraceResult) {
-//                BacktraceLogger.d(LOG_TAG, "Root handler event callback");
+                LOGGER.debug("Root handler event callback");
                 signal.countDown();
                 if (rootHandler != null) {
                     rootHandler.uncaughtException(thread, throwable);

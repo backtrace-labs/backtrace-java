@@ -2,10 +2,13 @@ package backtrace.io;
 
 
 import backtrace.io.temp.BacktraceResultStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class BacktraceThread extends Thread {
+    private static final transient Logger LOGGER = LoggerFactory.getLogger(BacktraceThread.class);
     private final static String THREAD_NAME = "backtrace-deamon";
 
     private ConcurrentLinkedQueue<BacktraceMessage> queue;

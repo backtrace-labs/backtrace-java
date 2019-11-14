@@ -1,6 +1,8 @@
 package backtrace.io;
 
 import com.google.common.io.Files;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.Queue;
@@ -8,6 +10,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 class BacktraceDatabase {
 
+    private static final transient Logger LOGGER = LoggerFactory.getLogger(BacktraceDatabase.class);
     private final BacktraceDatabaseConfig config;
 
 

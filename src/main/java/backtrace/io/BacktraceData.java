@@ -2,6 +2,8 @@ package backtrace.io;
 
 
 import com.google.gson.annotations.SerializedName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -11,8 +13,7 @@ import java.util.Map;
  * Serializable Backtrace API data object
  */
 public class BacktraceData implements Serializable {
-
-    private static transient String LOG_TAG = BacktraceData.class.getSimpleName();
+    private static final transient Logger LOGGER = LoggerFactory.getLogger(BacktraceData.class);
 
     /**
      * 16 bytes of randomness in human readable UUID format
@@ -136,6 +137,7 @@ public class BacktraceData implements Serializable {
      * @param clientAttributes
      */
     private void setAttributes(Map<String, Object> clientAttributes) {
+        LOGGER.debug("Setting attributes");
         Attributes attributes = new Attributes(report, clientAttributes);
         this.attributes = attributes.getAttributes();
         this.annotations = attributes.getAnnotations();
@@ -146,7 +148,7 @@ public class BacktraceData implements Serializable {
      * Set report information such as report identifier (UUID), timestamp, classifier
      */
     private void setReportInformation() {
-        // TODO: log info
+        LOGGER.debug("Setting report information");
         this.uuid = report.getUuid().toString();
         this.timestamp = report.timestamp;
         this.classifiers = report.exceptionTypeReport ? new String[]{report.classifier} : null;
@@ -158,7 +160,7 @@ public class BacktraceData implements Serializable {
      * Set information about all threads
      */
     private void setThreadsInformation() {
-        // TODO: log info
+        LOGGER.debug("Setting threads information");
         ThreadData threadData = new ThreadData(report.diagnosticStack);
         this.mainThread = threadData.getMainThread();
         this.threadInformationMap = threadData.threadInformation;

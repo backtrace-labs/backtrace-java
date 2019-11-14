@@ -1,5 +1,8 @@
 package backtrace.io;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,7 +12,7 @@ import java.util.Map;
  * Class instance to get a built-in attributes from current application
  */
 public class Attributes {
-
+    private static final transient Logger LOGGER = LoggerFactory.getLogger(Attributes.class);
     /**
      * Get built-in primitive attributes
      */
@@ -80,7 +83,7 @@ public class Attributes {
     }
 
     public Map<String, Object> getAnnotations(){
-//        BacktraceLogger.d(LOG_TAG, "Setting annotations");
+        LOGGER.debug("Setting annotations");
         Object exceptionMessage = null;
 
         if (this.attributes != null &&

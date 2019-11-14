@@ -1,5 +1,8 @@
 package backtrace.io;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -11,8 +14,7 @@ import java.util.List;
  * Helper class for building multipart/form-data request
  */
 class MultiFormRequestHelper {
-    private static final transient String LOG_TAG = MultiFormRequestHelper.class.getSimpleName();
-
+    private static final transient Logger LOGGER = LoggerFactory.getLogger(MultiFormRequestHelper.class);
     private static final String BOUNDARY = "*****";
     private static final String CRLF = "\r\n";
     private static final String TWO_HYPHENS = "--";
@@ -34,7 +36,7 @@ class MultiFormRequestHelper {
      */
     static void addEndOfRequest(OutputStream outputStream) throws IOException {
         if (outputStream == null) {
-//            BacktraceLogger.w(LOG_TAG, "Output stream is null");
+            LOGGER.warn("Output stream is null");
             return;
         }
 
@@ -51,7 +53,7 @@ class MultiFormRequestHelper {
      */
     static void addJson(OutputStream outputStream, String json) throws IOException {
         if (json == null || json.isEmpty() || outputStream == null) {
-//            BacktraceLogger.w(LOG_TAG, "JSON is null/empty or output stream is null");
+            LOGGER.warn("JSON is null/empty or output stream is null");
             return;
         }
         outputStream.write((MultiFormRequestHelper.TWO_HYPHENS + MultiFormRequestHelper.BOUNDARY +
@@ -73,7 +75,7 @@ class MultiFormRequestHelper {
     static void addFiles(OutputStream outputStream, List<String> attachments) throws
             IOException {
         if (attachments == null || outputStream == null) {
-//            BacktraceLogger.w(LOG_TAG, "Attachments or output stream is null");
+            LOGGER.warn("Attachments or output stream is null");
             return;
         }
 
@@ -90,7 +92,7 @@ class MultiFormRequestHelper {
      */
     private static void addFile(OutputStream outputStream, String absolutePath) throws IOException {
         if (absolutePath == null || outputStream == null) {
-//            BacktraceLogger.w(LOG_TAG, "Absolute path or output stream is null");
+            LOGGER.warn("Absolute path or output stream is null");
             return;
         }
 
@@ -121,7 +123,7 @@ class MultiFormRequestHelper {
     private static void streamFile(OutputStream outputStream, String absolutePath) throws
             IOException {
         if (outputStream == null || absolutePath == null) {
-//            BacktraceLogger.w(LOG_TAG, "Absolute path or output stream is null");
+            LOGGER.warn("Absolute path or output stream is null");
             return;
         }
         FileInputStream fis = new FileInputStream(absolutePath);

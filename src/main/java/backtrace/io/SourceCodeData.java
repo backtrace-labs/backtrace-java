@@ -1,6 +1,9 @@
 package backtrace.io;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +13,7 @@ import java.util.Map;
  * Collect all source data information about current program
  */
 public class SourceCodeData implements Serializable {
-    private static transient final String LOG_TAG = SourceCodeData.class.getSimpleName();
+    private static final transient Logger LOGGER = LoggerFactory.getLogger(SourceCodeData.class);
 
     /**
      * Source code information about current executed program
@@ -18,15 +21,15 @@ public class SourceCodeData implements Serializable {
     public Map<String, SourceCode> data = new HashMap<>();
 
     SourceCodeData(ArrayList<StackFrame> exceptionStack) {
-//        BacktraceLogger.d(LOG_TAG, "Initialization source code data");
+        LOGGER.debug("Initialization source code data");
         if (exceptionStack == null || exceptionStack.size() == 0) {
-//            BacktraceLogger.w(LOG_TAG, "Exception stack is null or empty");
+            LOGGER.warn("Exception stack is null or empty");
             return;
         }
 
         for (StackFrame stackFrame : exceptionStack) {
             if (stackFrame == null || stackFrame.getSourceCode().equals("")) {
-//                BacktraceLogger.w(LOG_TAG, "Stack frame is null or sourceCode is empty");
+                LOGGER.warn("Stack frame is null or sourceCode is empty");
                 continue;
             }
             String id = stackFrame.getSourceCode();
