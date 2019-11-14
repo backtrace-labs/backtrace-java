@@ -5,7 +5,7 @@ import backtrace.io.temp.BacktraceData;
 /**
  * Interface definition for a callback to be invoked before send report to Backtrace API
  */
-public interface OnBeforeSendEventListener {
+public interface BeforeSendEvent {
     /**
      * Event which will be executed before send report to Backtrace API
      *

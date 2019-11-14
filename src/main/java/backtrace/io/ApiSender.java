@@ -11,9 +11,9 @@ import java.util.List;
 /**
  * Class for sending and processing HTTP request
  */
-class HTTPSender {
+class ApiSender {
 
-    private static final String LOG_TAG = HTTPSender.class.getSimpleName();
+    private static final String LOG_TAG = ApiSender.class.getSimpleName();
 
     /**
      * Send HTTP request for certain url server with information about device, error, attachments
@@ -22,10 +22,9 @@ class HTTPSender {
      * @param json          message with information about device and error
      * @param attachments   list of paths to files that should be sent
      * @param report        information about error
-     * @param errorCallback event that will be executed after receiving an error from the server
      * @return information from the server about the result of processing the request
      */
-    static BacktraceResult sendReport(String serverUrl, String json, List<String> attachments, BacktraceReport report, OnServerErrorEventListener errorCallback) {
+    static BacktraceResult sendReport(String serverUrl, String json, List<String> attachments, BacktraceReport report) {
         HttpURLConnection urlConnection = null;
         BacktraceResult result;
 
@@ -72,10 +71,6 @@ class HTTPSender {
             }
 
         } catch (Exception e) {
-            if (errorCallback != null) {
-//                BacktraceLogger.d(LOG_TAG, "Custom handler on server error");
-                errorCallback.onEvent(e);
-            }
 //            BacktraceLogger.e(LOG_TAG, "Sending HTTP request failed to Backtrace API", e);
             result = BacktraceResult.OnError(report, e);
         } finally {

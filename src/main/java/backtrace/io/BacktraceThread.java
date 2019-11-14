@@ -60,7 +60,7 @@ public class BacktraceThread extends Thread {
         database.saveReport(backtraceData);
         String json = BacktraceSerializeHelper.toJson(backtraceData);
 
-        BacktraceResult result = HTTPSender.sendReport(config.getServerUrl(), json, null, backtraceData.report, null); // TODO:
+        BacktraceResult result = ApiSender.sendReport(config.getServerUrl(), json, null, backtraceData.report); // TODO:
 
         if(result.getStatus() == BacktraceResultStatus.Ok) {
             backtraceData.report.setAsSent();

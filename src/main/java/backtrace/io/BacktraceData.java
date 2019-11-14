@@ -150,7 +150,7 @@ public class BacktraceData implements Serializable {
         this.uuid = report.getUuid().toString();
         this.timestamp = report.timestamp;
         this.classifiers = report.exceptionTypeReport ? new String[]{report.classifier} : null;
-        this.langVersion = System.getProperty("java.version"); //TODO: Fix problem with read Java version
+        this.langVersion = System.getProperty("java.version");
         this.agentVersion = "0.1"; // TODO: FIX
     }
 

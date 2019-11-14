@@ -1,22 +1,21 @@
 package backtrace.io;
 
-import backtrace.io.BacktraceData;
-import backtrace.io.events.OnServerResponseEventListener;
+import backtrace.io.events.OnServerResponseEvent;
 
-public class BacktraceMessage {
+class BacktraceMessage {
     BacktraceData backtraceData;
-    OnServerResponseEventListener callback;
+    OnServerResponseEvent callback;
 
-    BacktraceMessage(BacktraceData backtraceData, OnServerResponseEventListener callback){
+    BacktraceMessage(BacktraceData backtraceData, OnServerResponseEvent callback){
         this.backtraceData = backtraceData;
         this.callback = callback;
     }
 
-    public BacktraceData getBacktraceData() {
+    BacktraceData getBacktraceData() {
         return backtraceData;
     }
 
-    public OnServerResponseEventListener getCallback() {
+    OnServerResponseEvent getCallback() {
         return callback;
     }
 }

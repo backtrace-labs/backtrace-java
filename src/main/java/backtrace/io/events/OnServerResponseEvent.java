@@ -6,7 +6,7 @@ import backtrace.io.BacktraceResult;
 /**
  * Interface definition for a callback to be invoked when server return response from Backtrace API
  */
-public interface OnServerResponseEventListener {
+public interface OnServerResponseEvent {
     /**
      * Event which will be executed when server return response from Backtrace API
      *

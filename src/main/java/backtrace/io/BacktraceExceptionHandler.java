@@ -1,6 +1,6 @@
 package backtrace.io;
 
-import backtrace.io.events.OnServerResponseEventListener;
+import backtrace.io.events.OnServerResponseEvent;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -17,12 +17,12 @@ public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandle
     private final Thread.UncaughtExceptionHandler rootHandler;
     private final CountDownLatch signal = new CountDownLatch(1);
     private BacktraceClient client;
-    private boolean blockMainThread;
+    private boolean blockThread;
 
-    private BacktraceExceptionHandler(BacktraceClient client, boolean blockMainThread) {
+    private BacktraceExceptionHandler(BacktraceClient client, boolean blockThread) {
 //        BacktraceLogger.d(LOG_TAG, "BacktraceExceptionHandler initialization"); // TODO:
         this.client = client;
-        this.blockMainThread = blockMainThread;
+        this.blockThread = blockThread;
         rootHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(this);
     }
@@ -32,12 +32,12 @@ public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandle
      * Enable catching unexpected exceptions by BacktraceClient
      *
      * @param client current Backtrace client instance
-     * @param blockMainThread //TODO:
+     * @param blockThread //TODO:
      *               which will be used to send information about exception
      */
-    public static void enable(BacktraceClient client, boolean blockMainThread) {
+    static void enable(BacktraceClient client, boolean blockThread) {
         Thread.UncaughtExceptionHandler currentHandler = Thread.getDefaultUncaughtExceptionHandler();
-        new BacktraceExceptionHandler(client, blockMainThread);
+        new BacktraceExceptionHandler(client, blockThread);
     }
 
     /**
@@ -66,7 +66,7 @@ public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandle
      */
     @Override
     public void uncaughtException(final Thread thread, final Throwable throwable) {
-        OnServerResponseEventListener callback = getCallbackToDefaultHandler(thread, throwable);
+        OnServerResponseEvent callback = getCallbackToDefaultHandler(thread, throwable);
 
         if (throwable instanceof Exception) {
 //            BacktraceLogger.e(LOG_TAG, "Sending uncaught exception to Backtrace API", throwable);
@@ -74,7 +74,7 @@ public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandle
 //            BacktraceLogger.d(LOG_TAG, "Uncaught exception sent to Backtrace API");
         }
 //        BacktraceLogger.d(LOG_TAG, "Default uncaught exception handler");
-        if (!blockMainThread){
+        if (!blockThread){
             return;
         }
 
@@ -85,8 +85,8 @@ public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandle
         }
     }
 
-    private OnServerResponseEventListener getCallbackToDefaultHandler(final Thread thread, final Throwable throwable) {
-        return new OnServerResponseEventListener() {
+    private OnServerResponseEvent getCallbackToDefaultHandler(final Thread thread, final Throwable throwable) {
+        return new OnServerResponseEvent() {
             @Override
             public void onEvent(BacktraceResult backtraceResult) {
 //                BacktraceLogger.d(LOG_TAG, "Root handler event callback");
