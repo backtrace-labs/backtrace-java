@@ -15,7 +15,7 @@ class BacktraceDatabase {
         this.config = config;
     }
 
-    static BacktraceDatabase init(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceData> queue){
+    static BacktraceDatabase init(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceMessage> queue){
         BacktraceDatabase database = new BacktraceDatabase(config.getDatabaseConfig());
         database.loadReports(queue);
         return database;
@@ -60,7 +60,7 @@ class BacktraceDatabase {
         }
     }
 
-    private void loadReports(final Queue<BacktraceData> queue){
+    private void loadReports(final Queue<BacktraceMessage> queue){
         File databaseDir = new File(getDatabaseDir());
         File[] files = databaseDir.listFiles();
         String fileExtension = config.getFileExtension();
@@ -77,7 +77,7 @@ class BacktraceDatabase {
                 continue;
             }
 
-            queue.add(report);
+            queue.add(new BacktraceMessage(report, null));
         }
     }
 

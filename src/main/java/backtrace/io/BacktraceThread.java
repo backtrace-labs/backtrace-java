@@ -6,19 +6,19 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class BacktraceThread extends Thread {
     private final static String THREAD_NAME = "backtrace-deamon";
 
-    private ConcurrentLinkedQueue<BacktraceData> queue;
+    private ConcurrentLinkedQueue<BacktraceMessage> queue;
     private BacktraceDatabase database;
     private final BacktraceConfig config;
 
 
-    private BacktraceThread(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceData> queue){
+    private BacktraceThread(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceMessage> queue){
         super();
         this.database = BacktraceDatabase.init(config, queue);
         this.config = config;
         this.queue = queue;
     }
 
-    static void init(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceData> queue){
+    static void init(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceMessage> queue){
         BacktraceThread thread = new BacktraceThread(config, queue);
         thread.setDaemon(true);
         thread.setName(THREAD_NAME);
@@ -29,7 +29,14 @@ public class BacktraceThread extends Thread {
     @Override
     public void run(){
         while(true){
-            BacktraceData backtraceData = queue.poll();
+            BacktraceMessage message = queue.poll();
+
+            if (message == null) {
+                continue;
+            }
+            
+            BacktraceData backtraceData = message.getBacktraceData();
+
             if (backtraceData == null){
                 continue;
             }

@@ -26,7 +26,7 @@ class SourceCode implements Serializable {
 
 
     SourceCode(StackFrame stackFrame) {
-        this.sourceCodeFileName = stackFrame.sourceCodeFileName;
-        this.startLine = stackFrame.line;
+        this.sourceCodeFileName = stackFrame.getSourceCodeFileName();
+        this.startLine = stackFrame.getLine();
     }
 }

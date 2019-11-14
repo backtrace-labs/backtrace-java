@@ -1,8 +1,14 @@
 package backtrace.io;
 
+import backtrace.io.events.OnBeforeSendEventListener;
+import backtrace.io.events.RequestHandler;
+
 public class BacktraceConfig {
     private BacktraceCredentials credentials;
     private BacktraceDatabaseConfig databaseConfig = new BacktraceDatabaseConfig();
+    private RequestHandler requestHandler;
+    private OnBeforeSendEventListener beforeSendEventListener;
+
     @SuppressWarnings("FieldCanBeLocal")
     private final String FORMAT = "json";
     /**
@@ -46,5 +52,21 @@ public class BacktraceConfig {
      */
     String getServerUrl() {
         return String.format("%spost?format=%s&token=%s", getEndpointUrl(), FORMAT, getSubmissionToken());
+    }
+
+    public RequestHandler getRequestHandler() {
+        return requestHandler;
+    }
+
+    public void setRequestHandler(RequestHandler requestHandler) {
+        this.requestHandler = requestHandler;
+    }
+
+    public OnBeforeSendEventListener getBeforeSendEventListener() {
+        return beforeSendEventListener;
+    }
+
+    public void setBeforeSendEventListener(OnBeforeSendEventListener beforeSendEventListener) {
+        this.beforeSendEventListener = beforeSendEventListener;
     }
 }
