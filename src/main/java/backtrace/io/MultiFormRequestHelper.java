@@ -10,7 +10,7 @@ import java.util.List;
 /***
  * Helper class for building multipart/form-data request
  */
-public class MultiFormRequestHelper {
+class MultiFormRequestHelper {
     private static final transient String LOG_TAG = MultiFormRequestHelper.class.getSimpleName();
 
     private static final String BOUNDARY = "*****";
@@ -22,7 +22,7 @@ public class MultiFormRequestHelper {
      *
      * @return string with content type and information about boundary
      */
-    public static String getContentType() {
+    static String getContentType() {
         return "multipart/form-data;boundary=" + MultiFormRequestHelper.BOUNDARY;
     }
 
@@ -32,7 +32,7 @@ public class MultiFormRequestHelper {
      * @param outputStream output data stream
      * @throws IOException
      */
-    public static void addEndOfRequest(OutputStream outputStream) throws IOException {
+    static void addEndOfRequest(OutputStream outputStream) throws IOException {
         if (outputStream == null) {
 //            BacktraceLogger.w(LOG_TAG, "Output stream is null");
             return;
@@ -49,7 +49,7 @@ public class MultiFormRequestHelper {
      * @param json         JSON string with BacktraceData object
      * @throws IOException
      */
-    public static void addJson(OutputStream outputStream, String json) throws IOException {
+    static void addJson(OutputStream outputStream, String json) throws IOException {
         if (json == null || json.isEmpty() || outputStream == null) {
 //            BacktraceLogger.w(LOG_TAG, "JSON is null/empty or output stream is null");
             return;
@@ -70,7 +70,7 @@ public class MultiFormRequestHelper {
      * @param attachments list of paths to files
      * @throws IOException
      */
-    public static void addFiles(OutputStream outputStream, List<String> attachments) throws
+    static void addFiles(OutputStream outputStream, List<String> attachments) throws
             IOException {
         if (attachments == null || outputStream == null) {
 //            BacktraceLogger.w(LOG_TAG, "Attachments or output stream is null");
@@ -118,7 +118,7 @@ public class MultiFormRequestHelper {
      * @param absolutePath absolute path to file
      * @throws IOException
      */
-    public static void streamFile(OutputStream outputStream, String absolutePath) throws
+    private static void streamFile(OutputStream outputStream, String absolutePath) throws
             IOException {
         if (outputStream == null || absolutePath == null) {
 //            BacktraceLogger.w(LOG_TAG, "Absolute path or output stream is null");

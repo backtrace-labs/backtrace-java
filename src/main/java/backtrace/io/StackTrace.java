@@ -28,12 +28,12 @@ public class StackTrace implements Serializable {
      *
      * @param exception current exception
      */
-    public StackTrace(Exception exception) {
+    StackTrace(Exception exception) {
         this.exception = exception;
         initialize();
     }
 
-    public ArrayList<StackFrame> getStackFrames() {
+    ArrayList<StackFrame> getStackFrames() {
         return stackFrames;
     }
 

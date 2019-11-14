@@ -16,7 +16,7 @@ public class BacktraceSerializeHelper {
      * @param json JSON string which will be deserialized
      * @return object created during deserialization of given json string
      */
-    public static BacktraceResult backtraceResultFromJson(String json) {
+    static BacktraceResult backtraceResultFromJson(String json) {
         return new Gson().fromJson(json, BacktraceResult.class);
     }
 
@@ -26,7 +26,7 @@ public class BacktraceSerializeHelper {
      * @param object object which will be serialized
      * @return serialized object in JSON string format
      */
-    public static String toJson(Object object) {
+    static String toJson(Object object) {
         Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES).create();
         return gson.toJson(object);
     }

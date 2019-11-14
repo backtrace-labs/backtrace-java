@@ -10,12 +10,13 @@ import java.util.ArrayList;
 /**
  * Get an information about single thread passed in constructor
  */
-public class ThreadInformation implements Serializable {
+class ThreadInformation implements Serializable {
     /**
      * Thread name
      */
     @SerializedName("name")
-    public String name;
+    @SuppressWarnings("FieldCanBeLocal")
+    private String name;
 
     /**
      * Denotes whether a thread is a faulting thread

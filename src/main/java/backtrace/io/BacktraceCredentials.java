@@ -11,7 +11,7 @@ class BacktraceCredentials {
      * @param endpointUrl endpoint url address
      * @param submissionToken server access token
      */
-    public BacktraceCredentials(String endpointUrl, String submissionToken) {
+    BacktraceCredentials(String endpointUrl, String submissionToken) {
         this.endpointUrl = endpointUrl;
         this.submissionToken = submissionToken;
     }
@@ -21,7 +21,7 @@ class BacktraceCredentials {
      *
      * @return endpoint url
      */
-    public String getEndpointUrl() {
+    String getEndpointUrl() {
         return endpointUrl;
     }
 
@@ -30,7 +30,7 @@ class BacktraceCredentials {
      *
      * @return access token
      */
-    public String getSubmissionToken() {
+    String getSubmissionToken() {
         return submissionToken;
     }
 

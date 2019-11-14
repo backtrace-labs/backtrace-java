@@ -36,7 +36,7 @@ public class HttpException extends Exception {
      * @param httpStatus received HTTP status code
      * @param message    received exception message
      */
-    public HttpException(Integer httpStatus, String message) {
+    HttpException(Integer httpStatus, String message) {
         super(message);
         setHttpStatus(httpStatus);
     }

@@ -16,23 +16,27 @@ public class StackFrame implements Serializable {
      * Function where exception occurs
      */
     @SerializedName("funcName")
-    public String functionName;
+    @SuppressWarnings("FieldCanBeLocal")
+    private String functionName;
     /**
      * Line number in source code where exception occurs
      */
     @SerializedName("line")
-    public Integer line = null;
+    @SuppressWarnings("FieldCanBeLocal")
+    private Integer line = null;
 
     /**
      * Source code file name where exception occurs
      */
     @SerializedName("sourceCode")
-    public String sourceCode;
+    @SuppressWarnings("FieldCanBeLocal")
+    private String sourceCode;
 
     /**
      * Source code file name where exception occurs
      */
-    public transient String sourceCodeFileName;
+    @SuppressWarnings("FieldCanBeLocal")
+    private transient String sourceCodeFileName;
 
     /**
      * Create new instance of BacktraceStackFrame
@@ -46,7 +50,7 @@ public class StackFrame implements Serializable {
      *
      * @param frame single stacktrace element
      */
-    public StackFrame(StackTraceElement frame) {
+    StackFrame(StackTraceElement frame) {
         if (frame == null || frame.getMethodName() == null) {
             return;
         }

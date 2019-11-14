@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Generate information about application threads
  */
-public class ThreadData implements Serializable {
+class ThreadData implements Serializable {
 
     /**
      * All collected application threads information

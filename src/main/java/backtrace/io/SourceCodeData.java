@@ -17,7 +17,7 @@ public class SourceCodeData implements Serializable {
      */
     public Map<String, SourceCode> data = new HashMap<>();
 
-    public SourceCodeData(ArrayList<StackFrame> exceptionStack) {
+    SourceCodeData(ArrayList<StackFrame> exceptionStack) {
 //        BacktraceLogger.d(LOG_TAG, "Initialization source code data");
         if (exceptionStack == null || exceptionStack.size() == 0) {
 //            BacktraceLogger.w(LOG_TAG, "Exception stack is null or empty");

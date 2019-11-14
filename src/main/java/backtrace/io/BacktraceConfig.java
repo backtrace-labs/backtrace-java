@@ -3,6 +3,7 @@ package backtrace.io;
 public class BacktraceConfig {
     private BacktraceCredentials credentials;
     private BacktraceDatabaseConfig databaseConfig = new BacktraceDatabaseConfig();
+    @SuppressWarnings("FieldCanBeLocal")
     private final String FORMAT = "json";
     /**
      * Initialize Backtrace credentials
