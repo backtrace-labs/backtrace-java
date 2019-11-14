@@ -20,12 +20,14 @@ public class BacktraceResult {
     /**
      * Message
      */
+    @SerializedName("response")
     private String message;
+
 
     /**
      * Result status eg. server error, ok
      */
-    private BacktraceResultStatus status = BacktraceResultStatus.Ok;
+    private BacktraceResultStatus status;
 
     /**
      * Current report
@@ -49,12 +51,16 @@ public class BacktraceResult {
         return message;
     }
 
-    public BacktraceResultStatus getStatus() {
+    BacktraceResultStatus getStatus() {
         return status;
     }
 
     void setBacktraceReport(BacktraceReport backtraceReport) {
         this.backtraceReport = backtraceReport;
+    }
+
+    void setStatus(BacktraceResultStatus status) {
+        this.status = status;
     }
 
     @SuppressWarnings({"UnusedDeclaration"})

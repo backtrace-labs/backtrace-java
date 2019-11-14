@@ -10,6 +10,15 @@ public class BacktraceClient {
         backtrace = new Backtrace(config);
     }
 
+
+    public void enableUncaughtExceptionsHandler(){
+        this.enableUncaughtExceptionsHandler(false);
+    }
+
+    public void enableUncaughtExceptionsHandler(boolean blockMainThread){
+        BacktraceExceptionHandler.enable(this, blockMainThread);
+    }
+
     public void send(BacktraceReport report){
         this.send(report, null);
     }

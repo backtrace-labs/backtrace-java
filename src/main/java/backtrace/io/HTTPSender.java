@@ -1,5 +1,7 @@
 package backtrace.io;
 
+import backtrace.io.temp.BacktraceResultStatus;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -9,9 +11,9 @@ import java.util.List;
 /**
  * Class for sending and processing HTTP request
  */
-class BacktraceReportSender {
+class HTTPSender {
 
-    private static final String LOG_TAG = BacktraceReportSender.class.getSimpleName();
+    private static final String LOG_TAG = HTTPSender.class.getSimpleName();
 
     /**
      * Send HTTP request for certain url server with information about device, error, attachments
@@ -58,9 +60,8 @@ class BacktraceReportSender {
 //            BacktraceLogger.d(LOG_TAG, "Received response status from Backtrace API for HTTP request is: " + Integer.toString(statusCode));
 
             if (statusCode == HttpURLConnection.HTTP_OK) {
-                result = BacktraceSerializeHelper.backtraceResultFromJson(
-                        getResponse(urlConnection)
-                );
+                result = BacktraceSerializeHelper.fromJson(getResponse(urlConnection), BacktraceResult.class);
+                result.setStatus(BacktraceResultStatus.Ok);
                 result.setBacktraceReport(report);
             } else {
                 String message = getResponse(urlConnection);

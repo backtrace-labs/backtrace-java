@@ -54,7 +54,7 @@ public class BacktraceConfig {
         return String.format("%spost?format=%s&token=%s", getEndpointUrl(), FORMAT, getSubmissionToken());
     }
 
-    public RequestHandler getRequestHandler() {
+    RequestHandler getRequestHandler() {
         return requestHandler;
     }
 
@@ -62,7 +62,7 @@ public class BacktraceConfig {
         this.requestHandler = requestHandler;
     }
 
-    public OnBeforeSendEventListener getBeforeSendEventListener() {
+    OnBeforeSendEventListener getBeforeSendEventListener() {
         return beforeSendEventListener;
     }
 

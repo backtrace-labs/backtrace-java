@@ -1,6 +1,8 @@
 package backtrace.io;
 
 
+import backtrace.io.temp.BacktraceResultStatus;
+
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class BacktraceThread extends Thread {
@@ -34,16 +36,11 @@ public class BacktraceThread extends Thread {
             if (message == null) {
                 continue;
             }
-            
-            BacktraceData backtraceData = message.getBacktraceData();
 
-            if (backtraceData == null){
-                continue;
-            }
             try {
 //                System.out.println("[BacktraceThread] " + backtraceData.report.message);
 //                System.out.println("[BacktraceThread] Single pipeline..");
-                pipeline(backtraceData);
+                pipeline(message);
 //                System.out.println("[BacktraceThread] Finished");
             }
             catch (Exception e){
@@ -53,14 +50,24 @@ public class BacktraceThread extends Thread {
         }
     }
 
-    private void pipeline(BacktraceData backtraceData){
+    private void pipeline(BacktraceMessage backtraceMessage){
+        BacktraceData backtraceData = backtraceMessage.getBacktraceData();
+
+        if (backtraceData == null){
+            return;
+        }
+
         database.saveReport(backtraceData);
         String json = BacktraceSerializeHelper.toJson(backtraceData);
 
-        BacktraceReportSender.sendReport(config.getServerUrl(), json, null, backtraceData.report, null); // TODO:
+        BacktraceResult result = HTTPSender.sendReport(config.getServerUrl(), json, null, backtraceData.report, null); // TODO:
 
-        backtraceData.report.setAsSent();
-
-//        database.removeReport(backtraceData); //TODO: remove only when success
+        if(result.getStatus() == BacktraceResultStatus.Ok) {
+            backtraceData.report.setAsSent();
+            database.removeReport(backtraceData);
+        } else {
+            // TODO: add again to queue
+        }
+        backtraceMessage.getCallback().onEvent(result);
     }
 }

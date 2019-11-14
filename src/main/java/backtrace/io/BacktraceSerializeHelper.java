@@ -8,17 +8,7 @@ import com.google.gson.GsonBuilder;
 /**
  * Helper class for serialize and deserialize objects
  */
-public class BacktraceSerializeHelper {
-
-    /**
-     * Deserialize JSON into BacktraceResult object
-     *
-     * @param json JSON string which will be deserialized
-     * @return object created during deserialization of given json string
-     */
-    static BacktraceResult backtraceResultFromJson(String json) {
-        return new Gson().fromJson(json, BacktraceResult.class);
-    }
+class BacktraceSerializeHelper {
 
     /**
      * Serialize given object to JSON string
@@ -31,7 +21,14 @@ public class BacktraceSerializeHelper {
         return gson.toJson(object);
     }
 
-    public static <T> T fromJson(String json, Class<T> type) {
+    /**
+     *
+     * @param json
+     * @param type
+     * @param <T>
+     * @return
+     */
+    static <T> T fromJson(String json, Class<T> type) {
         return new Gson().fromJson(json, type);
     }
 }

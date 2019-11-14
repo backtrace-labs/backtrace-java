@@ -17,12 +17,27 @@ public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandle
     private final Thread.UncaughtExceptionHandler rootHandler;
     private final CountDownLatch signal = new CountDownLatch(1);
     private BacktraceClient client;
+    private boolean blockMainThread;
 
-    private BacktraceExceptionHandler(BacktraceClient client) {
+    private BacktraceExceptionHandler(BacktraceClient client, boolean blockMainThread) {
 //        BacktraceLogger.d(LOG_TAG, "BacktraceExceptionHandler initialization"); // TODO:
         this.client = client;
+        this.blockMainThread = blockMainThread;
         rootHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(this);
+    }
+
+
+    /**
+     * Enable catching unexpected exceptions by BacktraceClient
+     *
+     * @param client current Backtrace client instance
+     * @param blockMainThread //TODO:
+     *               which will be used to send information about exception
+     */
+    public static void enable(BacktraceClient client, boolean blockMainThread) {
+        Thread.UncaughtExceptionHandler currentHandler = Thread.getDefaultUncaughtExceptionHandler();
+        new BacktraceExceptionHandler(client, blockMainThread);
     }
 
     /**
@@ -32,7 +47,15 @@ public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandle
      *               which will be used to send information about exception
      */
     public static void enable(BacktraceClient client) {
-        new BacktraceExceptionHandler(client);
+        new BacktraceExceptionHandler(client, false);
+    }
+
+    public static void disable() {
+        Thread.UncaughtExceptionHandler threadDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
+        if (threadDefaultHandler instanceof BacktraceExceptionHandler) {
+            BacktraceExceptionHandler backtraceExceptionHandler = (BacktraceExceptionHandler) threadDefaultHandler;
+            Thread.setDefaultUncaughtExceptionHandler(backtraceExceptionHandler.rootHandler);
+        }
     }
 
     /**
@@ -51,6 +74,10 @@ public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandle
 //            BacktraceLogger.d(LOG_TAG, "Uncaught exception sent to Backtrace API");
         }
 //        BacktraceLogger.d(LOG_TAG, "Default uncaught exception handler");
+        if (!blockMainThread){
+            return;
+        }
+
         try {
             signal.await();
         } catch (Exception ex) {
@@ -63,8 +90,10 @@ public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandle
             @Override
             public void onEvent(BacktraceResult backtraceResult) {
 //                BacktraceLogger.d(LOG_TAG, "Root handler event callback");
-                rootHandler.uncaughtException(thread, throwable);
                 signal.countDown();
+                if (rootHandler != null) {
+                    rootHandler.uncaughtException(thread, throwable);
+                }
             }
         };
     }
