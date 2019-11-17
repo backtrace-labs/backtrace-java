@@ -1,6 +1,6 @@
 package backtrace.io.events;
 
-import backtrace.io.temp.BacktraceData;
+import backtrace.io.BacktraceData;
 
 /**
  * Interface definition for a callback to be invoked before send report to Backtrace API
