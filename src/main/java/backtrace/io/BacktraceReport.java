@@ -176,10 +176,6 @@ public class BacktraceReport implements Serializable {
         }
     }
 
-    public BacktraceData toBacktraceData(Map<String, Object> clientAttributes) {
-        return new BacktraceData(this, clientAttributes);
-    }
-
     /**
      * Concat two dictionaries with attributes
      *
@@ -187,7 +183,7 @@ public class BacktraceReport implements Serializable {
      * @param attributes attributes to concatenate
      * @return concatenated map of attributes from report and from passed attributes
      */
-    public static Map<String, Object> concatAttributes(
+    static Map<String, Object> concatAttributes(
             BacktraceReport report, Map<String, Object> attributes) {
         Map<String, Object> reportAttributes = report.attributes != null ? report.attributes :
                 new HashMap<String, Object>();
@@ -199,7 +195,7 @@ public class BacktraceReport implements Serializable {
     }
 
 
-    public UUID getUuid() {
+    UUID getUuid() {
         return uuid;
     }
 
@@ -209,7 +205,7 @@ public class BacktraceReport implements Serializable {
     private transient CountDownLatch status;
 
 
-    public long getTimestamp() {
+    long getTimestamp() {
         return timestamp;
     }
 
