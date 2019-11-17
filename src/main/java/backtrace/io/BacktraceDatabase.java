@@ -18,65 +18,71 @@ class BacktraceDatabase {
         this.config = config;
     }
 
-    static BacktraceDatabase init(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceMessage> queue){
+    static BacktraceDatabase init(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceMessage> queue) {
         BacktraceDatabase database = new BacktraceDatabase(config.getDatabaseConfig());
         database.loadReports(queue);
         return database;
     }
 
-    private String getDatabaseDir(){
+    private String getDatabaseDir() {
         File currentDirFile = new File(config.getDatabasePath());
         return currentDirFile.getAbsolutePath();
     }
 
-    private String getFilePath(BacktraceReport backtraceReport){
+    private String getFilePath(BacktraceReport backtraceReport) {
         return getDatabaseDir() + "\\" + getFileName(backtraceReport);
     }
 
-    private String getFileName(BacktraceReport report){
+    private String getFileName(BacktraceReport report) {
         return report.getTimestamp() + "-" + report.getUuid() + "." + config.getFileExtension();
     }
 
 
-    void saveReport(BacktraceData backtraceData){
+    void saveReport(BacktraceData backtraceData) {
         String filePath = getFilePath(backtraceData.report);
         try (FileOutputStream fileOutputStream = new FileOutputStream(filePath)) {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(backtraceData);
-        }
-        catch (Exception e){
-            System.out.println(e);
-            //TODO : log that
+        } catch (Exception e) {
+            LOGGER.error("Can not save database report!", e);
         }
     }
 
-    void removeReport(BacktraceData backtraceData){
-        File file = new File(getFilePath(backtraceData.report));
+    void removeReport(BacktraceData backtraceData) {
+        String filePath = getFilePath(backtraceData.report);
+        File file = new File(filePath);
 
-        if(!file.exists() || file.isDirectory()) {
-            // TODO: log that
+        if (!file.exists() || file.isDirectory()) {
+            LOGGER.warn(String.format("File %s is directory or does not exist", filePath));
             return;
         }
 
-        if(!file.delete()){
-            // TODO: log that
+        if (!file.delete()) {
+            LOGGER.warn(String.format("File %s can not be deleted", filePath));
         }
     }
 
-    private void loadReports(final Queue<BacktraceMessage> queue){
+    private void loadReports(final Queue<BacktraceMessage> queue) {
         File databaseDir = new File(getDatabaseDir());
         File[] files = databaseDir.listFiles();
         String fileExtension = config.getFileExtension();
+
+        if (files == null) {
+            return;
+        }
+
         for (final File f : files) {
             String extension = Files.getFileExtension(f.getAbsolutePath());
 
-            if(!fileExtension.equals(extension)){
+            if (!fileExtension.equals(extension)) {
+                LOGGER.warn(String.format("File extension (%s) in database directory does not match to database files extension (%s)", fileExtension, extension));
                 continue;
             }
 
             BacktraceData report = loadReport(f);
 
-            if (report == null){
+            if (report == null) {
+                LOGGER.warn("Current report is null");
                 continue;
             }
 
@@ -84,13 +90,12 @@ class BacktraceDatabase {
         }
     }
 
-    private BacktraceData loadReport(File file){
-        try(FileInputStream fileInputStream = new FileInputStream(file)){
+    private BacktraceData loadReport(File file) {
+        try (FileInputStream fileInputStream = new FileInputStream(file)) {
             ObjectInputStream reader = new ObjectInputStream(fileInputStream);
-            return (BacktraceData)reader.readObject();
-        }
-        catch (Exception e){
-            System.out.println(e);
+            return (BacktraceData) reader.readObject();
+        } catch (Exception e) {
+            LOGGER.error("Can not load report from file", e);
         }
         return null;
     }
