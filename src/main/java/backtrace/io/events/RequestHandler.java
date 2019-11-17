@@ -1,7 +1,7 @@
 package backtrace.io.events;
 
 
-import backtrace.io.temp.BacktraceData;
+import backtrace.io.BacktraceData;
 import backtrace.io.BacktraceResult;
 
 /**
