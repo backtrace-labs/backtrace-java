@@ -15,14 +15,6 @@ import java.util.Scanner;
 public class FileHelper {
 
     private static final transient Logger LOGGER = LoggerFactory.getLogger(FileHelper.class);
-    /***
-     * Get file name with extension from file path
-     * @param absolutePath absolute path to file
-     * @return file name with extension
-     */
-    static String getFileNameFromPath(String absolutePath) {
-        return absolutePath.substring(absolutePath.lastIndexOf("/") + 1);
-    }
 
     /***
      * Remove from path list invalid paths like empty or incorrect paths or not existing files

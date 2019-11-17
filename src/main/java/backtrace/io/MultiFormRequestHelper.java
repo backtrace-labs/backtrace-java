@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLConnection;
+import java.nio.file.Paths;
 import java.util.List;
 
 
@@ -95,16 +96,12 @@ class MultiFormRequestHelper {
             LOGGER.warn("Absolute path or output stream is null");
             return;
         }
-
-        String fileContentType = URLConnection.guessContentTypeFromName(FileHelper
-                .getFileNameFromPath
-                        (absolutePath));
+        String fileName = Paths.get(absolutePath).getFileName().toString();
+        String fileContentType = URLConnection.guessContentTypeFromName(fileName);
 
         outputStream.write((MultiFormRequestHelper.TWO_HYPHENS + MultiFormRequestHelper.BOUNDARY +
                 MultiFormRequestHelper.CRLF).getBytes());
-        outputStream.write((MultiFormRequestHelper.getFileInfo("attachment_" + FileHelper
-                .getFileNameFromPath
-                        (absolutePath))).getBytes());
+        outputStream.write((MultiFormRequestHelper.getFileInfo("attachment_" + fileName)).getBytes());
         outputStream.write(("Content-Type: " + fileContentType + MultiFormRequestHelper.CRLF)
                 .getBytes
                         ());

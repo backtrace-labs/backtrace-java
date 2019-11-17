@@ -53,7 +53,7 @@ public class BacktraceReport implements Serializable {
     /**
      * Current report exception stack
      */
-    ArrayList<StackFrame> diagnosticStack;
+    ArrayList<BacktraceStackFrame> diagnosticStack;
 
     /**
      * Create new instance of Backtrace report to sending a report with custom client message
@@ -169,7 +169,7 @@ public class BacktraceReport implements Serializable {
         this.attachmentPaths = attachmentPaths == null ? new ArrayList<String>() : attachmentPaths;
         this.exception = exception;
         this.exceptionTypeReport = exception != null;
-        this.diagnosticStack = new StackTrace(exception).getStackFrames();
+        this.diagnosticStack = new BacktraceStackTrace(exception).getStackFrames();
         this.status = new CountDownLatch(1);
         if (this.exceptionTypeReport && exception != null) {
             this.classifier = exception.getClass().getCanonicalName();
