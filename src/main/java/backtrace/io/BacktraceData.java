@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 
@@ -126,10 +127,9 @@ public class BacktraceData implements Serializable {
      *
      * @return paths to attachments
      */
-    // TODO:
-//    public List<String> getAttachments() {
-//        return FileHelper.filterOutFiles(report.attachmentPaths);
-//    }
+    public List<String> getAttachments() {
+        return FileHelper.filterOutFiles(report.attachmentPaths);
+    }
 
     /**
      * Set attributes and add complex attributes to annotations
