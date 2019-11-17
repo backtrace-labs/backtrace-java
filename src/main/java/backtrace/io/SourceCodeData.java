@@ -20,14 +20,14 @@ public class SourceCodeData implements Serializable {
      */
     public Map<String, SourceCode> data = new HashMap<>();
 
-    SourceCodeData(ArrayList<StackFrame> exceptionStack) {
+    SourceCodeData(ArrayList<BacktraceStackFrame> exceptionStack) {
         LOGGER.debug("Initialization source code data");
         if (exceptionStack == null || exceptionStack.size() == 0) {
             LOGGER.warn("Exception stack is null or empty");
             return;
         }
 
-        for (StackFrame stackFrame : exceptionStack) {
+        for (BacktraceStackFrame stackFrame : exceptionStack) {
             if (stackFrame == null || stackFrame.getSourceCode().equals("")) {
                 LOGGER.warn("Stack frame is null or sourceCode is empty");
                 continue;

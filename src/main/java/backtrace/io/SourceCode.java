@@ -25,7 +25,7 @@ class SourceCode implements Serializable {
     private String sourceCodeFileName;
 
 
-    SourceCode(StackFrame stackFrame) {
+    SourceCode(BacktraceStackFrame stackFrame) {
         this.sourceCodeFileName = stackFrame.getSourceCodeFileName();
         this.startLine = stackFrame.getLine();
     }

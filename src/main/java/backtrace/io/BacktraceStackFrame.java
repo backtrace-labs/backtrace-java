@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  * Backtrace stack frame
  */
-public class StackFrame implements Serializable {
+public class BacktraceStackFrame implements Serializable {
 
     /**
      * Function where exception occurs
@@ -44,7 +44,7 @@ public class StackFrame implements Serializable {
      * Create new instance of BacktraceStackFrame
      */
     @SuppressWarnings({"UnusedDeclaration"})
-    public StackFrame() {
+    public BacktraceStackFrame() {
     }
 
     /**
@@ -52,7 +52,7 @@ public class StackFrame implements Serializable {
      *
      * @param frame single stacktrace element
      */
-    StackFrame(StackTraceElement frame) {
+    BacktraceStackFrame(StackTraceElement frame) {
         if (frame == null || frame.getMethodName() == null) {
             return;
         }

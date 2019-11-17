@@ -31,7 +31,7 @@ class ThreadInformation implements Serializable {
      */
     @SerializedName("stack")
     @SuppressWarnings({"UnusedDeclaration"})
-    private ArrayList<StackFrame> stack;
+    private ArrayList<BacktraceStackFrame> stack;
 
     /**
      * Create new instance of ThreadInformation
@@ -40,9 +40,9 @@ class ThreadInformation implements Serializable {
      * @param fault      denotes whether a thread is a faulting thread - in most cases main thread
      * @param stack      exception stack information
      */
-    private ThreadInformation(String threadName, Boolean fault, ArrayList<StackFrame>
+    private ThreadInformation(String threadName, Boolean fault, ArrayList<BacktraceStackFrame>
             stack) {
-        this.stack = stack == null ? new ArrayList<StackFrame>() : stack;
+        this.stack = stack == null ? new ArrayList<BacktraceStackFrame>() : stack;
         this.name = threadName;
         this.fault = fault;
     }
@@ -54,7 +54,7 @@ class ThreadInformation implements Serializable {
      * @param stack         exception stack information
      * @param currentThread is current thread flag
      */
-    ThreadInformation(Thread thread, ArrayList<StackFrame> stack, Boolean currentThread) {
+    ThreadInformation(Thread thread, ArrayList<BacktraceStackFrame> stack, Boolean currentThread) {
         this(thread.getName().toLowerCase(), currentThread, stack);
     }
 }

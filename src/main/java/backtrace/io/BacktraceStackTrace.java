@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * Backtrace stack trace
  */
-public class StackTrace implements Serializable {
+public class BacktraceStackTrace implements Serializable {
 
     /**
      * Current exception
@@ -17,7 +17,7 @@ public class StackTrace implements Serializable {
     /**
      * Collection of stacktrace elements
      */
-    private ArrayList<StackFrame> stackFrames = new ArrayList<>();
+    private ArrayList<BacktraceStackFrame> stackFrames = new ArrayList<>();
 
     private transient final static String NAME = "backtrace";
 
@@ -26,12 +26,12 @@ public class StackTrace implements Serializable {
      *
      * @param exception current exception
      */
-    StackTrace(Exception exception) {
+    BacktraceStackTrace(Exception exception) {
         this.exception = exception;
         initialize();
     }
 
-    ArrayList<StackFrame> getStackFrames() {
+    ArrayList<BacktraceStackFrame> getStackFrames() {
         return stackFrames;
     }
 
@@ -54,11 +54,12 @@ public class StackTrace implements Serializable {
         }
 
         for (StackTraceElement frame : frames) {
-            if (frame != null && !frame.getClassName().isEmpty() &&
-                    frame.getClassName().toLowerCase().startsWith(NAME)) {
+            if (frame == null ||
+                    (frame != null && !frame.getClassName().isEmpty() && frame.getClassName().toLowerCase().startsWith(NAME)) ||
+                    (frame.getClassName().toLowerCase().equals("java.lang.thread") && frame.getMethodName().equals("getStackTrace"))) {
                 continue;
             }
-            this.stackFrames.add(new StackFrame(frame));
+            this.stackFrames.add(new BacktraceStackFrame(frame));
         }
     }
 }

@@ -37,7 +37,7 @@ class ThreadData implements Serializable {
      *
      * @param exceptionStack current BacktraceReport exception stack
      */
-    ThreadData(ArrayList<StackFrame> exceptionStack) {
+    ThreadData(ArrayList<BacktraceStackFrame> exceptionStack) {
         generateCurrentThreadInformation(exceptionStack);
         processThreads();
     }
@@ -47,7 +47,7 @@ class ThreadData implements Serializable {
      *
      * @param exceptionStack current BacktraceReport exception stack
      */
-    private void generateCurrentThreadInformation(ArrayList<StackFrame> exceptionStack) {
+    private void generateCurrentThreadInformation(ArrayList<BacktraceStackFrame> exceptionStack) {
         Thread currThread = Thread.currentThread();
         mainThread = currThread.getName().toLowerCase();
         this.threadInformation.put(mainThread,
@@ -73,10 +73,10 @@ class ThreadData implements Serializable {
             }
 
             StackTraceElement[] stack = entry.getValue();
-            ArrayList<StackFrame> stackFrame = new ArrayList<>();
+            ArrayList<BacktraceStackFrame> stackFrame = new ArrayList<>();
             if (stack != null && stack.length != 0) {
                 for (StackTraceElement stackTraceElement : stack) {
-                    stackFrame.add(new StackFrame(stackTraceElement));
+                    stackFrame.add(new BacktraceStackFrame(stackTraceElement));
                 }
             }
             this.threadInformation.put(threadName, new ThreadInformation(thread, stackFrame, false));
