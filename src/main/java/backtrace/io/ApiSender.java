@@ -1,7 +1,5 @@
 package backtrace.io;
 
-import backtrace.io.temp.BacktraceResultStatus;
-
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
