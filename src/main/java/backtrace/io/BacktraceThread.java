@@ -1,7 +1,7 @@
 package backtrace.io;
 
 
-import backtrace.io.temp.BacktraceResultStatus;
+import backtrace.io.events.OnServerResponseEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +28,6 @@ public class BacktraceThread extends Thread {
         thread.setDaemon(true);
         thread.setName(THREAD_NAME);
         thread.start();
-//        return thread;
     }
 
     @Override
@@ -41,36 +40,38 @@ public class BacktraceThread extends Thread {
             }
 
             try {
-//                System.out.println("[BacktraceThread] " + backtraceData.report.message);
-//                System.out.println("[BacktraceThread] Single pipeline..");
                 pipeline(message);
-//                System.out.println("[BacktraceThread] Finished");
             }
             catch (Exception e){
-                System.out.println("[BacktraceThread] Exception");
-                System.out.println(e);
+                LOGGER.error("Exception during pipeline for message from queue..", e);
             }
         }
     }
 
-    private void pipeline(BacktraceMessage backtraceMessage){
+    private void pipeline(BacktraceMessage backtraceMessage) {
         BacktraceData backtraceData = backtraceMessage.getBacktraceData();
 
-        if (backtraceData == null){
+
+        if (backtraceData == null) {
+            LOGGER.warn("BacktraceData in queue is null");
             return;
         }
 
         database.saveReport(backtraceData);
         String json = BacktraceSerializeHelper.toJson(backtraceData);
 
-        BacktraceResult result = ApiSender.sendReport(config.getServerUrl(), json, null, backtraceData.report); // TODO:
+        BacktraceResult result = ApiSender.sendReport(config.getServerUrl(), json, backtraceData.getAttachments(), backtraceData.report);
 
-        if(result.getStatus() == BacktraceResultStatus.Ok) {
+        if (result.getStatus() == BacktraceResultStatus.Ok) {
             backtraceData.report.setAsSent();
             database.removeReport(backtraceData);
         } else {
-            // TODO: add again to queue
+            this.queue.add(backtraceMessage);
         }
-        backtraceMessage.getCallback().onEvent(result);
+
+        OnServerResponseEvent callback = backtraceMessage.getCallback();
+        if (callback != null) {
+            callback.onEvent(result);
+        }
     }
 }
