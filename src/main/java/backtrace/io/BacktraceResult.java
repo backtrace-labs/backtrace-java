@@ -1,6 +1,5 @@
 package backtrace.io;
 
-import backtrace.io.temp.BacktraceResultStatus;
 import com.google.gson.annotations.SerializedName;
 
 
