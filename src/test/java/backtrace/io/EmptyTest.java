@@ -4,9 +4,14 @@
 package backtrace.io;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
 
-public class BacktraceTest {
+public class EmptyTest {
     @Test public void testSomeLibraryMethod() {
+        // GIVEN
+
+        // WHEN
+
+        // THEN
+
     }
 }
