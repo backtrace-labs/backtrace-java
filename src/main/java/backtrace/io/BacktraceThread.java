@@ -51,16 +51,14 @@ public class BacktraceThread extends Thread {
     private void pipeline(BacktraceMessage backtraceMessage) {
         BacktraceData backtraceData = backtraceMessage.getBacktraceData();
 
-
         if (backtraceData == null) {
             LOGGER.warn("BacktraceData in queue is null");
             return;
         }
 
         database.saveReport(backtraceData);
-        String json = BacktraceSerializeHelper.toJson(backtraceData);
 
-        BacktraceResult result = ApiSender.sendReport(config.getServerUrl(), json, backtraceData.getAttachments(), backtraceData.getReport());
+        BacktraceResult result = ApiSender.sendReport(config.getServerUrl(), backtraceData);
 
         if (result.getStatus() == BacktraceResultStatus.Ok) {
             backtraceData.getReport().setAsSent();

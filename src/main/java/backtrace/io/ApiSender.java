@@ -17,12 +17,14 @@ class ApiSender {
      * Send HTTP request for certain url server with information about device, error, attachments
      *
      * @param serverUrl     server http address to which the request will be sent
-     * @param json          message with information about device and error
-     * @param attachments   list of paths to files that should be sent
-     * @param report        information about error
      * @return information from the server about the result of processing the request
      */
-    static BacktraceResult sendReport(String serverUrl, String json, List<String> attachments, BacktraceReport report) {
+    static BacktraceResult sendReport(String serverUrl, BacktraceData backtraceData) {
+
+        String json = BacktraceSerializeHelper.toJson(backtraceData);
+        BacktraceReport report = backtraceData.getReport();
+        List<String> attachments = backtraceData.getAttachments();
+
         HttpURLConnection urlConnection = null;
         BacktraceResult result;
 
