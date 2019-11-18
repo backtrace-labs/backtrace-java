@@ -92,7 +92,7 @@ public class BacktraceData implements Serializable {
      */
     @SerializedName("annotations")
     @SuppressWarnings({"unused", "FieldCanBeLocal"})
-    public Map<String, Object> annotations;
+    private Map<String, Object> annotations;
 
 
     @SerializedName("sourceCode")
@@ -111,7 +111,7 @@ public class BacktraceData implements Serializable {
      * @param report           current report
      * @param clientAttributes attributes which should be added to BacktraceData object
      */
-    public BacktraceData(BacktraceReport report, Map<String, Object> clientAttributes) {
+    BacktraceData(BacktraceReport report, Map<String, Object> clientAttributes) {
         if (report == null) {
             return;
         }
@@ -127,7 +127,7 @@ public class BacktraceData implements Serializable {
      *
      * @return paths to attachments
      */
-    public List<String> getAttachments() {
+    List<String> getAttachments() {
         return FileHelper.filterOutFiles(report.attachmentPaths);
     }
 
@@ -151,7 +151,7 @@ public class BacktraceData implements Serializable {
         LOGGER.debug("Setting report information");
         this.uuid = report.getUuid().toString();
         this.timestamp = report.timestamp;
-        this.classifiers = report.exceptionTypeReport ? new String[]{report.classifier} : null;
+        this.classifiers = report.getExceptionTypeReport() ? new String[]{report.classifier} : null;
         this.langVersion = System.getProperty("java.version");
         this.agentVersion = "0.1"; // TODO: FIX
     }

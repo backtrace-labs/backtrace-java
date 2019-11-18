@@ -1,5 +1,8 @@
 package backtrace.io;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
@@ -9,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 public class BacktraceReport implements Serializable {
 
+    private static final transient Logger LOGGER = LoggerFactory.getLogger(BacktraceReport.class);
     /**
      * 16 bytes of randomness in human readable UUID format
      * server will reject request if uuid is already found
@@ -20,10 +24,11 @@ public class BacktraceReport implements Serializable {
      */
     long timestamp = System.currentTimeMillis() / 1000;
 
+
     /**
      * Get information about report type. If value is true the BacktraceReport has an error
      */
-    Boolean exceptionTypeReport = false;
+    private boolean exceptionTypeReport = false;
 
     /**
      * Get a report classification
@@ -33,17 +38,20 @@ public class BacktraceReport implements Serializable {
     /**
      * Get an report attributes
      */
-    Map<String, Object> attributes;
+    private Map<String, Object> attributes;
+
+
 
     /**
      * Get a custom client message
      */
-    public String message;
+    private String message;
+
 
     /**
      * Get a report exception
      */
-    public Exception exception;
+    private Exception exception;
 
     /**
      * Get all paths to attachments
@@ -171,7 +179,7 @@ public class BacktraceReport implements Serializable {
         this.exceptionTypeReport = exception != null;
         this.diagnosticStack = new BacktraceStackTrace(exception).getStackFrames();
         this.status = new CountDownLatch(1);
-        if (this.exceptionTypeReport && exception != null) {
+        if (this.getExceptionTypeReport() && exception != null) {
             this.classifier = exception.getClass().getCanonicalName();
         }
     }
@@ -185,13 +193,23 @@ public class BacktraceReport implements Serializable {
      */
     static Map<String, Object> concatAttributes(
             BacktraceReport report, Map<String, Object> attributes) {
-        Map<String, Object> reportAttributes = report.attributes != null ? report.attributes :
-                new HashMap<String, Object>();
+        Map<String, Object> reportAttributes = report.attributes != null ? report.attributes : new HashMap<>();
         if (attributes == null) {
             return reportAttributes;
         }
         reportAttributes.putAll(attributes);
         return reportAttributes;
+    }
+
+    /**
+     *
+     * @param in
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        status = new CountDownLatch(1);
     }
 
 
@@ -204,28 +222,35 @@ public class BacktraceReport implements Serializable {
 
     private transient CountDownLatch status;
 
+    public String getMessage() {
+        return message;
+    }
 
     long getTimestamp() {
         return timestamp;
     }
 
-    protected void setAsSent(){
+    public Exception getException() {
+        return exception;
+    }
+
+    public boolean getExceptionTypeReport() {
+        return exceptionTypeReport;
+    }
+
+
+    void setAsSent(){
         // TODO: add check for status
         status.countDown();
     }
 
-    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject();
-        status = new CountDownLatch(1);
-    }
+
 
     public void waitUntilSent(){
         try {
-            status.await(20000, TimeUnit.SECONDS);
-        }
-        catch (Exception e){
-            System.out.print("[Main Thread] exception on waiting..");
-            System.out.println(e);
+            status.await(3600, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            LOGGER.error("Exception occurred during waiting for sending report..", e);
         }
     }
 }

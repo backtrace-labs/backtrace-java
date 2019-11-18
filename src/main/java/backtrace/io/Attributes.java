@@ -7,11 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-
 /**
  * Class instance to get a built-in attributes from current application
  */
-public class Attributes {
+class Attributes {
     private static final transient Logger LOGGER = LoggerFactory.getLogger(Attributes.class);
     /**
      * Get built-in primitive attributes
@@ -40,6 +39,7 @@ public class Attributes {
     Map<String, Object> getAttributes() {
         return attributes;
     }
+
     /**
      * Set information about exception (message and classifier)
      *
@@ -50,12 +50,12 @@ public class Attributes {
         if (report == null) {
             return;
         }
-        if (!report.exceptionTypeReport) {
-            this.attributes.put("error.message", report.message);
+        if (!report.getExceptionTypeReport()) {
+            this.attributes.put("error.message", report.getMessage());
             return;
         }
-        this.attributes.put("classifier", report.exception.getClass().getName());
-        this.attributes.put("error.message", report.exception.getMessage());
+        this.attributes.put("classifier", report.getException().getClass().getName());
+        this.attributes.put("error.message", report.getException().getMessage());
     }
 
 
@@ -77,17 +77,16 @@ public class Attributes {
             }
         }
         // add exception information to Complex attributes.
-        if (report.exceptionTypeReport) {
-            this.complexAttributes.put("Exception properties", report.exception);
+        if (report.getExceptionTypeReport()) {
+            this.complexAttributes.put("Exception properties", report.getException());
         }
     }
 
-    Map<String, Object> getAnnotations(){
+    Map<String, Object> getAnnotations() {
         LOGGER.debug("Setting annotations");
         Object exceptionMessage = null;
 
-        if (this.attributes != null &&
-                this.attributes.containsKey("error.message")) {
+        if (this.attributes != null && this.attributes.containsKey("error.message")) {
             exceptionMessage = this.attributes.get("error.message");
         }
         return Annotations.getAnnotations(exceptionMessage, complexAttributes);
