@@ -54,8 +54,7 @@ public class BacktraceStackTrace implements Serializable {
         }
 
         for (StackTraceElement frame : frames) {
-            if (frame == null ||
-                    (frame != null && !frame.getClassName().isEmpty() && frame.getClassName().toLowerCase().startsWith(NAME)) ||
+            if ((frame == null) || (frame != null && !frame.getClassName().isEmpty() && frame.getClassName().toLowerCase().startsWith(NAME)) ||
                     (frame.getClassName().toLowerCase().equals("java.lang.thread") && frame.getMethodName().equals("getStackTrace"))) {
                 continue;
             }

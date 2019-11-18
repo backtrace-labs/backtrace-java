@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 public class BacktraceReport implements Serializable {
 
@@ -179,7 +177,7 @@ public class BacktraceReport implements Serializable {
         this.exception = exception;
         this.exceptionTypeReport = exception != null;
         this.diagnosticStack = new BacktraceStackTrace(exception).getStackFrames();
-        this.status = new CountDownLatch(1);
+        this.status = new BacktraceReportSendingStatus();
         if (this.getExceptionTypeReport() && exception != null) {
             this.classifier = exception.getClass().getCanonicalName();
         }
@@ -210,7 +208,7 @@ public class BacktraceReport implements Serializable {
      */
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
-        status = new CountDownLatch(1);
+        status = new BacktraceReportSendingStatus();
     }
 
 
@@ -221,7 +219,7 @@ public class BacktraceReport implements Serializable {
     ///////////////////////
 
 
-    private transient CountDownLatch status;
+    private transient BacktraceReportSendingStatus status;
 
     public String getMessage() {
         return message;
@@ -244,17 +242,12 @@ public class BacktraceReport implements Serializable {
     }
 
     void setAsSent(){
-        // TODO: add check for status
-        status.countDown();
+        LOGGER.info("Set report status as sent");
+        status.reportSent();
     }
 
-
-
-    public void waitUntilSent(){
-        try {
-            status.await(3600, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            LOGGER.error("Exception occurred during waiting for sending report..", e);
-        }
+    public void await() throws InterruptedException{
+        LOGGER.info("Wait until the report will be sent");
+        status.await();
     }
 }
