@@ -7,7 +7,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * Helper class for access to files
@@ -40,12 +39,12 @@ public class FileHelper {
     }
 
     /***
-     * Check does file path is invalid, null, empty or file not exists
+     * Check does file path is invalid, null, empty or file not exists or is directory
      * @param filePath path to the file to be checked
      * @return true if path is invalid
      */
     private static boolean isFilePathInvalid(String filePath) {
-        return filePath == null || filePath.isEmpty() || !isFileExists(filePath);
+        return filePath == null || filePath.isEmpty() || !isFileExists(filePath) || new File(filePath).isDirectory();
     }
 
     /***
