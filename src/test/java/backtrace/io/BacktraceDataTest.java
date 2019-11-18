@@ -16,17 +16,17 @@ public class BacktraceDataTest {
         // WHEN
         BacktraceData data = new BacktraceData(report);
         // THEN
-        Assert.assertNull(report.getMessage());
-        Assert.assertTrue(report.getExceptionTypeReport());
-        Assert.assertEquals(exception, report.getException());
+        Assert.assertEquals(report, data.getReport());
+        Assert.assertNull(data.getAttachments());
     }
 
-    @Test public void initReportUsingMessage() {
-        // WHEN
+    @Test public void initBacktraceDataUsingMessage() {
+        // GIVEN
         BacktraceReport report = new BacktraceReport(message);
+        // WHEN
+        BacktraceData data = new BacktraceData(report);
         // THEN
-        Assert.assertNull(report.getException());
-        Assert.assertEquals(message, report.getMessage());
-        Assert.assertFalse(report.getExceptionTypeReport());
+        Assert.assertEquals(report, data.getReport());
+        Assert.assertNull(data.getAttachments());
     }
 }
