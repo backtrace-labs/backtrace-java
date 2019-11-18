@@ -51,15 +51,7 @@ class BacktraceDatabase {
     void removeReport(BacktraceData backtraceData) {
         String filePath = getFilePath(backtraceData.getReport());
         File file = new File(filePath);
-
-        if (!file.exists() || file.isDirectory()) {
-            LOGGER.warn(String.format("File %s is directory or does not exist", filePath));
-            return;
-        }
-
-        if (!file.delete()) {
-            LOGGER.warn(String.format("File %s can not be deleted", filePath));
-        }
+        removeDatabaseFile(file);
     }
 
     private void loadReports(final Queue<BacktraceMessage> queue) {
@@ -82,7 +74,7 @@ class BacktraceDatabase {
             BacktraceData report = loadReport(f);
 
             if (report == null) {
-                LOGGER.warn("Current report is null");
+                LOGGER.warn("Loaded report from file is null");
                 continue;
             }
 
@@ -90,11 +82,32 @@ class BacktraceDatabase {
         }
     }
 
+    private void removeDatabaseFile(File file){
+        if (file == null) {
+            LOGGER.warn("File is null, can not be deleted");
+            return;
+        }
+        if (!file.exists() || file.isDirectory()) {
+            LOGGER.warn(String.format("File %s is directory or does not exist", file.getPath()));
+            return;
+        }
+
+        LOGGER.info(String.format("Removing file %s from database", file.getPath()));
+
+        if (!file.delete()) {
+            LOGGER.warn(String.format("File %s can not be deleted", file.getPath()));
+        }
+    }
+
     private BacktraceData loadReport(File file) {
         try (FileInputStream fileInputStream = new FileInputStream(file)) {
             ObjectInputStream reader = new ObjectInputStream(fileInputStream);
             return (BacktraceData) reader.readObject();
-        } catch (Exception e) {
+        } catch (InvalidClassException ice){
+            LOGGER.error("Can not load report from invalid file", ice);
+            removeDatabaseFile(file);
+        }
+        catch (Exception e) {
             LOGGER.error("Can not load report from file", e);
         }
         return null;
