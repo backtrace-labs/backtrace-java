@@ -30,10 +30,11 @@ public class BacktraceReport implements Serializable {
      */
     private boolean exceptionTypeReport = false;
 
+
     /**
      * Get a report classification
      */
-    String classifier = "";
+    private String classifier = "";
 
     /**
      * Get an report attributes
@@ -174,7 +175,7 @@ public class BacktraceReport implements Serializable {
 
         this.attributes = attributes == null ? new HashMap<String, Object>() {
         } : attributes;
-        this.attachmentPaths = attachmentPaths == null ? new ArrayList<String>() : attachmentPaths;
+        this.attachmentPaths = attachmentPaths == null ? new ArrayList<>() : attachmentPaths;
         this.exception = exception;
         this.exceptionTypeReport = exception != null;
         this.diagnosticStack = new BacktraceStackTrace(exception).getStackFrames();
@@ -238,6 +239,9 @@ public class BacktraceReport implements Serializable {
         return exceptionTypeReport;
     }
 
+    public String getClassifier() {
+        return classifier;
+    }
 
     void setAsSent(){
         // TODO: add check for status

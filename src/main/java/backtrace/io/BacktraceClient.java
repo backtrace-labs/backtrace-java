@@ -5,14 +5,24 @@ import backtrace.io.events.BeforeSendEvent;
 import backtrace.io.events.OnServerResponseEvent;
 import backtrace.io.events.RequestHandler;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class BacktraceClient {
     private Backtrace backtrace;
     private BacktraceConfig config;
+    private final Map<String, Object> customAttributes;
 
     public BacktraceClient(BacktraceConfig config){
+        this(config, null);
+    }
+
+    public BacktraceClient(BacktraceConfig config, Map<String, Object> attributes){
+        this.customAttributes = attributes != null? attributes : new HashMap<>();
         this.config = config;
         this.backtrace = new Backtrace(config);
     }
+
 
     public void enableUncaughtExceptionsHandler(){
         this.enableUncaughtExceptionsHandler(false);
@@ -35,6 +45,6 @@ public class BacktraceClient {
     }
 
     public void send(BacktraceReport report, OnServerResponseEvent callback){
-        this.backtrace.send(report, callback);
+        this.backtrace.send(report, this.customAttributes, callback);
     }
 }

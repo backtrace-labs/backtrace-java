@@ -2,6 +2,8 @@ package backtrace.io;
 
 import backtrace.io.events.OnServerResponseEvent;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 class Backtrace {
@@ -12,8 +14,8 @@ class Backtrace {
         BacktraceThread.init(config, queue);
     }
 
-    void send(BacktraceReport report, OnServerResponseEvent callback){
-        BacktraceData backtraceData = new BacktraceData(report, null);
+    void send(BacktraceReport report, Map<String, Object> attributes, OnServerResponseEvent callback){
+        BacktraceData backtraceData = new BacktraceData(report, attributes);
         queue.add(new BacktraceMessage(backtraceData, callback));
     }
 }

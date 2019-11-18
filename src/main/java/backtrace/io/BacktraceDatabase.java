@@ -39,7 +39,7 @@ class BacktraceDatabase {
 
 
     void saveReport(BacktraceData backtraceData) {
-        String filePath = getFilePath(backtraceData.report);
+        String filePath = getFilePath(backtraceData.getReport());
         try (FileOutputStream fileOutputStream = new FileOutputStream(filePath)) {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(backtraceData);
@@ -49,7 +49,7 @@ class BacktraceDatabase {
     }
 
     void removeReport(BacktraceData backtraceData) {
-        String filePath = getFilePath(backtraceData.report);
+        String filePath = getFilePath(backtraceData.getReport());
         File file = new File(filePath);
 
         if (!file.exists() || file.isDirectory()) {

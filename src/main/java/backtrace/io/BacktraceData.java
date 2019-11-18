@@ -99,11 +99,20 @@ public class BacktraceData implements Serializable {
     @SuppressWarnings({"unused", "FieldCanBeLocal"})
     private Map<String, SourceCode> sourceCode;
 
+
     /**
      * Current BacktraceReport
      */
-    public BacktraceReport report;
+    private BacktraceReport report;
 
+    /**
+     * Create instance of report data
+     *
+     * @param report           current report
+     */
+    BacktraceData(BacktraceReport report) {
+        this(report, null);
+    }
 
     /**
      * Create instance of report data
@@ -151,7 +160,7 @@ public class BacktraceData implements Serializable {
         LOGGER.debug("Setting report information");
         this.uuid = report.getUuid().toString();
         this.timestamp = report.timestamp;
-        this.classifiers = report.getExceptionTypeReport() ? new String[]{report.classifier} : null;
+        this.classifiers = report.getExceptionTypeReport() ? new String[]{report.getClassifier()} : null;
         this.langVersion = System.getProperty("java.version");
         this.agentVersion = "0.1"; // TODO: FIX
     }
@@ -167,4 +176,13 @@ public class BacktraceData implements Serializable {
         SourceCodeData sourceCodeData = new SourceCodeData(report.diagnosticStack);
         this.sourceCode = sourceCodeData.data.isEmpty() ? null : sourceCodeData.data;
     }
+
+    /**
+     * Get current BacktraceReport
+     * @return current BacktraceReport
+     */
+    public BacktraceReport getReport() {
+        return report;
+    }
+
 }
