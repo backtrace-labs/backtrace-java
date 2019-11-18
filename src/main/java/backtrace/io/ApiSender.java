@@ -29,21 +29,7 @@ class ApiSender {
         BacktraceResult result;
 
         try {
-            URL url = new URL(serverUrl);
-            urlConnection = (HttpURLConnection) url.openConnection();
-
-            urlConnection.setRequestMethod("POST");
-            urlConnection.setUseCaches(false);
-
-            urlConnection.setDoOutput(true);
-            urlConnection.setDoInput(true);
-
-            urlConnection.setChunkedStreamingMode(128 * 1024);
-            urlConnection.setRequestProperty("Connection", "Keep-Alive");
-            urlConnection.setRequestProperty("Cache-Control", "no-cache");
-
-            urlConnection.setRequestProperty("Content-Type",
-                    MultiFormRequestHelper.getContentType());
+            urlConnection = getUrlConnection(serverUrl);
 
             LOGGER.debug("HttpURLConnection successfully initialized");
             DataOutputStream request = new DataOutputStream(urlConnection.getOutputStream());
@@ -85,6 +71,25 @@ class ApiSender {
             }
         }
         return result;
+    }
+
+    private static HttpURLConnection getUrlConnection(String serverUrl) throws IOException {
+        URL url = new URL(serverUrl);
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        urlConnection.setRequestMethod("POST");
+        urlConnection.setUseCaches(false);
+
+        urlConnection.setDoOutput(true);
+        urlConnection.setDoInput(true);
+
+        urlConnection.setChunkedStreamingMode(128 * 1024);
+        urlConnection.setRequestProperty("Connection", "Keep-Alive");
+        urlConnection.setRequestProperty("Cache-Control", "no-cache");
+
+        urlConnection.setRequestProperty("Content-Type",
+                MultiFormRequestHelper.getContentType());
+
+        return urlConnection;
     }
 
     /**
