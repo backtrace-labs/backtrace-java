@@ -82,7 +82,7 @@ public class Attributes {
         }
     }
 
-    public Map<String, Object> getAnnotations(){
+    Map<String, Object> getAnnotations(){
         LOGGER.debug("Setting annotations");
         Object exceptionMessage = null;
 
