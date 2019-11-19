@@ -122,6 +122,7 @@ public class BacktraceData implements Serializable {
      */
     BacktraceData(BacktraceReport report, Map<String, Object> clientAttributes) {
         if (report == null) {
+            LOGGER.warn("Report passed to BacktraceData constructor is null");
             return;
         }
         this.report = report;

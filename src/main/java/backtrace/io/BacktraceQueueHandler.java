@@ -2,14 +2,13 @@ package backtrace.io;
 
 import backtrace.io.events.OnServerResponseEvent;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-class Backtrace {
+class BacktraceQueueHandler {
     private ConcurrentLinkedQueue<BacktraceMessage> queue;
 
-    Backtrace(BacktraceConfig config){
+    BacktraceQueueHandler(BacktraceConfig config){
         queue = new ConcurrentLinkedQueue<>();
         BacktraceThread.init(config, queue);
     }

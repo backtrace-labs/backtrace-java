@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BacktraceClient {
-    private Backtrace backtrace;
+    private BacktraceQueueHandler backtrace;
     private BacktraceConfig config;
     private final Map<String, Object> customAttributes;
 
@@ -20,7 +20,7 @@ public class BacktraceClient {
     public BacktraceClient(BacktraceConfig config, Map<String, Object> attributes){
         this.customAttributes = attributes != null? attributes : new HashMap<>();
         this.config = config;
-        this.backtrace = new Backtrace(config);
+        this.backtrace = new BacktraceQueueHandler(config);
     }
 
 
