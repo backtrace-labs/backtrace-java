@@ -14,7 +14,8 @@ public class BacktraceDataTest {
         BacktraceData data = new BacktraceData(report);
         // THEN
         Assert.assertEquals(report, data.getReport());
-        Assert.assertNull(data.getAttachments());
+        Assert.assertEquals(0, data.getAttachments().size());
+        Assert.assertNotNull(data.getAttachments());
     }
 
     @Test public void initBacktraceDataUsingMessage() {
@@ -24,6 +25,7 @@ public class BacktraceDataTest {
         BacktraceData data = new BacktraceData(report);
         // THEN
         Assert.assertEquals(report, data.getReport());
-        Assert.assertNull(data.getAttachments());
+        Assert.assertEquals(0, data.getAttachments().size());
+        Assert.assertNotNull(data.getAttachments());
     }
 }
