@@ -13,38 +13,95 @@ public class BacktraceClient {
     private BacktraceConfig config;
     private final Map<String, Object> customAttributes;
 
-    public BacktraceClient(BacktraceConfig config){
+    public BacktraceClient(BacktraceConfig config) {
         this(config, null);
     }
 
-    public BacktraceClient(BacktraceConfig config, Map<String, Object> attributes){
-        this.customAttributes = attributes != null? attributes : new HashMap<>();
+    public BacktraceClient(BacktraceConfig config, Map<String, Object> attributes) {
+        this.customAttributes = attributes != null ? attributes : new HashMap<>();
         this.config = config;
         this.backtrace = new BacktraceQueueHandler(config);
     }
 
-
-    public void enableUncaughtExceptionsHandler(){
-        this.enableUncaughtExceptionsHandler(false);
-    }
-
-    public void enableUncaughtExceptionsHandler(boolean blockThread){
-        BacktraceExceptionHandler.enable(this, blockThread);
-    }
-
-    public void setCustomRequestHandler(RequestHandler customRequestHandler){
+    /**
+     *
+     * @param customRequestHandler
+     */
+    public void setCustomRequestHandler(RequestHandler customRequestHandler) {
         config.setRequestHandler(customRequestHandler);
     }
 
-    public void setBeforeSendEvent(BeforeSendEvent beforeSendEvent){
+    /**
+     *
+     * @param beforeSendEvent
+     */
+    public void setBeforeSendEvent(BeforeSendEvent beforeSendEvent) {
         config.setBeforeSendEvent(beforeSendEvent);
     }
 
-    public void send(BacktraceReport report){
+    /**
+     *
+     * @param report
+     */
+    public void send(BacktraceReport report) {
         this.send(report, null);
     }
 
-    public void send(BacktraceReport report, OnServerResponseEvent callback){
+    /**
+     *
+     * @param report
+     * @param callback
+     */
+    public void send(BacktraceReport report, OnServerResponseEvent callback) {
         this.backtrace.send(report, this.customAttributes, callback);
+    }
+
+    /**
+     *
+     * @param message
+     */
+    public void send(String message) {
+        this.send(message, null);
+    }
+
+    /**
+     *
+     * @param message
+     * @param callback
+     */
+    public void send(String message, OnServerResponseEvent callback) {
+        this.send(new BacktraceReport(message), callback);
+    }
+
+    /**
+     *
+     * @param exception
+     */
+    public void send(Exception exception) {
+        this.send(exception, null);
+    }
+
+    /**
+     *
+     * @param exception
+     * @param callback
+     */
+    public void send(Exception exception, OnServerResponseEvent callback) {
+        this.send(new BacktraceReport(exception), callback);
+    }
+
+    /**
+     *
+     */
+    public void enableUncaughtExceptionsHandler() {
+        this.enableUncaughtExceptionsHandler(false);
+    }
+
+    /**
+     *
+     * @param blockThread
+     */
+    public void enableUncaughtExceptionsHandler(boolean blockThread) {
+        BacktraceExceptionHandler.enable(this, blockThread);
     }
 }
