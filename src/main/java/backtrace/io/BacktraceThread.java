@@ -25,6 +25,6 @@ public class BacktraceThread extends Thread {
 
     @Override
     public void run(){
-        backtrace.processBacktraceMessages();
+        backtrace.handleBacktraceMessages();
     }
 }

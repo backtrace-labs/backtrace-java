@@ -20,7 +20,7 @@ public class Backtrace {
         this.queue = queue;
     }
 
-    void processBacktraceMessages(){
+    void handleBacktraceMessages(){
         while(true){
             try {
                 BacktraceMessage message = queue.poll();
