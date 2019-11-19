@@ -4,6 +4,8 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +27,10 @@ class ApiSender {
         BacktraceReport report = backtraceData.getReport();
         List<String> attachments = backtraceData.getAttachments();
 
+        return sendReport(serverUrl, json, report, attachments);
+    }
+
+    private static BacktraceResult sendReport(String serverUrl, String json, BacktraceReport report, List<String> attachments) {
         HttpURLConnection urlConnection = null;
         BacktraceResult result;
 
@@ -45,15 +51,10 @@ class ApiSender {
             LOGGER.debug("Received response status from Backtrace API for HTTP request is: " + Integer.toString(statusCode));
 
             if (statusCode == HttpURLConnection.HTTP_OK) {
-                result = BacktraceSerializeHelper.fromJson(getResponse(urlConnection), BacktraceResult.class);
-                result.setStatus(BacktraceResultStatus.Ok);
-                result.setBacktraceReport(report);
+                result = ApiSender.handleSuccessResponse(urlConnection, report);
             } else {
-                String message = getResponse(urlConnection);
-                message = (message == null || message.equals("")) ?
-                        urlConnection.getResponseMessage() : message;
                 throw new HttpException(statusCode, String.format("%s: %s",
-                        Integer.toString(statusCode), message));
+                        Integer.toString(statusCode), ApiSender.getErrorMessage(urlConnection)));
             }
 
         } catch (Exception e) {
@@ -71,6 +72,19 @@ class ApiSender {
             }
         }
         return result;
+    }
+
+    private static BacktraceResult handleSuccessResponse(HttpURLConnection urlConnection, BacktraceReport report) throws IOException {
+        BacktraceResult result = BacktraceSerializeHelper.fromJson(getResponse(urlConnection), BacktraceResult.class);
+        result.setStatus(BacktraceResultStatus.Ok);
+        result.setBacktraceReport(report);
+        return result;
+    }
+
+    private static String getErrorMessage(HttpURLConnection urlConnection) throws IOException{
+        String message = getResponse(urlConnection);
+        message = message.equals("") ? urlConnection.getResponseMessage() : message;
+        return message;
     }
 
     private static HttpURLConnection getUrlConnection(String serverUrl) throws IOException {
