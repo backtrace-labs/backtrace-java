@@ -53,7 +53,7 @@ public class BacktraceStackFrame implements Serializable {
      * @param frame single stacktrace element
      */
     BacktraceStackFrame(StackTraceElement frame) {
-        if (frame == null || frame.getMethodName() == null) {
+        if (frame == null) {
             return;
         }
         this.functionName = frame.getClassName() + "." + frame.getMethodName();

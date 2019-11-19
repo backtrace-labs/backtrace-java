@@ -3,8 +3,8 @@ package backtrace.io;
 import backtrace.io.events.OnServerResponseEvent;
 
 class BacktraceMessage {
-    BacktraceData backtraceData;
-    OnServerResponseEvent callback;
+    private BacktraceData backtraceData;
+    private OnServerResponseEvent callback;
 
     BacktraceMessage(BacktraceData backtraceData, OnServerResponseEvent callback) {
         this.backtraceData = backtraceData;

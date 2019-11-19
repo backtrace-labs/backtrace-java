@@ -47,7 +47,7 @@ class ApiSender {
             request.close();
 
             int statusCode = urlConnection.getResponseCode();
-            LOGGER.debug("Received response status from Backtrace API for HTTP request is: " + Integer.toString(statusCode));
+            LOGGER.debug("Received response status from Backtrace API for HTTP request is: " + statusCode);
 
             if (statusCode == HttpURLConnection.HTTP_OK) {
                 result = ApiSender.handleSuccessResponse(urlConnection, report);

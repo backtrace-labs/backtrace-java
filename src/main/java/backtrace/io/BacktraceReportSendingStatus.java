@@ -17,11 +17,11 @@ public class BacktraceReportSendingStatus {
         counter = new CountDownLatch(1);
     }
 
-    public void await(long timeout, TimeUnit unit) throws InterruptedException {
+    void await(long timeout, TimeUnit unit) throws InterruptedException {
         this.counter.await(timeout, unit);
     }
 
-    public void await() throws InterruptedException {
+    void await() throws InterruptedException {
         this.await(TIMEOUT, TimeUnit.SECONDS);
     }
 

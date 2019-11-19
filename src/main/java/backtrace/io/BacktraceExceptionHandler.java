@@ -86,14 +86,11 @@ public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandle
     }
 
     private OnServerResponseEvent getCallbackToDefaultHandler(final Thread thread, final Throwable throwable) {
-        return new OnServerResponseEvent() {
-            @Override
-            public void onEvent(BacktraceResult backtraceResult) {
-                LOGGER.debug("Root handler event callback");
-                signal.countDown();
-                if (rootHandler != null) {
-                    rootHandler.uncaughtException(thread, throwable);
-                }
+        return backtraceResult -> {
+            LOGGER.debug("Root handler event callback");
+            signal.countDown();
+            if (rootHandler != null) {
+                rootHandler.uncaughtException(thread, throwable);
             }
         };
     }

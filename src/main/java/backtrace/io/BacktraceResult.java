@@ -40,10 +40,10 @@ public class BacktraceResult {
      * @param message message
      * @param status  result status eg. ok, server error
      */
-    BacktraceResult(BacktraceReport report, String message, BacktraceResultStatus status) {
+    private BacktraceResult(BacktraceReport report, String message, BacktraceResultStatus status) {
         setBacktraceReport(report);
+        setStatus(status);
         this.message = message;
-        this.status = status;
     }
 
     public String getMessage() {

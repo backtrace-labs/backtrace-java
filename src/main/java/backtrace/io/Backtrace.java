@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class Backtrace {
+class Backtrace {
     private static final transient Logger LOGGER = LoggerFactory.getLogger(Backtrace.class);
     private ConcurrentLinkedQueue<BacktraceMessage> queue;
     private BacktraceDatabase database;
