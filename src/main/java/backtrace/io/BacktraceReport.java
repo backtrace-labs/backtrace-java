@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class BacktraceReport implements Serializable {
 
@@ -241,9 +242,14 @@ public class BacktraceReport implements Serializable {
         return classifier;
     }
 
-    void setAsSent(){
+    void markAsSent(){
         LOGGER.info("Set report status as sent");
         status.reportSent();
+    }
+
+    public void await(long timeout, TimeUnit unit) throws InterruptedException{
+        LOGGER.info("Wait until the report will be sent");
+        status.await(timeout, unit);
     }
 
     public void await() throws InterruptedException{

@@ -61,7 +61,7 @@ public class BacktraceThread extends Thread {
         BacktraceResult result = ApiSender.sendReport(config.getServerUrl(), backtraceData);
 
         if (result.getStatus() == BacktraceResultStatus.Ok) {
-            backtraceData.getReport().setAsSent();
+            backtraceData.getReport().markAsSent();
             database.removeReport(backtraceData);
         } else {
             this.queue.add(backtraceMessage);
