@@ -6,7 +6,6 @@ public class BacktraceDatabaseConfig {
     private boolean SAVE_TO_DATABASE = true;
 
     /**
-     *
      * @return
      */
     String getFileExtension() {
@@ -14,7 +13,6 @@ public class BacktraceDatabaseConfig {
     }
 
     /**
-     *
      * @return
      */
     String getDatabasePath() {
@@ -22,7 +20,6 @@ public class BacktraceDatabaseConfig {
     }
 
     /**
-     *
      * @return
      */
     public boolean isSaveToDatabase() {

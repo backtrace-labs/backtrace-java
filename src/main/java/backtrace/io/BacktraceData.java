@@ -108,7 +108,7 @@ public class BacktraceData implements Serializable {
     /**
      * Create instance of report data
      *
-     * @param report           current report
+     * @param report current report
      */
     BacktraceData(BacktraceReport report) {
         this(report, null);
@@ -180,6 +180,7 @@ public class BacktraceData implements Serializable {
 
     /**
      * Get current BacktraceReport
+     *
      * @return current BacktraceReport
      */
     public BacktraceReport getReport() {

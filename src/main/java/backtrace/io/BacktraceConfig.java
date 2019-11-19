@@ -11,10 +11,11 @@ public class BacktraceConfig {
 
     @SuppressWarnings("FieldCanBeLocal")
     private final String FORMAT = "json";
+
     /**
      * Initialize Backtrace credentials
      *
-     * @param endpointUrl endpoint url address
+     * @param endpointUrl     endpoint url address
      * @param submissionToken server access token
      */
     public BacktraceConfig(String endpointUrl, String submissionToken) {
@@ -22,7 +23,6 @@ public class BacktraceConfig {
     }
 
     /**
-     *
      * @return
      */
     BacktraceDatabaseConfig getDatabaseConfig() {

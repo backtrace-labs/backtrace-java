@@ -1,13 +1,12 @@
 package backtrace.io;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
-
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Class for sending and processing HTTP request
@@ -18,7 +17,7 @@ class ApiSender {
     /**
      * Send HTTP request for certain url server with information about device, error, attachments
      *
-     * @param serverUrl     server http address to which the request will be sent
+     * @param serverUrl server http address to which the request will be sent
      * @return information from the server about the result of processing the request
      */
     static BacktraceResult sendReport(String serverUrl, BacktraceData backtraceData) {
@@ -81,7 +80,7 @@ class ApiSender {
         return result;
     }
 
-    private static String getErrorMessage(HttpURLConnection urlConnection) throws IOException{
+    private static String getErrorMessage(HttpURLConnection urlConnection) throws IOException {
         String message = getResponse(urlConnection);
         message = message.equals("") ? urlConnection.getResponseMessage() : message;
         return message;

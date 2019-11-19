@@ -8,7 +8,7 @@ class BacktraceCredentials {
     /**
      * Initialize Backtrace credentials
      *
-     * @param endpointUrl endpoint url address
+     * @param endpointUrl     endpoint url address
      * @param submissionToken server access token
      */
     BacktraceCredentials(String endpointUrl, String submissionToken) {

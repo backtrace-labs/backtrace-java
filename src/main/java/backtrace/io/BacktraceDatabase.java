@@ -82,7 +82,7 @@ class BacktraceDatabase {
         }
     }
 
-    private void removeDatabaseFile(File file){
+    private void removeDatabaseFile(File file) {
         if (file == null) {
             LOGGER.warn("File is null, can not be deleted");
             return;
@@ -103,11 +103,10 @@ class BacktraceDatabase {
         try (FileInputStream fileInputStream = new FileInputStream(file)) {
             ObjectInputStream reader = new ObjectInputStream(fileInputStream);
             return (BacktraceData) reader.readObject();
-        } catch (InvalidClassException ice){
+        } catch (InvalidClassException ice) {
             LOGGER.error("Can not load report from invalid file", ice);
             removeDatabaseFile(file);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.error("Can not load report from file", e);
         }
         return null;

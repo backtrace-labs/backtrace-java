@@ -4,30 +4,32 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 public class BacktraceReportSendingStatus {
-    enum SendingStatus{
+    enum SendingStatus {
         UNSENT,
         SENT
     }
+
     private final transient int TIMEOUT = 60 * 60; // 1 hour
     private CountDownLatch counter;
     private SendingStatus status = SendingStatus.UNSENT;
 
-    BacktraceReportSendingStatus(){
+    BacktraceReportSendingStatus() {
         counter = new CountDownLatch(1);
     }
 
-    public void await(long timeout, TimeUnit unit) throws InterruptedException{
+    public void await(long timeout, TimeUnit unit) throws InterruptedException {
         this.counter.await(timeout, unit);
     }
-    public void await() throws InterruptedException{
+
+    public void await() throws InterruptedException {
         this.await(TIMEOUT, TimeUnit.SECONDS);
     }
 
-    public SendingStatus getSendingStatus(){
+    public SendingStatus getSendingStatus() {
         return status;
     }
 
-    void reportSent(){
+    void reportSent() {
         this.counter.countDown();
         this.status = SendingStatus.SENT;
     }

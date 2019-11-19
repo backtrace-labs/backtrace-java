@@ -13,15 +13,14 @@ public class Backtrace {
     private final BacktraceConfig config;
 
 
-    public Backtrace(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceMessage> queue)
-    {
+    public Backtrace(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceMessage> queue) {
         this.database = BacktraceDatabase.init(config, queue);
         this.config = config;
         this.queue = queue;
     }
 
-    void handleBacktraceMessages(){
-        while(true){
+    void handleBacktraceMessages() {
+        while (true) {
             try {
                 BacktraceMessage message = queue.poll();
 
@@ -30,14 +29,13 @@ public class Backtrace {
                 }
 
                 processSingleBacktraceMessage(message);
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 LOGGER.error("Exception during pipeline for message from queue..", e);
             }
         }
     }
 
-    private void processSingleBacktraceMessage(BacktraceMessage backtraceMessage){
+    private void processSingleBacktraceMessage(BacktraceMessage backtraceMessage) {
         BacktraceData backtraceData = backtraceMessage.getBacktraceData();
 
         if (backtraceData == null) {

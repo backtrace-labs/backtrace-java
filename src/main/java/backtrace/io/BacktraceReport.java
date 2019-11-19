@@ -41,7 +41,6 @@ public class BacktraceReport implements Serializable {
     private Map<String, Object> attributes;
 
 
-
     /**
      * Get a custom client message
      */
@@ -202,7 +201,6 @@ public class BacktraceReport implements Serializable {
     }
 
     /**
-     *
      * @param in
      * @throws IOException
      * @throws ClassNotFoundException
@@ -242,17 +240,17 @@ public class BacktraceReport implements Serializable {
         return classifier;
     }
 
-    void markAsSent(){
+    void markAsSent() {
         LOGGER.info("Set report status as sent");
         status.reportSent();
     }
 
-    public void await(long timeout, TimeUnit unit) throws InterruptedException{
+    public void await(long timeout, TimeUnit unit) throws InterruptedException {
         LOGGER.info("Wait until the report will be sent");
         status.await(timeout, unit);
     }
 
-    public void await() throws InterruptedException{
+    public void await() throws InterruptedException {
         LOGGER.info("Wait until the report will be sent");
         status.await();
     }

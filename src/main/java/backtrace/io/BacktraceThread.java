@@ -10,12 +10,12 @@ public class BacktraceThread extends Thread {
     private final static String THREAD_NAME = "backtrace-deamon";
     private Backtrace backtrace;
 
-    private BacktraceThread(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceMessage> queue){
+    private BacktraceThread(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceMessage> queue) {
         super();
         this.backtrace = new Backtrace(config, queue);
     }
 
-    static void init(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceMessage> queue){
+    static void init(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceMessage> queue) {
         LOGGER.info("Initialize BacktraceThread");
         BacktraceThread thread = new BacktraceThread(config, queue);
         thread.setDaemon(true);
@@ -24,7 +24,7 @@ public class BacktraceThread extends Thread {
     }
 
     @Override
-    public void run(){
+    public void run() {
         backtrace.handleBacktraceMessages();
     }
 }

@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.CountDownLatch;
 
 
-
 /**
  * Backtrace UncaughtExceptionHandler which will be invoked when a Thread abruptly terminates due
  * to an uncaught exception
@@ -33,9 +32,9 @@ public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandle
     /**
      * Enable catching unexpected exceptions by BacktraceClient
      *
-     * @param client current Backtrace client instance
+     * @param client      current Backtrace client instance
      * @param blockThread //TODO:
-     *               which will be used to send information about exception
+     *                    which will be used to send information about exception
      */
     static void enable(BacktraceClient client, boolean blockThread) {
         new BacktraceExceptionHandler(client, blockThread);
@@ -75,7 +74,7 @@ public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandle
             LOGGER.debug("Uncaught exception sent to Backtrace API");
         }
         LOGGER.debug("Default uncaught exception handler");
-        if (!blockThread){
+        if (!blockThread) {
             return;
         }
 

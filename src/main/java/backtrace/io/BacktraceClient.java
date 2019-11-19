@@ -24,7 +24,6 @@ public class BacktraceClient {
     }
 
     /**
-     *
      * @param customRequestHandler
      */
     public void setCustomRequestHandler(RequestHandler customRequestHandler) {
@@ -32,7 +31,6 @@ public class BacktraceClient {
     }
 
     /**
-     *
      * @param beforeSendEvent
      */
     public void setBeforeSendEvent(BeforeSendEvent beforeSendEvent) {
@@ -40,7 +38,6 @@ public class BacktraceClient {
     }
 
     /**
-     *
      * @param report
      */
     public void send(BacktraceReport report) {
@@ -48,7 +45,6 @@ public class BacktraceClient {
     }
 
     /**
-     *
      * @param report
      * @param callback
      */
@@ -57,7 +53,6 @@ public class BacktraceClient {
     }
 
     /**
-     *
      * @param message
      */
     public void send(String message) {
@@ -65,7 +60,6 @@ public class BacktraceClient {
     }
 
     /**
-     *
      * @param message
      * @param callback
      */
@@ -74,7 +68,6 @@ public class BacktraceClient {
     }
 
     /**
-     *
      * @param exception
      */
     public void send(Exception exception) {
@@ -82,7 +75,6 @@ public class BacktraceClient {
     }
 
     /**
-     *
      * @param exception
      * @param callback
      */
@@ -98,7 +90,6 @@ public class BacktraceClient {
     }
 
     /**
-     *
      * @param blockThread
      */
     public void enableUncaughtExceptionsHandler(boolean blockThread) {

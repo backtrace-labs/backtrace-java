@@ -22,7 +22,6 @@ class BacktraceSerializeHelper {
     }
 
     /**
-     *
      * @param json
      * @param type
      * @param <T>
