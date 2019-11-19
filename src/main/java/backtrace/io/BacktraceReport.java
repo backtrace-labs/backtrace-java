@@ -52,6 +52,8 @@ public class BacktraceReport implements Serializable {
      */
     private Exception exception;
 
+
+
     /**
      * Get all paths to attachments
      */
@@ -192,7 +194,7 @@ public class BacktraceReport implements Serializable {
      */
     static Map<String, Object> concatAttributes(
             BacktraceReport report, Map<String, Object> attributes) {
-        Map<String, Object> reportAttributes = report.attributes != null ? report.attributes : new HashMap<>();
+        Map<String, Object> reportAttributes = report.attributes != null ? report.getAttributes() : new HashMap<>();
         if (attributes == null) {
             return reportAttributes;
         }
@@ -213,6 +215,10 @@ public class BacktraceReport implements Serializable {
 
     UUID getUuid() {
         return uuid;
+    }
+
+    public Map<String, Object> getAttributes() {
+        return attributes;
     }
 
     ///////////////////////
@@ -240,6 +246,9 @@ public class BacktraceReport implements Serializable {
         return classifier;
     }
 
+    public List<String> getAttachmentPaths() {
+        return attachmentPaths;
+    }
     void markAsSent() {
         LOGGER.info("Set report status as sent");
         status.reportSent();

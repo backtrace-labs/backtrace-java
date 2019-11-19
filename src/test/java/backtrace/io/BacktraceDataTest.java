@@ -3,9 +3,12 @@ package backtrace.io;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class BacktraceDataTest {
     private static final String message = "test";
-
+    
     @Test public void initBacktraceDataUsingException() {
         // GIVEN
         Exception exception = new Exception(message);
