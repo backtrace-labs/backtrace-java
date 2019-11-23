@@ -79,4 +79,8 @@ public class BacktraceResult {
                 report, exception.getMessage(),
                 BacktraceResultStatus.ServerError);
     }
+
+    static BacktraceResult OnSuccess(BacktraceReport report, String message){
+        return new BacktraceResult(report, message, BacktraceResultStatus.Ok);
+    }
 }

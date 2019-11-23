@@ -18,6 +18,9 @@ public class BacktraceClient {
     }
 
     public BacktraceClient(BacktraceConfig config, Map<String, Object> attributes) {
+        if (config == null){
+            throw new NullPointerException("BacktraceConfig is null");
+        }
         this.customAttributes = attributes != null ? attributes : new HashMap<>();
         this.config = config;
         this.backtrace = new BacktraceQueueHandler(config);

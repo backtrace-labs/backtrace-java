@@ -45,18 +45,29 @@ class Backtrace {
 
         this.database.saveReport(backtraceData);
 
-        BacktraceResult result = ApiSender.sendReport(config.getServerUrl(), backtraceData);
+        BacktraceResult result = this.sendReport(backtraceData);
 
-        if (result.getStatus() == BacktraceResultStatus.Ok) {
-            backtraceData.getReport().markAsSent();
-            database.removeReport(backtraceData);
-        } else {
-            this.queue.add(backtraceMessage);
-        }
+        this.handleResponse(result, backtraceMessage);
 
         OnServerResponseEvent callback = backtraceMessage.getCallback();
         if (callback != null) {
             callback.onEvent(result);
         }
+    }
+
+    private BacktraceResult sendReport(BacktraceData backtraceData){
+        if(this.config.getRequestHandler() != null){
+            return this.config.getRequestHandler().onRequest(backtraceData);
+        }
+        return ApiSender.sendReport(config.getServerUrl(), backtraceData);
+    }
+
+    private void handleResponse(BacktraceResult result, BacktraceMessage backtraceMessage){
+        if (result.getStatus() == BacktraceResultStatus.Ok) {
+            backtraceMessage.getBacktraceData().getReport().markAsSent();
+            database.removeReport(backtraceMessage.getBacktraceData());
+            return;
+        }
+        this.queue.add(backtraceMessage);
     }
 }
