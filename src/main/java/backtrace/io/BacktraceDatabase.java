@@ -1,12 +1,15 @@
 package backtrace.io;
 
 import com.google.common.io.Files;
+import com.sun.javaws.exceptions.InvalidArgumentException;
+import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 class BacktraceDatabase {
 
@@ -15,10 +18,31 @@ class BacktraceDatabase {
 
 
     private BacktraceDatabase(BacktraceDatabaseConfig config) {
+        if (config == null){
+            throw new NullPointerException("DatabaseConfig is null");
+        }
+
         this.config = config;
+
+        if(!createDatabaseDir()){
+            throw new ValueException("Database path doesn't exist and can not be created");
+        }
     }
 
-    static BacktraceDatabase init(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceMessage> queue) {
+    private boolean createDatabaseDir(){
+        File dir = new File(this.config.getDatabasePath());
+        return dir.exists() || dir.mkdir();
+    }
+
+    static BacktraceDatabase init(BacktraceConfig config, Queue<BacktraceMessage> queue) {
+        if (config == null){
+            throw new NullPointerException("DatabaseConfig is null");
+        }
+
+        if (queue == null){
+            throw new NullPointerException("Passed queue is null");
+        }
+
         BacktraceDatabase database = new BacktraceDatabase(config.getDatabaseConfig());
         database.loadReports(queue);
         return database;
@@ -54,14 +78,16 @@ class BacktraceDatabase {
         removeDatabaseFile(file);
     }
 
-    private void loadReports(final Queue<BacktraceMessage> queue) {
+    private List<File> getDatabaseFiles(){
         File databaseDir = new File(getDatabaseDir());
         File[] files = databaseDir.listFiles();
-        String fileExtension = config.getFileExtension();
 
-        if (files == null) {
-            return;
+        if (files == null){
+            return new ArrayList<>();
         }
+
+        String fileExtension = config.getFileExtension();
+        List<File> databaseFiles = new ArrayList<>();
 
         for (final File f : files) {
             String extension = Files.getFileExtension(f.getAbsolutePath());
@@ -71,6 +97,18 @@ class BacktraceDatabase {
                 continue;
             }
 
+            databaseFiles.add(f);
+        }
+        return databaseFiles;
+    }
+
+    int size(){
+        return getDatabaseFiles().size();
+    }
+
+    private void loadReports(final Queue<BacktraceMessage> queue) {
+        List<File> files = getDatabaseFiles();
+        for (final File f : files) {
             BacktraceData report = loadReport(f);
 
             if (report == null) {

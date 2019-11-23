@@ -26,4 +26,11 @@ public class BacktraceDatabaseConfig {
         return SAVE_TO_DATABASE;
     }
 
+    /**
+     *
+     * @param databasePath
+     */
+    void setDatabasePath(String databasePath){
+        this.DATABASE_PATH = databasePath;
+    }
 }

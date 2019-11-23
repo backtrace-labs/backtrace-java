@@ -19,6 +19,13 @@ public class BacktraceConfig {
      * @param submissionToken server access token
      */
     public BacktraceConfig(String endpointUrl, String submissionToken) {
+        if (endpointUrl == null){
+            throw new NullPointerException("Endpoint URL can not be null");
+        }
+
+        if (submissionToken == null){
+            throw new NullPointerException("Submission token can not be null");
+        }
         credentials = new BacktraceCredentials(endpointUrl, submissionToken);
     }
 
@@ -58,12 +65,16 @@ public class BacktraceConfig {
         return requestHandler;
     }
 
-    void setRequestHandler(RequestHandler requestHandler) {
-        this.requestHandler = requestHandler;
-    }
-
     BeforeSendEvent getBeforeSendEvent() {
         return beforeSendEvent;
+    }
+
+    void setDatabasePath(String databasePath){
+        this.databaseConfig.setDatabasePath(databasePath);
+    }
+
+    void setRequestHandler(RequestHandler requestHandler) {
+        this.requestHandler = requestHandler;
     }
 
     void setBeforeSendEvent(BeforeSendEvent beforeSendEvent) {
