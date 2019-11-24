@@ -1,7 +1,6 @@
 package backtrace.io;
 
 import com.google.common.io.Files;
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

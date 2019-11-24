@@ -54,7 +54,6 @@ public class BacktraceReport implements Serializable {
     private Exception exception;
 
 
-
     /**
      * Get all paths to attachments
      */
@@ -229,12 +228,12 @@ public class BacktraceReport implements Serializable {
 
     private transient BacktraceReportSendingStatus status;
 
-    public int getRetryCounter() {
-        return retryCounter.get();
-    }
+//    public int getRetryCounter() {
+//        return retryCounter.get();
+//    }
 
-    public void incrementRetryCounter() {
-        retryCounter.incrementAndGet();
+    public int incrementAndGetRetryCounter() {
+        return retryCounter.addAndGet(1);
     }
 
     private transient AtomicInteger retryCounter;

@@ -3,8 +3,8 @@ package backtrace.io;
 public class BacktraceDatabaseConfig {
     private String FILE_EXTENSION = "backtrace_report";
     private String DATABASE_PATH = ".backtrace.io/";
-    private boolean SAVE_TO_DATABASE = true;
-    private Integer RETRY_LIMIT = 3;
+    private boolean USE_DATABASE = true;
+    private int RETRY_LIMIT = 3;
 
     /**
      * @return
@@ -21,15 +21,15 @@ public class BacktraceDatabaseConfig {
     }
 
 
-    public Integer getRetryLimit() {
+    public int getRetryLimit() {
         return RETRY_LIMIT;
     }
 
     /**
      * @return
      */
-    public boolean isSaveToDatabase() {
-        return SAVE_TO_DATABASE;
+    public boolean useDatabase() {
+        return USE_DATABASE;
     }
 
     /**

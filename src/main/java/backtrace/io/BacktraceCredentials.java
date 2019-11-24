@@ -33,6 +33,4 @@ class BacktraceCredentials {
     String getSubmissionToken() {
         return submissionToken;
     }
-
-
 }

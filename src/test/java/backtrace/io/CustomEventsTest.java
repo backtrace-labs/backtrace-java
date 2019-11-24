@@ -4,10 +4,12 @@ import backtrace.io.events.BeforeSendEvent;
 import backtrace.io.events.OnServerResponseEvent;
 import backtrace.io.events.RequestHandler;
 import net.jodah.concurrentunit.Waiter;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 
 public class CustomEventsTest {
+    private final String databasePath = "backtrace_test/";
     private final String message = "message";
     private BacktraceClient backtraceClient;
     private BacktraceConfig config;
@@ -23,8 +26,16 @@ public class CustomEventsTest {
     @Before
     public void init(){
         config = new BacktraceConfig("url", "token");
+        config.setDatabasePath(this.databasePath);
         this.backtraceClient = new BacktraceClient(config);
     }
+
+    @Before
+    public void cleanDatabaseDir() throws Exception {
+        File file = new File(databasePath);
+        FileHelper.deleteRecursive(file);
+    }
+
 
     @Test
     public void useRequestHandler(){
@@ -73,6 +84,7 @@ public class CustomEventsTest {
         OnServerResponseEvent callback = new OnServerResponseEvent() {
             @Override
             public void onEvent(BacktraceResult backtraceResult) {
+                Assert.assertEquals(message, backtraceResult.getMessage());
                 waiter.resume();
             }
         };
@@ -119,7 +131,7 @@ public class CustomEventsTest {
 
         // THEN
         try {
-            report.await(5, TimeUnit.SECONDS);
+            report.await();
         }
         catch (Exception e)
         {
@@ -154,7 +166,7 @@ public class CustomEventsTest {
 
         // THEN
         try {
-            report.await();
+            report.await(3, TimeUnit.SECONDS);
         }
         catch (Exception e)
         {
