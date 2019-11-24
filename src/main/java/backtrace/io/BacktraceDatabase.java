@@ -4,11 +4,10 @@ import com.google.common.io.Files;
 import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 class BacktraceDatabase {
 
@@ -69,6 +68,20 @@ class BacktraceDatabase {
         }
     }
 
+    public void validateDatabaseSize(){
+
+        List<File> files = getDatabaseFiles();
+        files.sort(FileHelper.getFileNameComparator());
+
+        if(config.isNumberOfRecordsLimited() && this.getTotalNumberOfRecords() > config.getMaxRecordCount()){
+            // TODO:
+        }
+
+        if(config.isDatabaseSizeLimited() && this.getDatabaseSize() > config.getMaxDatabaseSize()){
+            // TODO:
+        }
+    }
+
     void removeReport(BacktraceData backtraceData) {
         String filePath = getFilePath(backtraceData.getReport());
         File file = new File(filePath);
@@ -99,8 +112,12 @@ class BacktraceDatabase {
         return databaseFiles;
     }
 
-    int size(){
+    int getTotalNumberOfRecords(){
         return getDatabaseFiles().size();
+    }
+
+    long getDatabaseSize(){
+        throw new NotImplementedException();
     }
 
     private void loadReports(final Queue<BacktraceMessage> queue) {

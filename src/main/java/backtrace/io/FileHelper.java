@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
@@ -79,6 +80,16 @@ public class FileHelper {
         catch (Exception e) {
             throw new Exception("Failed to delete the folder: " + f, e);
         }
+    }
+
+
+    static Comparator<File> getFileNameComparator() {
+        return new Comparator<File>() {
+            @Override
+            public int compare(File o1, File o2) {
+                return o1.getAbsoluteFile().compareTo(o2.getAbsoluteFile());
+            }
+        };
     }
 
 }

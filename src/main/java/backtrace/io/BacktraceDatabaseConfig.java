@@ -5,6 +5,17 @@ public class BacktraceDatabaseConfig {
     private String DATABASE_PATH = ".backtrace.io/";
     private boolean USE_DATABASE = true;
     private int RETRY_LIMIT = 3;
+    private int MAX_RECORD_COUNT = 0;
+    private long MAX_DATABASE_SIZE = 0;
+
+
+    public int getMaxRecordCount() {
+        return MAX_RECORD_COUNT;
+    }
+
+    public long getMaxDatabaseSize() {
+        return MAX_DATABASE_SIZE;
+    }
 
     /**
      * @return
@@ -16,8 +27,16 @@ public class BacktraceDatabaseConfig {
     /**
      * @return
      */
-    String getDatabasePath() {
+    public String getDatabasePath() {
         return DATABASE_PATH;
+    }
+
+    boolean isNumberOfRecordsLimited(){
+        return MAX_RECORD_COUNT != 0;
+    }
+
+    boolean isDatabaseSizeLimited(){
+        return MAX_DATABASE_SIZE != 0;
     }
 
 
@@ -33,7 +52,7 @@ public class BacktraceDatabaseConfig {
         this.USE_DATABASE = false;
     }
 
-    public boolean useDatabase() {
+    boolean useDatabase() {
         return USE_DATABASE;
     }
 
@@ -41,14 +60,22 @@ public class BacktraceDatabaseConfig {
      *
      * @param databasePath
      */
-    void setDatabasePath(String databasePath){
+    public void setDatabasePath(String databasePath){
         this.DATABASE_PATH = databasePath;
     }
 
-    void setDatabaseRetryLimit(int retryLimit){
+    public void setDatabaseRetryLimit(int retryLimit){
         if(retryLimit < 0 ){
             throw new IllegalArgumentException("Retry limit value should be greater than or equal to zero");
         }
         this.RETRY_LIMIT = retryLimit;
+    }
+
+    public void setMaxDatabaseSize(long maxDatabaseSize) {
+        this.MAX_DATABASE_SIZE = maxDatabaseSize;
+    }
+
+    public void setMaxRecordCount(int maxRecordCount) {
+        this.MAX_RECORD_COUNT = maxRecordCount;
     }
 }

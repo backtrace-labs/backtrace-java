@@ -49,4 +49,13 @@ public class DatabaseConfigTest {
         }
         Assert.assertEquals(RETRY_LIMIT, report.getRetryCounter());
     }
+
+    @Test public void limitedNumberOfRecords() {
+        // GIVEN
+
+        // WHEN
+
+        // THEN
+
+    }
 }
