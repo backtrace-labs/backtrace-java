@@ -66,9 +66,6 @@ public class BacktraceDatabaseTest {
         Assert.assertEquals(0, queue.size());
     }
 
-
-
-
     @Test
     public void saveReportToDatabase() {
         // GIVEN
