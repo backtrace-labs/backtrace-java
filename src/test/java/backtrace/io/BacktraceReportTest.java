@@ -21,6 +21,31 @@ public class BacktraceReportTest {
         Assert.assertEquals(exception, report.getException());
     }
 
+    @Test
+    public void initReportUsingNull() {
+        // GIVEN
+        String message = null;
+        // WHEN
+        BacktraceReport report = new BacktraceReport(message);
+        // THEN
+        Assert.assertNotNull(report);
+        Assert.assertNull(report.getMessage());
+    }
+
+    @Test
+    public void initUsingException() {
+        // GIVEN
+        String message = "message";
+        Exception exception = new Exception(message);
+        // WHEN
+        BacktraceReport report = new BacktraceReport(exception);
+        // THEN
+        Assert.assertNotNull(report);
+        Assert.assertEquals(exception, report.getException());
+        Assert.assertTrue(report.getExceptionTypeReport());
+        Assert.assertEquals(exception.getClass().getName(), report.getClassifier());
+    }
+
     @Test public void initReportUsingMessage() {
         // WHEN
         BacktraceReport report = new BacktraceReport(message);
