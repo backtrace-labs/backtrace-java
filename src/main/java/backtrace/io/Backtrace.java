@@ -69,7 +69,6 @@ class Backtrace {
     }
 
     private void handleResponse(BacktraceResult result, BacktraceMessage backtraceMessage){
-        System.out.println("test");
         if (result.getStatus() == BacktraceResultStatus.Ok) {
             backtraceMessage.getBacktraceData().getReport().markAsSent();
             if(config.getDatabaseConfig().useDatabase()) {
@@ -79,7 +78,9 @@ class Backtrace {
         }
 
         BacktraceReport report = backtraceMessage.getBacktraceData().getReport();
-        if(report.incrementAndGetRetryCounter() < config.getDatabaseConfig().getRetryLimit()){
+        System.out.println(report.getRetryCounter());
+        if(report.getRetryCounter() < config.getDatabaseConfig().getRetryLimit()){
+            report.incrementAndGetRetryCounter();
             this.queue.add(backtraceMessage);
         }
     }

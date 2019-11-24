@@ -228,9 +228,9 @@ public class BacktraceReport implements Serializable {
 
     private transient BacktraceReportSendingStatus status;
 
-//    public int getRetryCounter() {
-//        return retryCounter.get();
-//    }
+    public int getRetryCounter() {
+        return retryCounter.get();
+    }
 
     public int incrementAndGetRetryCounter() {
         return retryCounter.addAndGet(1);
