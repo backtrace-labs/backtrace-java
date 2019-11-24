@@ -154,7 +154,7 @@ public class CustomEventsTest {
 
         // THEN
         try {
-            report.await(5, TimeUnit.SECONDS);
+            report.await();
         }
         catch (Exception e)
         {

@@ -82,4 +82,7 @@ public class BacktraceConfig {
         this.beforeSendEvent = beforeSendEvent;
     }
 
+    void setDatabaseRetryLimit(int value){
+        this.databaseConfig.setDatabaseRetryLimit(value);
+    }
 }

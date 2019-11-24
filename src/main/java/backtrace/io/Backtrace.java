@@ -72,6 +72,11 @@ class Backtrace {
             database.removeReport(backtraceMessage.getBacktraceData());
             return;
         }
-        this.queue.add(backtraceMessage);
+
+        BacktraceReport report = backtraceMessage.getBacktraceData().getReport();
+        if(report.getRetryCounter() < config.getDatabaseConfig().getRetryLimit()){
+            this.queue.add(backtraceMessage);
+            report.incrementRetryCounter();
+        }
     }
 }

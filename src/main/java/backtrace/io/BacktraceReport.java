@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class BacktraceReport implements Serializable {
 
@@ -180,6 +181,7 @@ public class BacktraceReport implements Serializable {
         this.exceptionTypeReport = exception != null;
         this.diagnosticStack = new BacktraceStackTrace(exception).getStackFrames();
         this.status = new BacktraceReportSendingStatus();
+        this.retryCounter = new AtomicInteger(0);
         if (this.getExceptionTypeReport() && exception != null) {
             this.classifier = exception.getClass().getCanonicalName();
         }
@@ -210,6 +212,7 @@ public class BacktraceReport implements Serializable {
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
         status = new BacktraceReportSendingStatus();
+        retryCounter = new AtomicInteger(0);
     }
 
 
@@ -225,6 +228,16 @@ public class BacktraceReport implements Serializable {
 
 
     private transient BacktraceReportSendingStatus status;
+
+    public int getRetryCounter() {
+        return retryCounter.get();
+    }
+
+    public void incrementRetryCounter() {
+        retryCounter.incrementAndGet();
+    }
+
+    private transient AtomicInteger retryCounter;
 
     public String getMessage() {
         return message;
