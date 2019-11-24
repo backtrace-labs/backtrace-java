@@ -17,13 +17,9 @@ class BacktraceDatabase {
 
 
     private BacktraceDatabase(BacktraceDatabaseConfig config) {
-        if (config == null){
-            throw new NullPointerException("DatabaseConfig is null");
-        }
-
         this.config = config;
 
-        if(!createDatabaseDir()){
+        if(config.useDatabase() && !createDatabaseDir()){
             throw new ValueException("Database path doesn't exist and can not be created");
         }
     }
@@ -43,7 +39,9 @@ class BacktraceDatabase {
         }
 
         BacktraceDatabase database = new BacktraceDatabase(config.getDatabaseConfig());
-        database.loadReports(queue);
+        if(config.getDatabaseConfig().useDatabase()) {
+            database.loadReports(queue);
+        }
         return database;
     }
 

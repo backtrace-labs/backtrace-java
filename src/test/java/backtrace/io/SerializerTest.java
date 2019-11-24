@@ -15,7 +15,7 @@ public class SerializerTest {
             this.message = message;
         }
 
-        public String getMessage(){
+        String getMessage(){
             return this.message;
         }
     }

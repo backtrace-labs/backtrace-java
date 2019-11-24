@@ -43,7 +43,9 @@ class Backtrace {
             return;
         }
 
-        this.database.saveReport(backtraceData);
+        if(config.getDatabaseConfig().useDatabase()) {
+            this.database.saveReport(backtraceData);
+        }
 
         if(config.getBeforeSendEvent() != null){
             backtraceData = config.getBeforeSendEvent().onEvent(backtraceData);
@@ -67,9 +69,12 @@ class Backtrace {
     }
 
     private void handleResponse(BacktraceResult result, BacktraceMessage backtraceMessage){
+        System.out.println("test");
         if (result.getStatus() == BacktraceResultStatus.Ok) {
             backtraceMessage.getBacktraceData().getReport().markAsSent();
-            database.removeReport(backtraceMessage.getBacktraceData());
+            if(config.getDatabaseConfig().useDatabase()) {
+                database.removeReport(backtraceMessage.getBacktraceData());
+            }
             return;
         }
 

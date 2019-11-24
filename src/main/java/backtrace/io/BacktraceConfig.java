@@ -1,7 +1,6 @@
 package backtrace.io;
 
 import backtrace.io.events.BeforeSendEvent;
-import backtrace.io.events.OnServerResponseEvent;
 import backtrace.io.events.RequestHandler;
 
 public class BacktraceConfig {
@@ -84,5 +83,9 @@ public class BacktraceConfig {
 
     void setDatabaseRetryLimit(int value){
         this.databaseConfig.setDatabaseRetryLimit(value);
+    }
+
+    public void disableDatabase(){
+        this.databaseConfig.disableDatabase();
     }
 }

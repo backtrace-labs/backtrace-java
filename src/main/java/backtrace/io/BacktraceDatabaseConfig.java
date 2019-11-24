@@ -28,6 +28,11 @@ public class BacktraceDatabaseConfig {
     /**
      * @return
      */
+
+    public void disableDatabase() {
+        this.USE_DATABASE = false;
+    }
+
     public boolean useDatabase() {
         return USE_DATABASE;
     }
