@@ -31,4 +31,12 @@ public class BacktraceDataTest {
         Assert.assertEquals(0, data.getAttachments().size());
         Assert.assertNotNull(data.getAttachments());
     }
+
+    @Test(expected = NullPointerException.class)
+    public void tryInitBacktraceDataWithNullReport(){
+        // GIVEN
+        BacktraceReport report = null;
+        // WHEN
+        new BacktraceData(report);
+    }
 }
