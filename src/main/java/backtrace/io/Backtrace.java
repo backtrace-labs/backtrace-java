@@ -78,7 +78,6 @@ class Backtrace {
         }
 
         BacktraceReport report = backtraceMessage.getBacktraceData().getReport();
-        System.out.println(report.getRetryCounter());
         if(report.getRetryCounter() < config.getDatabaseConfig().getRetryLimit()){
             report.incrementAndGetRetryCounter();
             this.queue.add(backtraceMessage);
