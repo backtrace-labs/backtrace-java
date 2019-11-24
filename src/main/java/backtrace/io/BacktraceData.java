@@ -59,6 +59,7 @@ public class BacktraceData implements Serializable {
     @SuppressWarnings({"unused", "FieldCanBeLocal"})
     private String agentVersion;
 
+
     /**
      * Get built-in attributes
      */
@@ -184,6 +185,15 @@ public class BacktraceData implements Serializable {
      */
     public BacktraceReport getReport() {
         return report;
+    }
+
+
+    /**
+     *
+     * @return
+     */
+    Map<String, Object> getAttributes() {
+        return attributes;
     }
 
 }

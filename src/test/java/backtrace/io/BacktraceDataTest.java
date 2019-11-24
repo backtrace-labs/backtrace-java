@@ -21,7 +21,7 @@ public class BacktraceDataTest {
         Assert.assertNotNull(data.getAttachments());
     }
 
-    @Test public void initBacktraceDataUsingMessage() {
+    @Test public void initBacktraceDataUsingString() {
         // GIVEN
         BacktraceReport report = new BacktraceReport(message);
         // WHEN
