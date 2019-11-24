@@ -249,6 +249,7 @@ public class BacktraceReport implements Serializable {
     public List<String> getAttachmentPaths() {
         return attachmentPaths;
     }
+
     void markAsSent() {
         LOGGER.info("Set report status as sent");
         status.reportSent();

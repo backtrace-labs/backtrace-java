@@ -1,16 +1,19 @@
 package backtrace.io;
 
+import backtrace.io.events.BeforeSendEvent;
+import backtrace.io.events.OnServerResponseEvent;
 import backtrace.io.events.RequestHandler;
+import net.jodah.concurrentunit.Waiter;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
-import java.util.LinkedList;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 
 public class BacktraceClientTest {
     private final String message = "message";
+    private BacktraceClient backtraceClient;
+    private BacktraceReport report;
 
     @Test(expected = NullPointerException.class)
     public void initBacktraceClientWithNullConfig() {
@@ -18,34 +21,13 @@ public class BacktraceClientTest {
         new BacktraceClient(null);
     }
 
-    @Test
-    public void useRequestHandler(){
-        // GIVEN
+    @Before
+    public void init(){
         BacktraceConfig config = new BacktraceConfig("url", "token");
-        BacktraceClient backtraceClient = new BacktraceClient(config);
-        final BacktraceReport report = new BacktraceReport(message);
-        final LinkedList<Integer> result = new LinkedList<>();
-        RequestHandler customRequestHandler = new RequestHandler() {
-            @Override
-            public BacktraceResult onRequest(BacktraceData data) {
-                result.add(1);
-                return BacktraceResult.OnSuccess(report, "");
-            }
-        };
-        // WHEN
-        backtraceClient.setCustomRequestHandler(customRequestHandler);
-        backtraceClient.send(report);
-
-        // THEN
-        try {
-            report.await(1000, TimeUnit.SECONDS);
-        }
-        catch (Exception e)
-        {
-            Assert.fail(e.getMessage());
-        }
-        Assert.assertEquals(1, result.size());
-        Assert.assertEquals(1, result.getFirst().intValue());
+        this.backtraceClient = new BacktraceClient(config);
+        this.report = new BacktraceReport(message);
     }
+
+
 
 }

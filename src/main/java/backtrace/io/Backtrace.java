@@ -45,6 +45,10 @@ class Backtrace {
 
         this.database.saveReport(backtraceData);
 
+        if(config.getBeforeSendEvent() != null){
+            backtraceData = config.getBeforeSendEvent().onEvent(backtraceData);
+        }
+
         BacktraceResult result = this.sendReport(backtraceData);
 
         this.handleResponse(result, backtraceMessage);

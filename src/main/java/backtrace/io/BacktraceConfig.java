@@ -1,6 +1,7 @@
 package backtrace.io;
 
 import backtrace.io.events.BeforeSendEvent;
+import backtrace.io.events.OnServerResponseEvent;
 import backtrace.io.events.RequestHandler;
 
 public class BacktraceConfig {
@@ -80,4 +81,5 @@ public class BacktraceConfig {
     void setBeforeSendEvent(BeforeSendEvent beforeSendEvent) {
         this.beforeSendEvent = beforeSendEvent;
     }
+
 }
