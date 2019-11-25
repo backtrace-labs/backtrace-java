@@ -81,8 +81,16 @@ public class BacktraceConfig {
         this.beforeSendEvent = beforeSendEvent;
     }
 
-    void setDatabaseRetryLimit(int value){
+    public void setDatabaseRetryLimit(int value){
         this.databaseConfig.setDatabaseRetryLimit(value);
+    }
+
+    public void setMaxDatabaseSize(long value){
+        this.databaseConfig.setMaxDatabaseSize(value);
+    }
+
+    public void setMaxRecordCount(int value){
+        this.databaseConfig.setMaxRecordCount(value);
     }
 
     public void disableDatabase(){

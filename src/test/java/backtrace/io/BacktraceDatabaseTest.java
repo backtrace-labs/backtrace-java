@@ -18,8 +18,7 @@ public class BacktraceDatabaseTest {
     private BacktraceData backtraceData;
 
     @Before
-    public void init() throws Exception{
-        this.cleanDatabaseDir();
+    public void init(){
         // GIVEN
         this.backtraceConfig = new BacktraceConfig("", "");
         this.backtraceConfig.setDatabasePath(databasePath);
@@ -30,6 +29,7 @@ public class BacktraceDatabaseTest {
     /**
      * Remove database dir after each test
      */
+    @Before
     @After
     public void cleanDatabaseDir() throws Exception {
         File file = new File(databasePath);
@@ -62,7 +62,8 @@ public class BacktraceDatabaseTest {
         BacktraceDatabase database = BacktraceDatabase.init(config, this.queue);
 
         // THEN
-        Assert.assertEquals(0, database.size());
+        Assert.assertEquals(0, database.getTotalNumberOfRecords());
+        Assert.assertEquals(0, database.getDatabaseSize());
         Assert.assertEquals(0, queue.size());
     }
 
@@ -74,7 +75,7 @@ public class BacktraceDatabaseTest {
         // WHEN
         database.saveReport(backtraceData);
         // THEN
-        Assert.assertEquals(1, database.size());
+        Assert.assertEquals(1, database.getTotalNumberOfRecords());
         Assert.assertEquals(0, queue.size());
     }
 
@@ -88,7 +89,7 @@ public class BacktraceDatabaseTest {
         database = BacktraceDatabase.init(this.backtraceConfig, this.queue);
 
         // THEN
-        Assert.assertEquals(1, database.size());
+        Assert.assertEquals(1, database.getTotalNumberOfRecords());
         Assert.assertEquals(1, this.queue.size());
         Assert.assertEquals(this.message, this.queue.getFirst().getBacktraceData().getReport().getMessage());
     }
@@ -103,6 +104,6 @@ public class BacktraceDatabaseTest {
         database.removeReport(this.backtraceData);
 
         // THEN
-        Assert.assertEquals(0, database.size());
+        Assert.assertEquals(0, database.getTotalNumberOfRecords());
     }
 }

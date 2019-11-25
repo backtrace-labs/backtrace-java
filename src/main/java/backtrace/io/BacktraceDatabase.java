@@ -4,10 +4,11 @@ import com.google.common.io.Files;
 import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
 
 class BacktraceDatabase {
 
@@ -18,27 +19,27 @@ class BacktraceDatabase {
     private BacktraceDatabase(BacktraceDatabaseConfig config) {
         this.config = config;
 
-        if(config.useDatabase() && !createDatabaseDir()){
+        if (config.useDatabase() && !createDatabaseDir()) {
             throw new ValueException("Database path doesn't exist and can not be created");
         }
     }
 
-    private boolean createDatabaseDir(){
+    private boolean createDatabaseDir() {
         File dir = new File(this.config.getDatabasePath());
         return dir.exists() || dir.mkdir();
     }
 
     static BacktraceDatabase init(BacktraceConfig config, Queue<BacktraceMessage> queue) {
-        if (config == null){
+        if (config == null) {
             throw new NullPointerException("DatabaseConfig is null");
         }
 
-        if (queue == null){
+        if (queue == null) {
             throw new NullPointerException("Passed queue is null");
         }
 
         BacktraceDatabase database = new BacktraceDatabase(config.getDatabaseConfig());
-        if(config.getDatabaseConfig().useDatabase()) {
+        if (config.getDatabaseConfig().useDatabase()) {
             database.loadReports(queue);
         }
         return database;
@@ -59,6 +60,13 @@ class BacktraceDatabase {
 
 
     void saveReport(BacktraceData backtraceData) {
+        boolean enoughSpace = this.deleteExcessDatabaseRecords();
+
+        if (!enoughSpace) {
+            LOGGER.warn("Not enough space to save report");
+            return;
+        }
+
         String filePath = getFilePath(backtraceData.getReport());
         try (FileOutputStream fileOutputStream = new FileOutputStream(filePath)) {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
@@ -68,18 +76,28 @@ class BacktraceDatabase {
         }
     }
 
-    public void validateDatabaseSize(){
-
+    private boolean deleteExcessDatabaseRecords() {
         List<File> files = getDatabaseFiles();
         files.sort(FileHelper.getFileNameComparator());
 
-        if(config.isNumberOfRecordsLimited() && this.getTotalNumberOfRecords() > config.getMaxRecordCount()){
-            // TODO:
+        while ((config.isNumberOfRecordsLimited() && this.getTotalNumberOfRecords() >= config.getMaxRecordCount()) ||
+                (config.isDatabaseSizeLimited() && this.getDatabaseSize() >= config.getMaxDatabaseSize())) {
+            if (files.size() == 0) {
+                LOGGER.warn("Database is empty, can not remove more files from database");
+                break;
+            }
+            File fileToRemove = files.get(0);
+            this.removeDatabaseFile(fileToRemove);
+            files.remove(0);
         }
 
-        if(config.isDatabaseSizeLimited() && this.getDatabaseSize() > config.getMaxDatabaseSize()){
-            // TODO:
+        if ((!config.isNumberOfRecordsLimited() && !config.isDatabaseSizeLimited()) ||
+                (config.isNumberOfRecordsLimited() && this.getTotalNumberOfRecords() < config.getMaxRecordCount()) ||
+                (config.isDatabaseSizeLimited() && this.getDatabaseSize() < config.getMaxDatabaseSize())) {
+            // enough space
+            return true;
         }
+        return false;
     }
 
     void removeReport(BacktraceData backtraceData) {
@@ -88,11 +106,11 @@ class BacktraceDatabase {
         removeDatabaseFile(file);
     }
 
-    private List<File> getDatabaseFiles(){
+    private List<File> getDatabaseFiles() {
         File databaseDir = new File(getDatabaseDir());
         File[] files = databaseDir.listFiles();
 
-        if (files == null){
+        if (files == null) {
             return new ArrayList<>();
         }
 
@@ -112,12 +130,19 @@ class BacktraceDatabase {
         return databaseFiles;
     }
 
-    int getTotalNumberOfRecords(){
+    int getTotalNumberOfRecords() {
         return getDatabaseFiles().size();
     }
 
-    long getDatabaseSize(){
-        throw new NotImplementedException();
+    long getDatabaseSize() {
+        long size = 0;
+        List<File> files = getDatabaseFiles();
+        for (File file : files) {
+            if (file.isFile()) {
+                size += file.length();
+            }
+        }
+        return size;
     }
 
     private void loadReports(final Queue<BacktraceMessage> queue) {
