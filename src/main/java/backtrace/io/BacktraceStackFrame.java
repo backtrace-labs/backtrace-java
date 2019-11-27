@@ -62,19 +62,15 @@ public class BacktraceStackFrame implements Serializable {
         this.line = frame.getLineNumber() > 0 ? frame.getLineNumber() : null;
     }
 
-    public String getFunctionName() {
-        return functionName;
-    }
-
-    public Integer getLine() {
+    Integer getLine() {
         return line;
     }
 
-    public String getSourceCode() {
+    String getSourceCode() {
         return sourceCode;
     }
 
-    public String getSourceCodeFileName() {
+    String getSourceCodeFileName() {
         return sourceCodeFileName;
     }
 }

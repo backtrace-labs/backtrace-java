@@ -57,11 +57,10 @@ public class FileHelper {
         return new File(absoluteFilePath).exists();
     }
 
-
     /**
-     *
-     * @param f
-     * @throws Exception
+     * Delete recursive all files
+     * @param f File
+     * @throws Exception if failed deleting file
      */
     static void deleteRecursive(File f) throws Exception {
         try {
@@ -82,7 +81,10 @@ public class FileHelper {
         }
     }
 
-
+    /**
+     * Custom comparator which compare two file names
+     * @return Custom comparator which compare two file names
+     */
     static Comparator<File> getFileNameComparator() {
         return new Comparator<File>() {
             @Override

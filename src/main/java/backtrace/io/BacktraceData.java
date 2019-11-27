@@ -107,7 +107,7 @@ public class BacktraceData implements Serializable {
     private BacktraceReport report;
 
     /**
-     * Create instance of report data
+     * Creates instance of report data
      *
      * @param report           current report
      */
@@ -116,10 +116,10 @@ public class BacktraceData implements Serializable {
     }
 
     /**
-     * Create instance of report data
+     * Creates instance of report data
      *
-     * @param report           current report
-     * @param clientAttributes attributes which should be added to BacktraceData object
+     * @param report           Current report
+     * @param clientAttributes Attributes which should be added to BacktraceData object
      */
     BacktraceData(BacktraceReport report, Map<String, Object> clientAttributes) {
         if (report == null) {
@@ -134,18 +134,18 @@ public class BacktraceData implements Serializable {
     }
 
     /**
-     * Get absolute paths to report attachments
+     * Gets absolute paths to report attachments
      *
-     * @return paths to attachments
+     * @return Paths to attachments
      */
     List<String> getAttachments() {
         return FileHelper.filterOutFiles(report.attachmentPaths);
     }
 
     /**
-     * Set attributes and add complex attributes to annotations
+     * Sets attributes and add complex attributes to annotations
      *
-     * @param clientAttributes
+     * @param clientAttributes Custom attributes passed by application
      */
     private void setAttributes(Map<String, Object> clientAttributes) {
         LOGGER.debug("Setting attributes");
@@ -156,7 +156,7 @@ public class BacktraceData implements Serializable {
 
 
     /**
-     * Set report information such as report identifier (UUID), timestamp, classifier
+     * Sets report information such as report identifier (UUID), timestamp, classifier
      */
     private void setReportInformation() {
         LOGGER.debug("Setting report information");
@@ -168,7 +168,7 @@ public class BacktraceData implements Serializable {
     }
 
     /**
-     * Set information about all threads
+     * Sets information about all threads
      */
     private void setThreadsInformation() {
         LOGGER.debug("Setting threads information");
@@ -180,8 +180,8 @@ public class BacktraceData implements Serializable {
     }
 
     /**
-     * Get current BacktraceReport
-     * @return current BacktraceReport
+     * Gets current BacktraceReport
+     * @return Current BacktraceReport
      */
     public BacktraceReport getReport() {
         return report;
@@ -189,8 +189,8 @@ public class BacktraceData implements Serializable {
 
 
     /**
-     *
-     * @return
+     * Returns built-in attributes
+     * @return Current built-in attributes
      */
     Map<String, Object> getAttributes() {
         return attributes;

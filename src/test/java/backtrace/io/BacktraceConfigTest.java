@@ -55,6 +55,6 @@ public class BacktraceConfigTest {
         BacktraceConfig backtraceConfig = new BacktraceConfig("","");
         backtraceConfig.setDatabaseRetryLimit(retryNumber);
         // THEN
-        Assert.assertEquals(retryNumber, backtraceConfig.getDatabaseConfig().getRetryLimit());
+        Assert.assertEquals(retryNumber, backtraceConfig.getDatabaseConfig().getDatabaseRetryLimit());
     }
 }

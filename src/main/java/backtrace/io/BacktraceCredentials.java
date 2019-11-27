@@ -6,7 +6,7 @@ class BacktraceCredentials {
     private String submissionToken;
 
     /**
-     * Initialize Backtrace credentials
+     * Creates Backtrace credentials instance
      *
      * @param endpointUrl     endpoint url address
      * @param submissionToken server access token
@@ -17,18 +17,18 @@ class BacktraceCredentials {
     }
 
     /**
-     * Get URL to Backtrace server API
+     * Returns URL to Backtrace server API
      *
-     * @return endpoint url
+     * @return Endpoint url
      */
     String getEndpointUrl() {
         return endpointUrl;
     }
 
     /**
-     * Get an access token to Backtrace server API
+     * Returns an access token to Backtrace server API
      *
-     * @return access token
+     * @return Access token
      */
     String getSubmissionToken() {
         return submissionToken;

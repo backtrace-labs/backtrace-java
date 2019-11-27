@@ -43,7 +43,7 @@ class Backtrace {
             return;
         }
 
-        if(config.getDatabaseConfig().useDatabase()) {
+        if(config.getDatabaseConfig().isDatabaseEnabled()) {
             this.database.saveReport(backtraceData);
         }
 
@@ -71,15 +71,15 @@ class Backtrace {
     private void handleResponse(BacktraceResult result, BacktraceMessage backtraceMessage){
         if (result.getStatus() == BacktraceResultStatus.Ok) {
             backtraceMessage.getBacktraceData().getReport().markAsSent();
-            if(config.getDatabaseConfig().useDatabase()) {
+            if(config.getDatabaseConfig().isDatabaseEnabled()) {
                 database.removeReport(backtraceMessage.getBacktraceData());
             }
             return;
         }
 
         BacktraceReport report = backtraceMessage.getBacktraceData().getReport();
-        if(report.getRetryCounter() < config.getDatabaseConfig().getRetryLimit()){
-            report.incrementAndGetRetryCounter();
+        if(report.getRetryCounter() < config.getDatabaseConfig().getDatabaseRetryLimit()){
+            report.incrementRetryCounter();
             this.queue.add(backtraceMessage);
         }
     }

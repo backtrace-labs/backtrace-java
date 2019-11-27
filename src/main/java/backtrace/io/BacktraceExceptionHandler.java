@@ -30,10 +30,10 @@ public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandle
 
 
     /**
-     * Enable catching unexpected exceptions by BacktraceClient
+     * Enables catching unexpected exceptions by BacktraceClient
      *
-     * @param client      current Backtrace client instance
-     * @param blockThread //TODO:
+     * @param client      Current Backtrace client instance
+     * @param blockThread Block thread until it gets a response from the API
      *                    which will be used to send information about exception
      */
     static void enable(BacktraceClient client, boolean blockThread) {
@@ -41,15 +41,17 @@ public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandle
     }
 
     /**
-     * Enable catching unexpected exceptions by BacktraceClient
+     * Enables catching unexpected exceptions by BacktraceClient
      *
-     * @param client current Backtrace client instance
-     *               which will be used to send information about exception
+     * @param client Current Backtrace client instance which will be used to send information about exception
      */
     public static void enable(BacktraceClient client) {
         new BacktraceExceptionHandler(client, false);
     }
 
+    /**
+     * Disables using BacktraceExceptionHandler and sets default uncaught exception handler
+     */
     public static void disable() {
         Thread.UncaughtExceptionHandler threadDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
         if (threadDefaultHandler instanceof BacktraceExceptionHandler) {
@@ -61,8 +63,8 @@ public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandle
     /**
      * Called when a thread stops because of an uncaught exception
      *
-     * @param thread    thread that is about to exit
-     * @param throwable uncaught exception
+     * @param thread    Thread that is about to exit
+     * @param throwable Uncaught exception
      */
     @Override
     public void uncaughtException(final Thread thread, final Throwable throwable) {
@@ -85,6 +87,13 @@ public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandle
         }
     }
 
+    /**
+     * Returns callback to default uncaught exception handler
+     *
+     * @param thread    current thread
+     * @param throwable error
+     * @return callback to default uncaught exception handler
+     */
     private OnServerResponseEvent getCallbackToDefaultHandler(final Thread thread, final Throwable throwable) {
         return backtraceResult -> {
             LOGGER.debug("Root handler event callback");

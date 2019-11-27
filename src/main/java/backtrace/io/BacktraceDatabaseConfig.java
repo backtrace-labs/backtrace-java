@@ -1,81 +1,66 @@
 package backtrace.io;
 
 public class BacktraceDatabaseConfig {
+    @SuppressWarnings("FieldCanBeLocal")
     private String FILE_EXTENSION = "backtrace_report";
     private String DATABASE_PATH = ".backtrace.io/";
     private boolean USE_DATABASE = true;
     private int RETRY_LIMIT = 3;
     private int MAX_RECORD_COUNT = -1;
-    private long MAX_DATABASE_SIZE = -1; // unlimited
+    private long MAX_DATABASE_SIZE = -1; // -1 is unlimited
 
-
-    public int getMaxRecordCount() {
+    int getDatabaseMaxRecordCount() {
         return MAX_RECORD_COUNT;
     }
 
-    public long getMaxDatabaseSize() {
+    long getDatabaseMaxSize() {
         return MAX_DATABASE_SIZE;
     }
 
-    /**
-     * @return
-     */
     String getFileExtension() {
         return FILE_EXTENSION;
     }
 
-    /**
-     * @return
-     */
-    public String getDatabasePath() {
+    String getDatabasePath() {
         return DATABASE_PATH;
     }
 
-    boolean isNumberOfRecordsLimited(){
-        return MAX_RECORD_COUNT != -1;
-    }
-
-    boolean isDatabaseSizeLimited(){
-        return MAX_DATABASE_SIZE != -1;
-    }
-
-
-    public int getRetryLimit() {
+    public int getDatabaseRetryLimit() {
         return RETRY_LIMIT;
     }
 
-    /**
-     * @return
-     */
-
-    public void disableDatabase() {
-        this.USE_DATABASE = false;
+    boolean isDatabaseNumberOfRecordsLimited() {
+        return MAX_RECORD_COUNT != -1;
     }
 
-    boolean useDatabase() {
+    boolean isDatabaseSizeLimited() {
+        return MAX_DATABASE_SIZE != -1;
+    }
+
+    boolean isDatabaseEnabled() {
         return USE_DATABASE;
     }
 
-    /**
-     *
-     * @param databasePath
-     */
-    public void setDatabasePath(String databasePath){
+    void disableDatabase() {
+        this.USE_DATABASE = false;
+    }
+
+    void setDatabasePath(String databasePath) {
         this.DATABASE_PATH = databasePath;
     }
 
-    public void setDatabaseRetryLimit(int retryLimit){
-        if(retryLimit < 0){
+    void setDatabaseRetryLimit(int retryLimit) {
+        if (retryLimit < 0) {
             throw new IllegalArgumentException("Retry limit value should be greater than or equal to zero");
         }
         this.RETRY_LIMIT = retryLimit;
     }
 
-    public void setMaxDatabaseSize(long maxDatabaseSize) {
+    void setMaxDatabaseSize(long maxDatabaseSize) {
         this.MAX_DATABASE_SIZE = maxDatabaseSize;
     }
 
-    public void setMaxRecordCount(int maxRecordCount) {
+    void setMaxRecordCount(int maxRecordCount) {
         this.MAX_RECORD_COUNT = maxRecordCount;
     }
 }

@@ -35,10 +35,6 @@ public class BacktraceStackTrace implements Serializable {
         return stackFrames;
     }
 
-    public Exception getException() {
-        return exception;
-    }
-
     private void initialize() {
         StackTraceElement[] stackTraceElements = this.exception != null ?
                 this.exception.getStackTrace() : Thread.currentThread().getStackTrace();

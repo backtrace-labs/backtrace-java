@@ -24,7 +24,10 @@ class SourceCode implements Serializable {
     @SuppressWarnings("FieldCanBeLocal")
     private String sourceCodeFileName;
 
-
+    /**
+     * Create SourceCode instance
+     * @param stackFrame current StackFrame
+     */
     SourceCode(BacktraceStackFrame stackFrame) {
         this.sourceCodeFileName = stackFrame.getSourceCodeFileName();
         this.startLine = stackFrame.getLine();

@@ -19,7 +19,7 @@ class BacktraceDatabase {
     private BacktraceDatabase(BacktraceDatabaseConfig config) {
         this.config = config;
 
-        if (config.useDatabase() && !createDatabaseDir()) {
+        if (config.isDatabaseEnabled() && !createDatabaseDir()) {
             throw new ValueException("Database path doesn't exist and can not be created");
         }
     }
@@ -39,7 +39,7 @@ class BacktraceDatabase {
         }
 
         BacktraceDatabase database = new BacktraceDatabase(config.getDatabaseConfig());
-        if (config.getDatabaseConfig().useDatabase()) {
+        if (config.getDatabaseConfig().isDatabaseEnabled()) {
             database.loadReports(queue);
         }
         return database;
@@ -80,8 +80,8 @@ class BacktraceDatabase {
         List<File> files = getDatabaseFiles();
         files.sort(FileHelper.getFileNameComparator());
 
-        while ((config.isNumberOfRecordsLimited() && this.getTotalNumberOfRecords() >= config.getMaxRecordCount()) ||
-                (config.isDatabaseSizeLimited() && this.getDatabaseSize() >= config.getMaxDatabaseSize())) {
+        while ((config.isDatabaseNumberOfRecordsLimited() && this.getTotalNumberOfRecords() >= config.getDatabaseMaxRecordCount()) ||
+                (config.isDatabaseSizeLimited() && this.getDatabaseSize() >= config.getDatabaseMaxSize())) {
             if (files.size() == 0) {
                 LOGGER.warn("Database is empty, can not remove more files from database");
                 break;
@@ -91,9 +91,9 @@ class BacktraceDatabase {
             files.remove(0);
         }
 
-        if ((!config.isNumberOfRecordsLimited() && !config.isDatabaseSizeLimited()) ||
-                (config.isNumberOfRecordsLimited() && this.getTotalNumberOfRecords() < config.getMaxRecordCount()) ||
-                (config.isDatabaseSizeLimited() && this.getDatabaseSize() < config.getMaxDatabaseSize())) {
+        if ((!config.isDatabaseNumberOfRecordsLimited() && !config.isDatabaseSizeLimited()) ||
+                (config.isDatabaseNumberOfRecordsLimited() && this.getTotalNumberOfRecords() < config.getDatabaseMaxRecordCount()) ||
+                (config.isDatabaseSizeLimited() && this.getDatabaseSize() < config.getDatabaseMaxSize())) {
             // enough space
             return true;
         }

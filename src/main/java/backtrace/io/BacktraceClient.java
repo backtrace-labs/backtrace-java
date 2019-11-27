@@ -13,10 +13,19 @@ public class BacktraceClient {
     private BacktraceConfig config;
     private final Map<String, Object> customAttributes;
 
+    /**
+     * Creates Backtrace client instance with BacktraceConfig
+     * @param config Library configuration
+     */
     public BacktraceClient(BacktraceConfig config) {
         this(config, null);
     }
 
+    /**
+     * Creates Backtrace client instance with BacktraceConfig and custom attributes
+     * @param config Library configuration
+     * @param attributes Custom attributes which will be attached to each report
+     */
     public BacktraceClient(BacktraceConfig config, Map<String, Object> attributes) {
         if (config == null){
             throw new NullPointerException("BacktraceConfig is null");
@@ -27,44 +36,50 @@ public class BacktraceClient {
     }
 
     /**
-     * @param customRequestHandler
+     * Sets the request which will be executed instead of the default error sending to the Backtrace API
+     * @param customRequestHandler Custom event which will be executed the default error sending to the Backtrace API
      */
     public void setCustomRequestHandler(RequestHandler customRequestHandler) {
         config.setRequestHandler(customRequestHandler);
     }
 
     /**
-     * @param beforeSendEvent
+     * Sets the event which will be executed before sending the error
+     * @param beforeSendEvent Custom event which will be executed before sending the error
      */
     public void setBeforeSendEvent(BeforeSendEvent beforeSendEvent) {
         config.setBeforeSendEvent(beforeSendEvent);
     }
 
     /**
-     * @param report
+     * Sends a report to Backtrace API
+     * @param report Error report which will be sent
      */
     public void send(BacktraceReport report) {
         this.send(report, null);
     }
 
     /**
-     * @param report
-     * @param callback
+     * Sends a report to Backtrace API and executes callback when receives a response
+     * @param report Error report which will be sent
+     * @param callback Event which will be executed after receiving a response
      */
     public void send(BacktraceReport report, OnServerResponseEvent callback) {
         this.backtrace.send(report, this.customAttributes, callback);
     }
 
     /**
-     * @param message
+     * Sends a message to Backtrace API
+     * @param message Text message
      */
     public void send(String message) {
         this.send(message, null);
     }
 
     /**
-     * @param message
-     * @param callback
+     * Sends a message to Backtrace API
+     * @param message Text message
+     * @param callback Event which will be executed after receiving a response
      */
     public void send(String message, OnServerResponseEvent callback) {
         this.send(new BacktraceReport(message), callback);
@@ -78,16 +93,14 @@ public class BacktraceClient {
     }
 
     /**
-     * @param exception
-     * @param callback
+     * Sends an exception to Backtrace API
+     * @param exception Current exception
+     * @param callback Event which will be executed after receiving a response
      */
     public void send(Exception exception, OnServerResponseEvent callback) {
         this.send(new BacktraceReport(exception), callback);
     }
 
-    /**
-     *
-     */
     public void enableUncaughtExceptionsHandler() {
         this.enableUncaughtExceptionsHandler(false);
     }

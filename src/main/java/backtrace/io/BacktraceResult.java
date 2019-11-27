@@ -45,12 +45,18 @@ public class BacktraceResult {
         setStatus(status);
         this.message = message;
     }
+    @SuppressWarnings({"UnusedDeclaration"})
+    public BacktraceReport getBacktraceReport() {
+        return backtraceReport;
+    }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public String getMessage() {
         return message;
     }
 
-    BacktraceResultStatus getStatus() {
+    @SuppressWarnings({"UnusedDeclaration"})
+    public BacktraceResultStatus getStatus() {
         return status;
     }
 
@@ -62,13 +68,8 @@ public class BacktraceResult {
         this.status = status;
     }
 
-    @SuppressWarnings({"UnusedDeclaration"})
-    public BacktraceReport getBacktraceReport() {
-        return backtraceReport;
-    }
-
     /**
-     * Set result when error occurs while sending data to API
+     * Returns result when error occurs while sending data to API
      *
      * @param report    executed report
      * @param exception current exception
@@ -80,6 +81,12 @@ public class BacktraceResult {
                 BacktraceResultStatus.ServerError);
     }
 
+    /**
+     * Returns result when the report was successfully sent
+     * @param report executed report
+     * @param message message from Backtrace API
+     * @return BacktraceResult with message from Backtrace API
+     */
     static BacktraceResult OnSuccess(BacktraceReport report, String message){
         return new BacktraceResult(report, message, BacktraceResultStatus.Ok);
     }

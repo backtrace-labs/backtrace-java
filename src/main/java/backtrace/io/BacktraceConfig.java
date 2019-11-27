@@ -13,7 +13,7 @@ public class BacktraceConfig {
     private final String FORMAT = "json";
 
     /**
-     * Initialize Backtrace credentials
+     * Creates Backtrace credentials instance
      *
      * @param endpointUrl     endpoint url address
      * @param submissionToken server access token
@@ -30,32 +30,34 @@ public class BacktraceConfig {
     }
 
     /**
-     * @return
+     * Returns instance of current database config
+     * @return Database config
      */
     BacktraceDatabaseConfig getDatabaseConfig() {
         return databaseConfig;
     }
 
     /**
-     * Get URL to Backtrace server API
+     * Returns URL to Backtrace server API
      *
-     * @return endpoint url
+     * @return Endpoint url
      */
     private String getEndpointUrl() {
         return credentials.getEndpointUrl();
     }
 
     /**
-     * Get an access token to Backtrace server API
+     * Returns an access token to Backtrace server API
      *
-     * @return access token
+     * @return Access token
      */
     private String getSubmissionToken() {
         return credentials.getSubmissionToken();
     }
 
     /**
-     * Get Backtrace console server URL with parameters
+     * Returns Backtrace console server URL with parameters
+     * @return URL for Backtrace Console
      */
     String getServerUrl() {
         return String.format("%spost?format=%s&token=%s", getEndpointUrl(), FORMAT, getSubmissionToken());

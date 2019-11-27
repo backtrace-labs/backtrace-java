@@ -24,6 +24,12 @@ class Annotations {
         }
     }
 
+    /**
+     *
+     * @param exceptionMessage
+     * @param complexAttributes
+     * @return
+     */
     static Map<String, Object> getAnnotations(Object exceptionMessage, Map<String, Object> complexAttributes) {
         Map<String, Object> result = new HashMap<>();
         result.put("Environment Variables", System.getenv());

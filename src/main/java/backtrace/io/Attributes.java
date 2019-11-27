@@ -13,21 +13,21 @@ import java.util.Map;
 class Attributes {
     private static final transient Logger LOGGER = LoggerFactory.getLogger(Attributes.class);
     /**
-     * Get built-in primitive attributes
+     * Gets built-in primitive attributes
      */
     private Map<String, Object> attributes = new HashMap<>();
 
     /**
-     * Get built-in complex attributes
+     * Gets built-in complex attributes
      */
     private Map<String, Object> complexAttributes = new HashMap<>();
 
 
     /**
-     * Create instance of Backtrace Attribute
+     * Creates instance of Backtrace Attribute
      *
-     * @param report           received Backtrace report
-     * @param clientAttributes client's attributes (report and client)
+     * @param report           Received Backtrace report
+     * @param clientAttributes Client's attributes (report and client)
      */
     Attributes(BacktraceReport report, Map<String, Object> clientAttributes) {
         if (report != null) {
@@ -41,9 +41,9 @@ class Attributes {
     }
 
     /**
-     * Set information about exception (message and classifier)
+     * Sets information about exception (message and classifier)
      *
-     * @param report received report
+     * @param report Received report
      */
     private void setExceptionAttributes(BacktraceReport report) {
         //there is no information to analyse
@@ -60,10 +60,10 @@ class Attributes {
 
 
     /**
-     * Divide custom user attributes into primitive and complex attributes and add to this object
+     * Divides custom user attributes into primitive and complex attributes and add to this object
      *
-     * @param report           received report
-     * @param clientAttributes client's attributes (report and client)
+     * @param report           Received report
+     * @param clientAttributes Client's attributes (report and client)
      */
     private void splitClientAttributes(BacktraceReport report, Map<String, Object> clientAttributes) {
         Map<String, Object> attributes = BacktraceReport.concatAttributes(report, clientAttributes);
@@ -82,6 +82,11 @@ class Attributes {
         }
     }
 
+    /**
+     * Sets exception message based on attributes and returns annotations based on complex attributes
+     * @return Annotations based on complex attributes
+     */
+    // TODO: remove setter from get method
     Map<String, Object> getAnnotations() {
         LOGGER.debug("Setting annotations");
         Object exceptionMessage = null;
@@ -89,7 +94,7 @@ class Attributes {
         if (this.attributes != null && this.attributes.containsKey("error.message")) {
             exceptionMessage = this.attributes.get("error.message");
         }
-        return Annotations.getAnnotations(exceptionMessage, complexAttributes);
+        return Annotations.getAnnotations(exceptionMessage, this.complexAttributes);
     }
 }
 
