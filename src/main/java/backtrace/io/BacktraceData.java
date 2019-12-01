@@ -164,7 +164,16 @@ public class BacktraceData implements Serializable {
         this.timestamp = report.timestamp;
         this.classifiers = report.getExceptionTypeReport() ? new String[]{report.getClassifier()} : null;
         this.langVersion = System.getProperty("java.version");
-        this.agentVersion = "0.1"; // TODO: FIX
+        this.agentVersion = getLibraryVersion(); // TODO: FIX
+    }
+
+    private String getLibraryVersion(){
+        Package objPackage = this.getClass().getPackage();
+        String version = objPackage.getSpecificationVersion();
+        if (version == null){
+            version = objPackage.getImplementationVersion();
+        }
+        return version;
     }
 
     /**

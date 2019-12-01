@@ -71,7 +71,8 @@ class Attributes {
             this.attributes.put("cpu.count", cpuCores);
         }
 
-        this.attributes.put("uname.machine", getOS());
+        this.attributes.put("uname.sysname", System.getProperty("os.name"));
+        this.attributes.put("uname.version", System.getProperty("os.version"));
 
         try {
             String hostname = InetAddress.getLocalHost().getHostName();
