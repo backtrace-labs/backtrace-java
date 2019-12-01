@@ -35,6 +35,14 @@ public class BacktraceClient {
         this.backtrace = new BacktraceQueueHandler(config);
     }
 
+    public void setApplicationVersion(String version){
+        this.customAttributes.put("version", version);
+    }
+
+    public void setApplicationName(String applicationName){
+        this.customAttributes.put("application", applicationName);
+    }
+
     /**
      * Sets the request which will be executed instead of the default error sending to the Backtrace API
      * @param customRequestHandler Custom event which will be executed the default error sending to the Backtrace API

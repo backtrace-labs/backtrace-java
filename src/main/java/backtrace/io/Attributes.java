@@ -3,8 +3,13 @@ package backtrace.io;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 
 /**
@@ -33,6 +38,7 @@ class Attributes {
         if (report != null) {
             this.splitClientAttributes(report, clientAttributes);
             this.setExceptionAttributes(report);
+            this.setHardwareAttributes();
         }
     }
 
@@ -58,6 +64,72 @@ class Attributes {
         this.attributes.put("error.message", report.getException().getMessage());
     }
 
+    private void setHardwareAttributes(){
+        int cpuCores = Runtime.getRuntime().availableProcessors();
+
+        if (cpuCores > 0){
+            this.attributes.put("cpu.count", cpuCores);
+        }
+
+        this.attributes.put("uname.machine", getOS());
+
+        try {
+            String hostname = InetAddress.getLocalHost().getHostName();
+            this.attributes.put("hostname", hostname);
+        } catch (UnknownHostException exception){
+            LOGGER.error("Can not get hostname", exception);
+        }
+
+        this.attributes.put("guid", generateMachineId());
+
+        this.attributes.put("system.memory.total", Runtime.getRuntime().totalMemory());
+        this.attributes.put("system.memory.free",  Runtime.getRuntime().freeMemory());
+        this.attributes.put("system.memory.max", Runtime.getRuntime().maxMemory());
+    }
+
+    private String generateMachineId(){
+        try {
+            InetAddress ip = InetAddress.getLocalHost();
+            System.out.println("Current IP address : " + ip.getHostAddress());
+
+            NetworkInterface network = NetworkInterface.getByInetAddress(ip);
+
+            byte[] mac = network.getHardwareAddress();
+
+            System.out.print("Current MAC address : ");
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < mac.length; i++) {
+                sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));
+            }
+            String macAddress = sb.toString();
+            String hex = macAddress.replace(":","").replace("-","");
+            return UUID.nameUUIDFromBytes(hex.getBytes()).toString();
+        }
+        catch (SocketException | UnknownHostException exception){
+            LOGGER.error("Can not get device MAC address", exception);
+        }
+        return UUID.randomUUID().toString();
+    }
+
+    /**
+     * Get the name of the operating system on which the application runs
+     * @return OS name
+     */
+    private static String getOS() {
+        String os = System.getProperty("os.name").toLowerCase();
+        if (os.contains("win")) {
+            return "Windows";
+        } else if (os.contains("nix") || os.contains("nux")
+                || os.contains("aix")) {
+            return "Linux";
+        } else if (os.contains("mac")) {
+            return "macOS";
+        } else if (os.contains("sunos")) {
+            return "Solaris";
+        }
+        return "Unknown";
+    }
 
     /**
      * Divides custom user attributes into primitive and complex attributes and add to this object
@@ -76,6 +148,7 @@ class Attributes {
                 this.complexAttributes.put(entry.getKey(), value);
             }
         }
+
         // add exception information to Complex attributes.
         if (report.getExceptionTypeReport()) {
             this.complexAttributes.put("Exception properties", report.getException());

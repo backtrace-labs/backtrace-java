@@ -77,7 +77,7 @@ public class FileHelper {
             }
         }
         catch (Exception e) {
-            throw new Exception("Failed to delete the folder: " + f, e);
+            LOGGER.error("Failed to delete the folder: " + f, e);
         }
     }
 

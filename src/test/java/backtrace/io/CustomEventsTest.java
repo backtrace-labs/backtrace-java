@@ -31,6 +31,7 @@ public class CustomEventsTest {
     }
 
     @Before
+    @After
     public void cleanDatabaseDir() throws Exception {
         File file = new File(databasePath);
         FileHelper.deleteRecursive(file);
@@ -175,5 +176,39 @@ public class CustomEventsTest {
         Assert.assertNotEquals(0, outputAttributes.size());
         Assert.assertTrue(outputAttributes.containsKey(attributeKey));
         Assert.assertEquals(attributeValue, outputAttributes.get(attributeKey));
+    }
+
+    @Test
+    public void sendRequestWithAppVersionAndName() {
+        // GIVEN
+        BacktraceReport report = new BacktraceReport(message);
+        String appVersion = "release-1.0";
+        String appName = "Java-test";
+        backtraceClient = new BacktraceClient(config);
+        Waiter waiter = new Waiter();
+
+        // WHEN
+        backtraceClient.setApplicationName(appName);
+        backtraceClient.setApplicationVersion(appVersion);
+
+        backtraceClient.setCustomRequestHandler(new RequestHandler() {
+            @Override
+            public BacktraceResult onRequest(BacktraceData data) {
+                // THEN
+                waiter.assertEquals(appName, data.getAttributes().get("application"));
+                waiter.assertEquals(appVersion, data.getAttributes().get("version"));
+                waiter.resume();
+                return null;
+            }
+        });
+
+        backtraceClient.send(report);
+
+        try {
+            waiter.await(5, TimeUnit.SECONDS);
+        }
+        catch (Exception exception){
+            waiter.fail(exception);
+        }
     }
 }
