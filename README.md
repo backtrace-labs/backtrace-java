@@ -1,4 +1,4 @@
-# Backtrace (in development)
+# Backtrace Java support
 
 [Backtrace](http://backtrace.io/)'s integration with Java applications which allows customers to capture and report handled and unhandled java exceptions to their Backtrace instance, instantly offering the ability to prioritize and debug software errors.
 
@@ -40,10 +40,18 @@ BacktraceClient client = new BacktraceClient(config);
 ## Database <a name=""></a>
 TODO:
 
+## Setting application name and version
+
+
+```java
+backtraceClient.setApplicationName("Backtrace Demo");
+backtraceClient.setApplicationVersion("1.0.0");
+```
+
 ## Sending an error report <a name="using-backtrace-sending-report"></a>
 Method `BacktraceClient.send` will send an error report to the Backtrace endpoint specified. There `send` method is overloaded, see examples below:
 
-### Using BacktraceReport
+### Using `BacktraceReport`
 The `BacktraceReport` class represents a single error report. (Optional) You can also submit custom attributes using the `attributes` parameter. You can also pass list of file paths to files which will be send to API in `attachmentPaths` parameter.
 
 ```java
@@ -61,7 +69,7 @@ try {
 }
 ```
 
-### Asynchronous Send support
+### Asynchronous `send` support
 
 Method `send` behind the mask use dedicated thread which sending report to server. You can specify the method that should be performed after completion.
 
@@ -74,7 +82,13 @@ Method `send` behind the mask use dedicated thread which sending report to serve
         });
 ```
 
-### Other BacktraceReport overloads
+Method `await` of BacktraceReport allows to block current thread until report will be sent, as a parameter you can set set the maximum time you want to wait for an answer.
+
+```java
+report.await(5, TimeUnit.SECONDS);
+```
+
+### Other `BacktraceReport` overloads
 
 `BacktraceClient` can also automatically create `BacktraceReport` given an exception or a custom message using the following overloads of the `BacktraceClient.send` method:
 
