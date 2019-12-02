@@ -35,16 +35,24 @@ public class BacktraceClient {
         this.backtrace = new BacktraceQueueHandler(config);
     }
 
+    /**
+     * Set application version, this information will be attached to each of reports as 'version' attribute
+     * @param version application version
+     */
     public void setApplicationVersion(String version){
         this.customAttributes.put("version", version);
     }
 
+    /**
+     * Set application name, this information will be attached to each of reports as 'application' attribute
+     * @param applicationName application name
+     */
     public void setApplicationName(String applicationName){
         this.customAttributes.put("application", applicationName);
     }
 
     /**
-     * Sets the request which will be executed instead of the default error sending to the Backtrace API
+     * Sets the request which will be executed instead of the default error sending to the Backtrace Console
      * @param customRequestHandler Custom event which will be executed the default error sending to the Backtrace API
      */
     public void setCustomRequestHandler(RequestHandler customRequestHandler) {
@@ -60,7 +68,7 @@ public class BacktraceClient {
     }
 
     /**
-     * Sends a report to Backtrace API
+     * Sends a report to Backtrace Console
      * @param report Error report which will be sent
      */
     public void send(BacktraceReport report) {
@@ -68,7 +76,7 @@ public class BacktraceClient {
     }
 
     /**
-     * Sends a report to Backtrace API and executes callback when receives a response
+     * Sends a report to Backtrace Console and executes callback when receives a response
      * @param report Error report which will be sent
      * @param callback Event which will be executed after receiving a response
      */
@@ -77,7 +85,7 @@ public class BacktraceClient {
     }
 
     /**
-     * Sends a message to Backtrace API
+     * Sends a message to Backtrace Console
      * @param message Text message
      */
     public void send(String message) {
@@ -85,7 +93,7 @@ public class BacktraceClient {
     }
 
     /**
-     * Sends a message to Backtrace API
+     * Sends a message to Backtrace Console
      * @param message Text message
      * @param callback Event which will be executed after receiving a response
      */
@@ -94,14 +102,15 @@ public class BacktraceClient {
     }
 
     /**
-     * @param exception
+     * Send an exception to Backtrace Console
+     * @param exception current exception
      */
     public void send(Exception exception) {
         this.send(exception, null);
     }
 
     /**
-     * Sends an exception to Backtrace API
+     * Sends an exception to Backtrace Console
      * @param exception Current exception
      * @param callback Event which will be executed after receiving a response
      */
@@ -109,13 +118,19 @@ public class BacktraceClient {
         this.send(new BacktraceReport(exception), callback);
     }
 
+    /**
+     * Enable handling of uncaught exceptions, exceptions will be sent to the Backtrace Console
+     */
+    @SuppressWarnings("unused")
     public void enableUncaughtExceptionsHandler() {
         this.enableUncaughtExceptionsHandler(false);
     }
 
     /**
-     * @param blockThread
+     * Enable handling of uncaught exceptions, exceptions will be sent to the Backtrace console
+     * @param blockThread wait until the error is sent
      */
+    @SuppressWarnings("WeakerAccess")
     public void enableUncaughtExceptionsHandler(boolean blockThread) {
         BacktraceExceptionHandler.enable(this, blockThread);
     }
