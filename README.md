@@ -37,16 +37,19 @@ BacktraceConfig config = new BacktraceConfig("https://myserver.sp.backtrace.io:6
 BacktraceClient client = new BacktraceClient(config);
 ```
 
-## Database <a name=""></a>
-TODO:
-
 ## Setting application name and version
 
+In order to easily distinguish which errors belong to which application it is recommended to set the application version and its name. This data will be sent as attributes to the Backtrace console.
 
 ```java
 backtraceClient.setApplicationName("Backtrace Demo");
 backtraceClient.setApplicationVersion("1.0.0");
 ```
+
+## Database <a name=""></a>
+TODO:
+
+
 
 ## Sending an error report <a name="using-backtrace-sending-report"></a>
 Method `BacktraceClient.send` will send an error report to the Backtrace endpoint specified. There `send` method is overloaded, see examples below:
