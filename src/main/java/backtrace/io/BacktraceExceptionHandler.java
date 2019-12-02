@@ -37,6 +37,10 @@ public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandle
      *                    which will be used to send information about exception
      */
     static void enable(BacktraceClient client, boolean blockThread) {
+        if (Thread.getDefaultUncaughtExceptionHandler() instanceof BacktraceExceptionHandler) {
+            // BacktraceExceptionHandler already enabled
+            return;
+        }
         new BacktraceExceptionHandler(client, blockThread);
     }
 
