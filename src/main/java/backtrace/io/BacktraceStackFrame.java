@@ -16,7 +16,7 @@ public class BacktraceStackFrame implements Serializable {
      * Function where exception occurs
      */
     @SerializedName("funcName")
-    @SuppressWarnings("FieldCanBeLocal")
+    @SuppressWarnings({"FieldCanBeLocal", "UnusedDeclaration"})
     private String functionName;
 
 

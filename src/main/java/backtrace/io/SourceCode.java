@@ -14,14 +14,14 @@ class SourceCode implements Serializable {
      * Line number in source code where exception occurs
      */
     @SerializedName("startLine")
-    @SuppressWarnings("FieldCanBeLocal")
+    @SuppressWarnings({"FieldCanBeLocal", "UnusedDeclaration"})
     private Integer startLine;
 
     /**
      * Filename to source file where exception occurs
      */
     @SerializedName("path")
-    @SuppressWarnings("FieldCanBeLocal")
+    @SuppressWarnings({"FieldCanBeLocal", "UnusedDeclaration"})
     private String sourceCodeFileName;
 
     /**

@@ -12,13 +12,20 @@ class Backtrace {
     private BacktraceDatabase database;
     private final BacktraceConfig config;
 
-
+    /**
+     * Creates Backtrace instance
+     * @param config Library configuration
+     * @param queue Queue containing error reports that should be sent to the Backtrace console
+     */
     public Backtrace(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceMessage> queue) {
         this.database = BacktraceDatabase.init(config, queue);
         this.config = config;
         this.queue = queue;
     }
 
+    /**
+     * Handles the queue of incoming error reports
+     */
     void handleBacktraceMessages() {
         while (true) {
             try {
@@ -35,6 +42,10 @@ class Backtrace {
         }
     }
 
+    /**
+     * Process a single message from the queue
+     * @param backtraceMessage message containing error report and callback
+     */
     private void processSingleBacktraceMessage(BacktraceMessage backtraceMessage) {
         BacktraceData backtraceData = backtraceMessage.getBacktraceData();
 
@@ -61,6 +72,11 @@ class Backtrace {
         }
     }
 
+    /**
+     * Sends a error report using custom request handler or send it to the Backtrace console by a default method
+     * @param backtraceData error report
+     * @return server response
+     */
     private BacktraceResult sendReport(BacktraceData backtraceData){
         if(this.config.getRequestHandler() != null){
             return this.config.getRequestHandler().onRequest(backtraceData);
@@ -68,6 +84,13 @@ class Backtrace {
         return ApiSender.sendReport(config.getSubmissionUrl(), backtraceData);
     }
 
+    /**
+     * Depending on the status of the response from the server, it performs various processing flows.
+     * If successful, it marks the report as sent and deletes it from the database.
+     * In case of failure, if the repetition limit is not exceeded, it adds to the queue.
+     * @param result server response
+     * @param backtraceMessage message containing error report and callback
+     */
     private void handleResponse(BacktraceResult result, BacktraceMessage backtraceMessage){
         if (result.getStatus() == BacktraceResultStatus.Ok) {
             backtraceMessage.getBacktraceData().getReport().markAsSent();

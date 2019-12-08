@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * Backtrace stack trace
  */
-public class BacktraceStackTrace implements Serializable {
+class BacktraceStackTrace implements Serializable {
 
     /**
      * Current exception
@@ -28,33 +28,35 @@ public class BacktraceStackTrace implements Serializable {
      */
     BacktraceStackTrace(Exception exception) {
         this.exception = exception;
-        initialize();
+        this.stackFrames = gatherStacktraceInformation();
     }
 
     ArrayList<BacktraceStackFrame> getStackFrames() {
         return stackFrames;
     }
 
-    private void initialize() {
+    /**
+     * Get collection of stacktrace elements from current exception/thread
+     * after filtering out frames from inside the Backtrace library
+     * @return collection of stacktrace frames
+     */
+    private ArrayList<BacktraceStackFrame> gatherStacktraceInformation() {
         StackTraceElement[] stackTraceElements = this.exception != null ?
                 this.exception.getStackTrace() : Thread.currentThread().getStackTrace();
+        
         if (stackTraceElements == null || stackTraceElements.length == 0) {
-            return;
-        }
-        setStacktraceInformation(stackTraceElements);
-    }
-
-    private void setStacktraceInformation(StackTraceElement[] frames) {
-        if (frames == null || frames.length == 0) {
-            return;
+            return null;
         }
 
-        for (StackTraceElement frame : frames) {
+        ArrayList<BacktraceStackFrame> result = new ArrayList<>();
+        for (StackTraceElement frame : stackTraceElements) {
             if ((frame == null) || (frame.getClassName().isEmpty() && frame.getClassName().toLowerCase().startsWith(NAME)) ||
                     (frame.getClassName().toLowerCase().equals("java.lang.thread") && frame.getMethodName().equals("getStackTrace"))) {
                 continue;
             }
-            this.stackFrames.add(new BacktraceStackFrame(frame));
+            result.add(new BacktraceStackFrame(frame));
         }
+        
+        return result;
     }
 }

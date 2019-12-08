@@ -15,14 +15,14 @@ class ThreadInformation implements Serializable {
      * Thread name
      */
     @SerializedName("name")
-    @SuppressWarnings("FieldCanBeLocal")
+    @SuppressWarnings({"FieldCanBeLocal", "UnusedDeclaration"})
     private String name;
 
     /**
      * Denotes whether a thread is a faulting thread
      */
     @SerializedName("fault")
-    @SuppressWarnings({"UnusedDeclaration"})
+    @SuppressWarnings({"FieldCanBeLocal", "UnusedDeclaration"})
     private Boolean fault;
 
 
@@ -30,7 +30,7 @@ class ThreadInformation implements Serializable {
      * Current thread stacktrace
      */
     @SerializedName("stack")
-    @SuppressWarnings({"UnusedDeclaration"})
+    @SuppressWarnings({"FieldCanBeLocal", "UnusedDeclaration"})
     private ArrayList<BacktraceStackFrame> stack;
 
     /**
@@ -42,7 +42,7 @@ class ThreadInformation implements Serializable {
      */
     private ThreadInformation(String threadName, Boolean fault, ArrayList<BacktraceStackFrame>
             stack) {
-        this.stack = stack == null ? new ArrayList<BacktraceStackFrame>() : stack;
+        this.stack = stack == null ? new ArrayList<>() : stack;
         this.name = threadName;
         this.fault = fault;
     }

@@ -36,7 +36,6 @@ class BacktraceReportSendingStatus {
      * @throws InterruptedException if the current thread is interrupted
      *                              while waiting
      */
-
     void await() throws InterruptedException {
         this.await(TIMEOUT, TimeUnit.SECONDS);
     }

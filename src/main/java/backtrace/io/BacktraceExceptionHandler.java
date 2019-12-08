@@ -20,6 +20,12 @@ public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandle
     private BacktraceClient client;
     private boolean blockThread;
 
+    /**
+     * Creates BacktraceExceptionHandler instance with BacktraceClient instance and blockThread flag
+     * @param client      Current Backtrace client instance
+     * @param blockThread Block thread until it gets a response from the API
+     *                    which will be used to send information about exception
+     */
     private BacktraceExceptionHandler(BacktraceClient client, boolean blockThread) {
         LOGGER.debug("BacktraceExceptionHandler initialization");
         this.client = client;

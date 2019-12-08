@@ -109,7 +109,7 @@ public class BacktraceData implements Serializable {
     /**
      * Creates instance of report data
      *
-     * @param report           current report
+     * @param report current report
      */
     BacktraceData(BacktraceReport report) {
         this(report, null);
@@ -167,10 +167,14 @@ public class BacktraceData implements Serializable {
         this.agentVersion = getLibraryVersion();
     }
 
-    private String getLibraryVersion(){
+    /**
+     * Get library version based on package information
+     * @return library version
+     */
+    private String getLibraryVersion() {
         Package objPackage = this.getClass().getPackage();
         String version = objPackage.getSpecificationVersion();
-        if (version == null){
+        if (version == null) {
             version = objPackage.getImplementationVersion();
         }
         return version;
@@ -190,6 +194,7 @@ public class BacktraceData implements Serializable {
 
     /**
      * Gets current BacktraceReport
+     *
      * @return Current BacktraceReport
      */
     public BacktraceReport getReport() {
@@ -199,6 +204,7 @@ public class BacktraceData implements Serializable {
 
     /**
      * Returns built-in attributes
+     *
      * @return Current built-in attributes
      */
     Map<String, Object> getAttributes() {

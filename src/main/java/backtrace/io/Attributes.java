@@ -64,10 +64,13 @@ class Attributes {
         this.attributes.put("error.message", report.getException().getMessage());
     }
 
-    private void setHardwareAttributes(){
+    /**
+     * Set machine attributes such as memory, operating system and processor details
+     */
+    private void setHardwareAttributes() {
         int cpuCores = Runtime.getRuntime().availableProcessors();
 
-        if (cpuCores > 0){
+        if (cpuCores > 0) {
             this.attributes.put("cpu.count", cpuCores);
         }
 
@@ -77,60 +80,42 @@ class Attributes {
         try {
             String hostname = InetAddress.getLocalHost().getHostName();
             this.attributes.put("hostname", hostname);
-        } catch (UnknownHostException exception){
+        } catch (UnknownHostException exception) {
             LOGGER.error("Can not get hostname", exception);
         }
 
         this.attributes.put("guid", generateMachineId());
 
         this.attributes.put("system.memory.total", Runtime.getRuntime().totalMemory());
-        this.attributes.put("system.memory.free",  Runtime.getRuntime().freeMemory());
+        this.attributes.put("system.memory.free", Runtime.getRuntime().freeMemory());
         this.attributes.put("system.memory.max", Runtime.getRuntime().maxMemory());
     }
 
-    private String generateMachineId(){
+    /**
+     * Generate a unique identifier that uniquely determines the device
+     * @return unique device identifier
+     */
+    private String generateMachineId() {
         try {
             InetAddress ip = InetAddress.getLocalHost();
-            System.out.println("Current IP address : " + ip.getHostAddress());
 
             NetworkInterface network = NetworkInterface.getByInetAddress(ip);
 
             byte[] mac = network.getHardwareAddress();
-
-            System.out.print("Current MAC address : ");
 
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < mac.length; i++) {
                 sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));
             }
             String macAddress = sb.toString();
-            String hex = macAddress.replace(":","").replace("-","");
+            String hex = macAddress.replace(":", "").replace("-", "");
             return UUID.nameUUIDFromBytes(hex.getBytes()).toString();
-        }
-        catch (SocketException | UnknownHostException exception){
+        } catch (SocketException | UnknownHostException exception) {
             LOGGER.error("Can not get device MAC address", exception);
         }
         return UUID.randomUUID().toString();
     }
 
-    /**
-     * Get the name of the operating system on which the application runs
-     * @return OS name
-     */
-    private static String getOS() {
-        String os = System.getProperty("os.name").toLowerCase();
-        if (os.contains("win")) {
-            return "Windows";
-        } else if (os.contains("nix") || os.contains("nux")
-                || os.contains("aix")) {
-            return "Linux";
-        } else if (os.contains("mac")) {
-            return "macOS";
-        } else if (os.contains("sunos")) {
-            return "Solaris";
-        }
-        return "Unknown";
-    }
 
     /**
      * Divides custom user attributes into primitive and complex attributes and add to this object
@@ -158,6 +143,7 @@ class Attributes {
 
     /**
      * Sets exception message based on attributes and returns annotations based on complex attributes
+     *
      * @return Annotations based on complex attributes
      */
     // TODO: remove setter from get method

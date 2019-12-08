@@ -19,10 +19,18 @@ class BacktraceCredentials {
         this(String.format("%spost?format=%s&token=%s", endpointUrl, FORMAT, submissionToken));
     }
 
+    /**
+     * Creates Backtrace credentials instance
+     * @param backtraceHostUri submission uri string
+     */
     BacktraceCredentials(String backtraceHostUri){
         this(URI.create(backtraceHostUri));
     }
 
+    /**
+     * Creates Backtrace credentials instance
+     * @param backtraceHostUri submission uri
+     */
     BacktraceCredentials(URI backtraceHostUri){
         this.backtraceHostUri = backtraceHostUri;
     }
