@@ -146,7 +146,6 @@ class Attributes {
      *
      * @return Annotations based on complex attributes
      */
-    // TODO: remove setter from get method
     Map<String, Object> getAnnotations() {
         LOGGER.debug("Setting annotations");
         Object exceptionMessage = null;
