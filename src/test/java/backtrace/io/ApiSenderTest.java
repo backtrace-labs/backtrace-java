@@ -10,7 +10,7 @@ import org.junit.Test;
 
 public class ApiSenderTest {
     @Test
-    public void sendRequestForInvalidUrl(){
+    public void sendRequestForInvalidUrl() {
         // GIVEN
         String url = "incorrect-url";
         String expectedExceptionMessage = String.format("no protocol: %s", url);

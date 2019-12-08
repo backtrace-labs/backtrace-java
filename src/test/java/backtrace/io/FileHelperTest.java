@@ -6,7 +6,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -18,7 +19,7 @@ public class FileHelperTest {
     private String absolutePath = new File(fileName).getAbsolutePath();
 
     @Before
-    public void setUp() throws IOException{
+    public void setUp() throws IOException {
         deleteTestFile();
         createTestFile();
     }
@@ -28,7 +29,7 @@ public class FileHelperTest {
         deleteTestFile();
     }
 
-    private void createTestFile() throws IOException{
+    private void createTestFile() throws IOException {
         Files.write(Paths.get(this.absolutePath), fileContent.getBytes());
     }
 
@@ -37,7 +38,8 @@ public class FileHelperTest {
         file.delete();
     }
 
-    @Test public void removeIncorrectPathsFromNull () {
+    @Test
+    public void removeIncorrectPathsFromNull() {
         // GIVEN
         List<String> attachments = null;
 
@@ -48,10 +50,11 @@ public class FileHelperTest {
         Assert.assertEquals(0, attachments.size());
     }
 
-    @Test public void removeIncorrectPaths() {
+    @Test
+    public void removeIncorrectPaths() {
         // GIVEN
         List<String> attachments = Arrays.asList("", null, "random-string", "C:\\test.txt",
-                                                new File("").getAbsolutePath(), this.absolutePath);
+                new File("").getAbsolutePath(), this.absolutePath);
 
         // WHEN
         attachments = FileHelper.filterOutFiles(attachments);

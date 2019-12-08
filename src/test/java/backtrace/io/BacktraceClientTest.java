@@ -18,12 +18,11 @@ public class BacktraceClientTest {
     }
 
     @Before
-    public void init(){
+    public void init() {
         config = new BacktraceConfig("url", "token");
         this.backtraceClient = new BacktraceClient(config);
         this.report = new BacktraceReport(message);
     }
-
 
 
 }

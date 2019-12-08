@@ -7,8 +7,9 @@ import org.junit.Test;
 
 public class BacktraceDataTest {
     private static final String message = "test";
-    
-    @Test public void initBacktraceDataUsingException() {
+
+    @Test
+    public void initBacktraceDataUsingException() {
         // GIVEN
         Exception exception = new Exception(message);
         BacktraceReport report = new BacktraceReport(exception);
@@ -20,7 +21,8 @@ public class BacktraceDataTest {
         Assert.assertNotNull(data.getAttachments());
     }
 
-    @Test public void initBacktraceDataUsingString() {
+    @Test
+    public void initBacktraceDataUsingString() {
         // GIVEN
         BacktraceReport report = new BacktraceReport(message);
         // WHEN
@@ -32,7 +34,7 @@ public class BacktraceDataTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void tryInitBacktraceDataWithNullReport(){
+    public void tryInitBacktraceDataWithNullReport() {
         // GIVEN
         BacktraceReport report = null;
         // WHEN

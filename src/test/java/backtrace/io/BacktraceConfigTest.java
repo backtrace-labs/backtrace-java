@@ -8,7 +8,7 @@ import java.net.URI;
 
 public class BacktraceConfigTest {
     @Test
-    public void initBacktraceCredentialsWithUrlAndToken(){
+    public void initBacktraceCredentialsWithUrlAndToken() {
         // GIVEN
         String token = "token";
         String url = "url";
@@ -21,7 +21,7 @@ public class BacktraceConfigTest {
     }
 
     @Test
-    public void initBacktraceCredentialsWithUriString(){
+    public void initBacktraceCredentialsWithUriString() {
         // GIVEN
         String uriString = "https://submit.backtrace.io/test_universe/test_token/json";
 
@@ -34,7 +34,7 @@ public class BacktraceConfigTest {
     }
 
     @Test
-    public void initBacktraceCredentialsWithUri(){
+    public void initBacktraceCredentialsWithUri() {
         // GIVEN
         URI uriString = URI.create("https://submit.backtrace.io/test_universe/test_token/json");
 
@@ -47,7 +47,7 @@ public class BacktraceConfigTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void initBacktraceConfigWithNullToken(){
+    public void initBacktraceConfigWithNullToken() {
         // GIVEN
         String token = null;
         String url = "url";
@@ -57,7 +57,7 @@ public class BacktraceConfigTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void initBacktraceConfigWithNullUrl(){
+    public void initBacktraceConfigWithNullUrl() {
         // GIVEN
         String token = "token";
         String url = null;
@@ -67,7 +67,7 @@ public class BacktraceConfigTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void setNegativeNumberOfRetriesInDatabaseConfig(){
+    public void setNegativeNumberOfRetriesInDatabaseConfig() {
         // GIVEN
         int retryNumber = -1;
         // WHEN
@@ -80,7 +80,7 @@ public class BacktraceConfigTest {
         // GIVEN
         int retryNumber = 100;
         // WHEN
-        BacktraceConfig backtraceConfig = new BacktraceConfig("","");
+        BacktraceConfig backtraceConfig = new BacktraceConfig("", "");
         backtraceConfig.setDatabaseRetryLimit(retryNumber);
         // THEN
         Assert.assertEquals(retryNumber, backtraceConfig.getDatabaseConfig().getDatabaseRetryLimit());

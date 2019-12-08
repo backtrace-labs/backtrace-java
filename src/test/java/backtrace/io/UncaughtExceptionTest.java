@@ -20,14 +20,14 @@ public class UncaughtExceptionTest {
     BacktraceClient client;
 
     @Before
-    public void init(){
+    public void init() {
         config = new BacktraceConfig("", "");
         config.disableDatabase();
         client = new BacktraceClient(config);
     }
 
     @Test
-    public void testUncaughtExceptionHandler(){
+    public void testUncaughtExceptionHandler() {
         // GIVEN
         final Waiter waiter = new Waiter();
         client.setCustomRequestHandler(new RequestHandler() {
@@ -39,10 +39,8 @@ public class UncaughtExceptionTest {
         });
 
         // WHEN
-        Thread testThread = new Thread()
-        {
-            public void run()
-            {
+        Thread testThread = new Thread() {
+            public void run() {
                 BacktraceExceptionHandler.enable(client, false);
                 throw new RuntimeException("Expected!");
             }
@@ -53,14 +51,13 @@ public class UncaughtExceptionTest {
         try {
             testThread.join();
             waiter.await(2, TimeUnit.SECONDS);
-        }
-        catch (InterruptedException | TimeoutException exception){
+        } catch (InterruptedException | TimeoutException exception) {
             Assert.fail(exception.getMessage());
         }
     }
 
     @Test
-    public void testUncaughtExceptionHandlerWithBlockingThread(){
+    public void testUncaughtExceptionHandlerWithBlockingThread() {
         // GIVEN
         final Waiter waiter = new Waiter();
         final List<Integer> result = new ArrayList<>();
@@ -73,10 +70,8 @@ public class UncaughtExceptionTest {
         });
 
         // WHEN
-        Thread testThread = new Thread()
-        {
-            public void run()
-            {
+        Thread testThread = new Thread() {
+            public void run() {
                 BacktraceExceptionHandler.enable(client);
                 throw new NullPointerException("Expected!");
             }
@@ -87,8 +82,7 @@ public class UncaughtExceptionTest {
         try {
             testThread.join();
             waiter.await(2, TimeUnit.SECONDS);
-        }
-        catch (InterruptedException | TimeoutException exception){
+        } catch (InterruptedException | TimeoutException exception) {
             Assert.fail(exception.getMessage());
         }
     }

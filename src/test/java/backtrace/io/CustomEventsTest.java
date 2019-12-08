@@ -28,7 +28,7 @@ public class CustomEventsTest {
     private BacktraceConfig config;
 
     @Before
-    public void init(){
+    public void init() {
         config = new BacktraceConfig("url", "token");
         config.setDatabasePath(this.databasePath);
         this.backtraceClient = new BacktraceClient(config);
@@ -43,7 +43,7 @@ public class CustomEventsTest {
 
 
     @Test
-    public void useRequestHandler(){
+    public void useRequestHandler() {
         // GIVEN
         final LinkedList<Integer> result = new LinkedList<>();
         RequestHandler customRequestHandler = new RequestHandler() {
@@ -63,9 +63,7 @@ public class CustomEventsTest {
         // THEN
         try {
             report.await(1, TimeUnit.SECONDS);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Assert.fail(e.getMessage());
         }
         Assert.assertEquals(2, result.size());
@@ -100,8 +98,7 @@ public class CustomEventsTest {
         // THEN
         try {
             waiter.await(1, TimeUnit.SECONDS);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             Assert.fail(e.getMessage());
         }
     }
@@ -137,9 +134,7 @@ public class CustomEventsTest {
         // THEN
         try {
             report.await();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Assert.fail(e.getMessage());
         }
         Assert.assertEquals(2, result.size());
@@ -172,9 +167,7 @@ public class CustomEventsTest {
         // THEN
         try {
             report.await(3, TimeUnit.SECONDS);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Assert.fail(e.getMessage());
         }
         Assert.assertNotEquals(0, outputAttributes.size());
@@ -210,8 +203,7 @@ public class CustomEventsTest {
 
         try {
             waiter.await(5, TimeUnit.SECONDS);
-        }
-        catch (Exception exception){
+        } catch (Exception exception) {
             waiter.fail(exception);
         }
     }

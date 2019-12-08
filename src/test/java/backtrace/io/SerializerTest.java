@@ -12,17 +12,17 @@ public class SerializerTest {
     class MockTestObject {
         private String message;
 
-        MockTestObject(String message){
+        MockTestObject(String message) {
             this.message = message;
         }
 
-        String getMessage(){
+        String getMessage() {
             return this.message;
         }
     }
 
     @Before
-    public void init(){
+    public void init() {
         this.expectedJson = String.format("{\"message\":\"%s\"}", this.message);
     }
 

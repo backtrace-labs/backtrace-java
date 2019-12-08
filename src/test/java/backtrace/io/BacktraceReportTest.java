@@ -4,14 +4,18 @@ import backtrace.io.data.BacktraceReport;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class BacktraceReportTest {
     private static final String message = "test";
     private static final String attributeName = "attribute-name";
     private static final String attributeValue = "attribute-value";
 
-    @Test public void initReportUsingException() {
+    @Test
+    public void initReportUsingException() {
         // GIVEN
         Exception exception = new Exception(message);
         // WHEN
@@ -47,7 +51,8 @@ public class BacktraceReportTest {
         Assert.assertEquals(exception.getClass().getName(), report.getClassifier());
     }
 
-    @Test public void initReportUsingMessage() {
+    @Test
+    public void initReportUsingMessage() {
         // WHEN
         BacktraceReport report = new BacktraceReport(message);
         // THEN
@@ -56,7 +61,8 @@ public class BacktraceReportTest {
         Assert.assertFalse(report.getExceptionTypeReport());
     }
 
-    @Test public void initReportUsingMessageAndAttribute() {
+    @Test
+    public void initReportUsingMessageAndAttribute() {
         // GIVEN
         Map<String, Object> attributes = new HashMap<String, Object>() {{
             put(attributeName, attributeValue);
@@ -71,7 +77,8 @@ public class BacktraceReportTest {
         Assert.assertEquals(0, report.getAttachmentPaths().size());
     }
 
-    @Test public void initReportUsingMessageAndAttachment() {
+    @Test
+    public void initReportUsingMessageAndAttachment() {
         // GIVEN
         List<String> attachments = Arrays.asList("test.txt", "test2.txt");
 

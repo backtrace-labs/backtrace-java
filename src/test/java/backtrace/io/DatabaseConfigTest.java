@@ -41,7 +41,7 @@ public class DatabaseConfigTest {
         int RETRY_LIMIT = 3;
         Waiter waiter = new Waiter();
 
-        BacktraceConfig config = new BacktraceConfig("","");
+        BacktraceConfig config = new BacktraceConfig("", "");
         config.disableDatabase();
 
         config.setDatabaseRetryLimit(RETRY_LIMIT);
@@ -67,22 +67,22 @@ public class DatabaseConfigTest {
         // THEN
         try {
             waiter.await(10, TimeUnit.SECONDS, RETRY_LIMIT);
-        }
-        catch (TimeoutException e) {
+        } catch (TimeoutException e) {
             Assert.fail(e.getMessage());
         }
         Assert.assertEquals(RETRY_LIMIT, report.getRetryCounter());
     }
 
-    @Test public void limitedNumberOfRecords() {
+    @Test
+    public void limitedNumberOfRecords() {
         // GIVEN
         final int maxNumberOfRecordsInDatabase = 2;
         final Queue<BacktraceMessage> queue = new LinkedList<>();
-        final BacktraceConfig config = new BacktraceConfig("","");
+        final BacktraceConfig config = new BacktraceConfig("", "");
         config.setDatabasePath(databasePath);
         config.setMaxRecordCount(maxNumberOfRecordsInDatabase);
 
-        List<BacktraceData> data = new ArrayList<BacktraceData>(){{
+        List<BacktraceData> data = new ArrayList<BacktraceData>() {{
             add(new BacktraceData(new BacktraceReport("1")));
             add(new BacktraceData(new BacktraceReport("2")));
             add(new BacktraceData(new BacktraceReport("3")));
@@ -92,7 +92,7 @@ public class DatabaseConfigTest {
         BacktraceDatabase database = BacktraceDatabase.init(config, queue);
 
         // WHEN
-        for (BacktraceData backtraceData : data){
+        for (BacktraceData backtraceData : data) {
             database.saveReport(backtraceData);
         }
 
@@ -100,13 +100,14 @@ public class DatabaseConfigTest {
         Assert.assertEquals(maxNumberOfRecordsInDatabase, database.getTotalNumberOfRecords());
     }
 
-    @Test public void zeroDatabaseSize(){
+    @Test
+    public void zeroDatabaseSize() {
         // GIVEN
         final long maxSize = 0;
-        final BacktraceConfig config = new BacktraceConfig("","");
+        final BacktraceConfig config = new BacktraceConfig("", "");
         config.setDatabasePath(databasePath);
 
-        List<BacktraceData> data = new ArrayList<BacktraceData>(){{
+        List<BacktraceData> data = new ArrayList<BacktraceData>() {{
             add(new BacktraceData(new BacktraceReport("1")));
             add(new BacktraceData(new BacktraceReport("2")));
         }};
@@ -115,7 +116,7 @@ public class DatabaseConfigTest {
         config.setMaxDatabaseSize(maxSize);
 
         // WHEN
-        for (BacktraceData backtraceData : data){
+        for (BacktraceData backtraceData : data) {
             database.saveReport(backtraceData);
         }
 
@@ -124,12 +125,13 @@ public class DatabaseConfigTest {
         Assert.assertEquals(0, database.getTotalNumberOfRecords());
     }
 
-    @Test public void limitedDatabaseSize(){
+    @Test
+    public void limitedDatabaseSize() {
         // GIVEN
         final long maxSize = 100000000; // huge number enough to store 4 reports
-        final BacktraceConfig config = new BacktraceConfig("","");
+        final BacktraceConfig config = new BacktraceConfig("", "");
         config.setDatabasePath(databasePath);
-        List<BacktraceData> data = new ArrayList<BacktraceData>(){{
+        List<BacktraceData> data = new ArrayList<BacktraceData>() {{
             add(new BacktraceData(new BacktraceReport("1")));
             add(new BacktraceData(new BacktraceReport("2")));
             add(new BacktraceData(new BacktraceReport("3")));
@@ -140,7 +142,7 @@ public class DatabaseConfigTest {
         config.setMaxDatabaseSize(maxSize);
 
         // WHEN
-        for (BacktraceData backtraceData : data){
+        for (BacktraceData backtraceData : data) {
             database.saveReport(backtraceData);
         }
 

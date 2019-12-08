@@ -22,7 +22,7 @@ public class BacktraceDatabaseTest {
     private BacktraceData backtraceData;
 
     @Before
-    public void init(){
+    public void init() {
         // GIVEN
         this.backtraceConfig = new BacktraceConfig("", "");
         this.backtraceConfig.setDatabasePath(databasePath);
@@ -51,13 +51,13 @@ public class BacktraceDatabaseTest {
     @Test(expected = NullPointerException.class)
     public void invalidNullQueue() {
         // GIVEN
-        BacktraceConfig config = new BacktraceConfig("","");
+        BacktraceConfig config = new BacktraceConfig("", "");
         // WHEN
         BacktraceDatabase.init(config, null);
     }
 
     @Test
-    public void loadReportsFromEmptyDatabase(){
+    public void loadReportsFromEmptyDatabase() {
         // GIVEN
         BacktraceConfig config = new BacktraceConfig("", "");
         config.setDatabasePath(databasePath);
