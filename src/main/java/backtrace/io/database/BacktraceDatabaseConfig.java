@@ -1,4 +1,4 @@
-package backtrace.io;
+package backtrace.io.database;
 
 public class BacktraceDatabaseConfig {
     @SuppressWarnings("FieldCanBeLocal")
@@ -37,34 +37,34 @@ public class BacktraceDatabaseConfig {
         return MAX_DATABASE_SIZE != -1;
     }
 
-    boolean isDatabaseEnabled() {
+    public boolean isDatabaseEnabled() {
         return USE_DATABASE;
     }
 
-    void disableDatabase() {
+    public void disableDatabase() {
         this.USE_DATABASE = false;
     }
 
-    void enableDatabase() {
+    public void enableDatabase() {
         this.USE_DATABASE = true;
     }
 
-    void setDatabasePath(String databasePath) {
+    public void setDatabasePath(String databasePath) {
         this.DATABASE_PATH = databasePath;
     }
 
-    void setDatabaseRetryLimit(int retryLimit) {
+    public void setDatabaseRetryLimit(int retryLimit) {
         if (retryLimit < 0) {
             throw new IllegalArgumentException("Retry limit value should be greater than or equal to zero");
         }
         this.RETRY_LIMIT = retryLimit;
     }
 
-    void setMaxDatabaseSize(long maxDatabaseSize) {
+    public void setMaxDatabaseSize(long maxDatabaseSize) {
         this.MAX_DATABASE_SIZE = maxDatabaseSize;
     }
 
-    void setMaxRecordCount(int maxRecordCount) {
+    public void setMaxRecordCount(int maxRecordCount) {
         this.MAX_RECORD_COUNT = maxRecordCount;
     }
 }

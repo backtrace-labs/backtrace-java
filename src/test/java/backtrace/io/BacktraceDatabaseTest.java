@@ -1,5 +1,9 @@
 package backtrace.io;
 
+import backtrace.io.data.BacktraceData;
+import backtrace.io.data.BacktraceReport;
+import backtrace.io.database.BacktraceDatabase;
+import backtrace.io.helpers.FileHelper;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

@@ -1,8 +1,8 @@
 package backtrace.io.events;
 
 
-import backtrace.io.BacktraceData;
-import backtrace.io.BacktraceResult;
+import backtrace.io.data.BacktraceData;
+import backtrace.io.http.BacktraceResult;
 
 /**
  * Interface definition for a callback to be invoked instead of default request to Backtrace API

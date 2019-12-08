@@ -1,4 +1,4 @@
-package backtrace.io;
+package backtrace.io.data.report;
 
 
 import java.io.Serializable;
@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Generate information about application threads
  */
-class ThreadData implements Serializable {
+public class ThreadData implements Serializable {
 
     /**
      * All collected application threads information
@@ -22,8 +22,12 @@ class ThreadData implements Serializable {
      *
      * @return main thread id
      */
-    String getMainThread() {
+    public String getMainThread() {
         return mainThread;
+    }
+
+    public HashMap<String, ThreadInformation> getThreadInformation() {
+        return threadInformation;
     }
 
     /**
@@ -37,7 +41,7 @@ class ThreadData implements Serializable {
      *
      * @param exceptionStack current BacktraceReport exception stack
      */
-    ThreadData(ArrayList<BacktraceStackFrame> exceptionStack) {
+    public ThreadData(ArrayList<BacktraceStackFrame> exceptionStack) {
         generateCurrentThreadInformation(exceptionStack);
         processThreads();
     }

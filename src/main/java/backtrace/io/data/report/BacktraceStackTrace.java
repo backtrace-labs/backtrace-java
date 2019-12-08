@@ -1,4 +1,4 @@
-package backtrace.io;
+package backtrace.io.data.report;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * Backtrace stack trace
  */
-class BacktraceStackTrace implements Serializable {
+public class BacktraceStackTrace implements Serializable {
 
     /**
      * Current exception
@@ -26,12 +26,12 @@ class BacktraceStackTrace implements Serializable {
      *
      * @param exception current exception
      */
-    BacktraceStackTrace(Exception exception) {
+    public BacktraceStackTrace(Exception exception) {
         this.exception = exception;
         this.stackFrames = gatherStacktraceInformation();
     }
 
-    ArrayList<BacktraceStackFrame> getStackFrames() {
+    public ArrayList<BacktraceStackFrame> getStackFrames() {
         return stackFrames;
     }
 

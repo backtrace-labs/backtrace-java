@@ -1,5 +1,6 @@
-package backtrace.io;
+package backtrace.io.http;
 
+import backtrace.io.data.BacktraceReport;
 import com.google.gson.annotations.SerializedName;
 
 
@@ -75,7 +76,7 @@ public class BacktraceResult {
      * @param exception current exception
      * @return BacktraceResult with exception information
      */
-    static BacktraceResult OnError(BacktraceReport report, Exception exception) {
+    public static BacktraceResult OnError(BacktraceReport report, Exception exception) {
         return new BacktraceResult(
                 report, exception.getMessage(),
                 BacktraceResultStatus.ServerError);
@@ -87,7 +88,7 @@ public class BacktraceResult {
      * @param message message from Backtrace API
      * @return BacktraceResult with message from Backtrace API
      */
-    static BacktraceResult OnSuccess(BacktraceReport report, String message){
+    public static BacktraceResult OnSuccess(BacktraceReport report, String message){
         return new BacktraceResult(report, message, BacktraceResultStatus.Ok);
     }
 }

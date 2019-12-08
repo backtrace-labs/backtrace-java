@@ -1,4 +1,4 @@
-package backtrace.io;
+package backtrace.io.http;
 
 /**
  * Existing send method result statuses

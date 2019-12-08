@@ -1,5 +1,7 @@
 package backtrace.io;
 
+import backtrace.io.data.BacktraceData;
+import backtrace.io.data.BacktraceReport;
 import backtrace.io.events.OnServerResponseEvent;
 
 import java.util.Map;

@@ -1,5 +1,9 @@
-package backtrace.io;
+package backtrace.io.database;
 
+import backtrace.io.*;
+import backtrace.io.data.BacktraceData;
+import backtrace.io.data.BacktraceReport;
+import backtrace.io.helpers.FileHelper;
 import com.google.common.io.Files;
 import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
 import org.slf4j.Logger;
@@ -10,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
-class BacktraceDatabase {
+public class BacktraceDatabase {
 
     private static final transient Logger LOGGER = LoggerFactory.getLogger(BacktraceDatabase.class);
     private final BacktraceDatabaseConfig config;
@@ -29,7 +33,7 @@ class BacktraceDatabase {
         return dir.exists() || dir.mkdir();
     }
 
-    static BacktraceDatabase init(BacktraceConfig config, Queue<BacktraceMessage> queue) {
+    public static BacktraceDatabase init(BacktraceConfig config, Queue<BacktraceMessage> queue) {
         if (config == null) {
             throw new NullPointerException("DatabaseConfig is null");
         }
@@ -59,7 +63,7 @@ class BacktraceDatabase {
     }
 
 
-    void saveReport(BacktraceData backtraceData) {
+    public void saveReport(BacktraceData backtraceData) {
         boolean enoughSpace = this.deleteExcessDatabaseRecords();
 
         if (!enoughSpace) {
@@ -100,7 +104,7 @@ class BacktraceDatabase {
         return false;
     }
 
-    void removeReport(BacktraceData backtraceData) {
+    public void removeReport(BacktraceData backtraceData) {
         String filePath = getFilePath(backtraceData.getReport());
         File file = new File(filePath);
         removeDatabaseFile(file);
@@ -130,11 +134,11 @@ class BacktraceDatabase {
         return databaseFiles;
     }
 
-    int getTotalNumberOfRecords() {
+    public int getTotalNumberOfRecords() {
         return getDatabaseFiles().size();
     }
 
-    long getDatabaseSize() {
+    public long getDatabaseSize() {
         long size = 0;
         List<File> files = getDatabaseFiles();
         for (File file : files) {

@@ -1,5 +1,10 @@
 package backtrace.io;
 
+import backtrace.io.data.BacktraceData;
+import backtrace.io.data.BacktraceReport;
+import backtrace.io.http.ApiSender;
+import backtrace.io.http.BacktraceResult;
+import backtrace.io.http.BacktraceResultStatus;
 import org.junit.Assert;
 import org.junit.Test;
 

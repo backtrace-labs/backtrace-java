@@ -1,4 +1,4 @@
-package backtrace.io;
+package backtrace.io.data.report;
 
 
 import org.slf4j.Logger;
@@ -20,7 +20,7 @@ public class SourceCodeData implements Serializable {
      */
     public Map<String, SourceCode> data = new HashMap<>();
 
-    SourceCodeData(ArrayList<BacktraceStackFrame> exceptionStack) {
+    public SourceCodeData(ArrayList<BacktraceStackFrame> exceptionStack) {
         LOGGER.debug("Initialization source code data");
         if (exceptionStack == null || exceptionStack.size() == 0) {
             LOGGER.warn("Exception stack is null or empty");

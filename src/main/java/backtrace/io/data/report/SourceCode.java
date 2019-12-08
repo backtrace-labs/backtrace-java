@@ -1,4 +1,4 @@
-package backtrace.io;
+package backtrace.io.data.report;
 
 
 import com.google.gson.annotations.SerializedName;
@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * Single instance of source data frame
  */
-class SourceCode implements Serializable {
+public class SourceCode implements Serializable {
     /**
      * Line number in source code where exception occurs
      */

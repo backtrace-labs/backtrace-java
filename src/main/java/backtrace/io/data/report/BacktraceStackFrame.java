@@ -1,4 +1,4 @@
-package backtrace.io;
+package backtrace.io.data.report;
 
 
 import com.google.gson.annotations.SerializedName;

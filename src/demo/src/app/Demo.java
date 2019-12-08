@@ -1,7 +1,7 @@
 package app;
 
 import backtrace.io.BacktraceClient;
-import backtrace.io.BacktraceReport;
+import backtrace.io.data.BacktraceReport;
 
 public class Demo {
     public static void main(String[] args) {

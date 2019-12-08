@@ -1,10 +1,10 @@
-package backtrace.io;
+package backtrace.io.data.report;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-class BacktraceReportSendingStatus {
-    enum SendingStatus {
+public class BacktraceReportSendingStatus {
+    public enum SendingStatus {
         UNSENT,
         SENT
     }
@@ -14,7 +14,7 @@ class BacktraceReportSendingStatus {
     private CountDownLatch counter;
     private SendingStatus status = SendingStatus.UNSENT;
 
-    BacktraceReportSendingStatus() {
+    public BacktraceReportSendingStatus() {
         counter = new CountDownLatch(1);
     }
 
@@ -26,7 +26,7 @@ class BacktraceReportSendingStatus {
      * @throws InterruptedException if the current thread is interrupted
      *                              while waiting
      */
-    void await(long timeout, TimeUnit unit) throws InterruptedException {
+    public void await(long timeout, TimeUnit unit) throws InterruptedException {
         this.counter.await(timeout, unit);
     }
 
@@ -36,18 +36,18 @@ class BacktraceReportSendingStatus {
      * @throws InterruptedException if the current thread is interrupted
      *                              while waiting
      */
-    void await() throws InterruptedException {
+    public void await() throws InterruptedException {
         this.await(TIMEOUT, TimeUnit.SECONDS);
     }
 
-    SendingStatus getSendingStatus() {
+    public SendingStatus getSendingStatus() {
         return status;
     }
 
     /**
      * Sets that the report has been sent
      */
-    void reportSent() {
+    public void reportSent() {
         this.counter.countDown();
         this.status = SendingStatus.SENT;
     }

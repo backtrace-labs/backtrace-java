@@ -1,5 +1,6 @@
 package backtrace.io;
 
+import backtrace.io.data.BacktraceReport;
 import org.junit.Assert;
 import org.junit.Test;
 

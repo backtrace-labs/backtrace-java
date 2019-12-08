@@ -1,5 +1,6 @@
 package backtrace.io;
 
+import backtrace.io.database.BacktraceDatabaseConfig;
 import backtrace.io.events.BeforeSendEvent;
 import backtrace.io.events.RequestHandler;
 
@@ -57,7 +58,7 @@ public class BacktraceConfig {
      *
      * @return Database config
      */
-    BacktraceDatabaseConfig getDatabaseConfig() {
+    public BacktraceDatabaseConfig getDatabaseConfig() {
         return databaseConfig;
     }
 

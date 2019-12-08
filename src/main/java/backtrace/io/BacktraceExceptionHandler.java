@@ -1,5 +1,6 @@
 package backtrace.io;
 
+import backtrace.io.data.BacktraceReport;
 import backtrace.io.events.OnServerResponseEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

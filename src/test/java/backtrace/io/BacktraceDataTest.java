@@ -1,10 +1,9 @@
 package backtrace.io;
 
+import backtrace.io.data.BacktraceData;
+import backtrace.io.data.BacktraceReport;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class BacktraceDataTest {
     private static final String message = "test";

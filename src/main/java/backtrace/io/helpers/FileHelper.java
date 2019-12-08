@@ -1,4 +1,4 @@
-package backtrace.io;
+package backtrace.io.helpers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class FileHelper {
      * @param paths list of paths to files
      * @return filtered list of file paths
      */
-    static ArrayList<String> filterOutFiles(List<String> paths) {
+    public static ArrayList<String> filterOutFiles(List<String> paths) {
         ArrayList<String> result = new ArrayList<>();
         if (paths == null) {
             return result;
@@ -62,7 +62,7 @@ public class FileHelper {
      * @param f File
      * @throws Exception if failed deleting file
      */
-    static void deleteRecursive(File f) throws Exception {
+    public static void deleteRecursive(File f) throws Exception {
         try {
             if (!f.exists()){
                 return;
@@ -85,7 +85,7 @@ public class FileHelper {
      * Custom comparator which compare two file names
      * @return Custom comparator which compare two file names
      */
-    static Comparator<File> getFileNameComparator() {
+    public static Comparator<File> getFileNameComparator() {
         return new Comparator<File>() {
             @Override
             public int compare(File o1, File o2) {

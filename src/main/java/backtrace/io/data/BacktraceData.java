@@ -1,6 +1,11 @@
-package backtrace.io;
+package backtrace.io.data;
 
+import backtrace.io.helpers.FileHelper;
+import backtrace.io.data.report.SourceCode;
+import backtrace.io.data.report.SourceCodeData;
+import backtrace.io.data.report.ThreadData;
 
+import backtrace.io.data.report.ThreadInformation;
 import com.google.gson.annotations.SerializedName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -111,7 +116,7 @@ public class BacktraceData implements Serializable {
      *
      * @param report current report
      */
-    BacktraceData(BacktraceReport report) {
+    public BacktraceData(BacktraceReport report) {
         this(report, null);
     }
 
@@ -121,7 +126,7 @@ public class BacktraceData implements Serializable {
      * @param report           Current report
      * @param clientAttributes Attributes which should be added to BacktraceData object
      */
-    BacktraceData(BacktraceReport report, Map<String, Object> clientAttributes) {
+    public BacktraceData(BacktraceReport report, Map<String, Object> clientAttributes) {
         if (report == null) {
             LOGGER.warn("Report passed to BacktraceData constructor is null");
             throw new NullPointerException("BacktraceReport can not be null");
@@ -138,7 +143,7 @@ public class BacktraceData implements Serializable {
      *
      * @return Paths to attachments
      */
-    List<String> getAttachments() {
+    public List<String> getAttachments() {
         return FileHelper.filterOutFiles(report.attachmentPaths);
     }
 
@@ -187,7 +192,7 @@ public class BacktraceData implements Serializable {
         LOGGER.debug("Setting threads information");
         ThreadData threadData = new ThreadData(report.diagnosticStack);
         this.mainThread = threadData.getMainThread();
-        this.threadInformationMap = threadData.threadInformation;
+        this.threadInformationMap = threadData.getThreadInformation();
         SourceCodeData sourceCodeData = new SourceCodeData(report.diagnosticStack);
         this.sourceCode = sourceCodeData.data.isEmpty() ? null : sourceCodeData.data;
     }
@@ -207,7 +212,7 @@ public class BacktraceData implements Serializable {
      *
      * @return Current built-in attributes
      */
-    Map<String, Object> getAttributes() {
+    public Map<String, Object> getAttributes() {
         return attributes;
     }
 

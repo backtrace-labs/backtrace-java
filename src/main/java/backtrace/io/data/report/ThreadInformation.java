@@ -1,4 +1,4 @@
-package backtrace.io;
+package backtrace.io.data.report;
 
 
 import com.google.gson.annotations.SerializedName;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 /**
  * Get an information about single thread passed in constructor
  */
-class ThreadInformation implements Serializable {
+public class ThreadInformation implements Serializable {
     /**
      * Thread name
      */

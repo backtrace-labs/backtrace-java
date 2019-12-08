@@ -1,5 +1,6 @@
 package backtrace.io;
 
+import backtrace.io.helpers.BacktraceSerializeHelper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,6 +1,9 @@
 package backtrace.io;
 
+import backtrace.io.data.BacktraceData;
+import backtrace.io.data.BacktraceReport;
 import backtrace.io.events.RequestHandler;
+import backtrace.io.http.BacktraceResult;
 import net.jodah.concurrentunit.Waiter;
 import org.junit.Assert;
 import org.junit.Before;

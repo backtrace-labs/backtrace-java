@@ -1,4 +1,4 @@
-package backtrace.io;
+package backtrace.io.http;
 
 /**
  * Exception which represents a HTTP fault

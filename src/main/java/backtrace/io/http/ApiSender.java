@@ -1,5 +1,8 @@
-package backtrace.io;
+package backtrace.io.http;
 
+import backtrace.io.data.BacktraceData;
+import backtrace.io.data.BacktraceReport;
+import backtrace.io.helpers.BacktraceSerializeHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +14,7 @@ import java.util.List;
 /**
  * Class for sending and processing HTTP request
  */
-class ApiSender {
+public class ApiSender {
     private static final transient Logger LOGGER = LoggerFactory.getLogger(ApiSender.class);
 
     /**
@@ -20,7 +23,7 @@ class ApiSender {
      * @param serverUrl server http address to which the request will be sent
      * @return information from the server about the result of processing the request
      */
-    static BacktraceResult sendReport(String serverUrl, BacktraceData backtraceData) {
+    public static BacktraceResult sendReport(String serverUrl, BacktraceData backtraceData) {
 
         String json = BacktraceSerializeHelper.toJson(backtraceData);
         BacktraceReport report = backtraceData.getReport();

@@ -1,5 +1,8 @@
-package backtrace.io;
+package backtrace.io.data;
 
+import backtrace.io.data.report.BacktraceReportSendingStatus;
+import backtrace.io.data.report.BacktraceStackFrame;
+import backtrace.io.data.report.BacktraceStackTrace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -229,20 +232,20 @@ public class BacktraceReport implements Serializable {
     /**
      * Sets that the report has been sent
      */
-    void markAsSent() {
+    public void markAsSent() {
         LOGGER.info("Set report status as sent");
         status.reportSent();
     }
 
-    UUID getUuid() {
+    public UUID getUuid() {
         return uuid;
     }
 
-    long getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 
-    void incrementRetryCounter() {
+    public void incrementRetryCounter() {
         retryCounter.addAndGet(1);
     }
 

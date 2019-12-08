@@ -1,6 +1,12 @@
 package backtrace.io;
 
+import backtrace.io.data.BacktraceData;
+import backtrace.io.data.BacktraceReport;
+import backtrace.io.database.BacktraceDatabase;
 import backtrace.io.events.OnServerResponseEvent;
+import backtrace.io.http.ApiSender;
+import backtrace.io.http.BacktraceResult;
+import backtrace.io.http.BacktraceResultStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +23,7 @@ class Backtrace {
      * @param config Library configuration
      * @param queue Queue containing error reports that should be sent to the Backtrace console
      */
-    public Backtrace(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceMessage> queue) {
+    Backtrace(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceMessage> queue) {
         this.database = BacktraceDatabase.init(config, queue);
         this.config = config;
         this.queue = queue;

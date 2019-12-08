@@ -1,13 +1,8 @@
 package backtrace.io;
 
-import backtrace.io.events.RequestHandler;
-import org.junit.Assert;
+import backtrace.io.data.BacktraceReport;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 
 public class BacktraceClientTest {

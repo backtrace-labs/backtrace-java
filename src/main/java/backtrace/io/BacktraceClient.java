@@ -1,6 +1,7 @@
 package backtrace.io;
 
 
+import backtrace.io.data.BacktraceReport;
 import backtrace.io.events.BeforeSendEvent;
 import backtrace.io.events.OnServerResponseEvent;
 import backtrace.io.events.RequestHandler;
