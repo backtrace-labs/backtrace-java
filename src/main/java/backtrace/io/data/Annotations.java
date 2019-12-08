@@ -25,19 +25,19 @@ class Annotations {
     }
 
     /**
-     *
-     * @param exceptionMessage
-     * @param complexAttributes
-     * @return
+     * Creates annotation object with complex attributes, environments variables and exception details
+     * @param exceptionObject exception string message
+     * @param complexAttributes user complex attributes
+     * @return annotation object
      */
-    static Map<String, Object> getAnnotations(Object exceptionMessage, Map<String, Object> complexAttributes) {
+    static Map<String, Object> getAnnotations(Object exceptionObject, Map<String, Object> complexAttributes) {
         Map<String, Object> result = new HashMap<>();
         result.put("Environment Variables", System.getenv());
         if (complexAttributes != null) {
             result.putAll(complexAttributes);
         }
 
-        result.put("Exception", new AnnotationException(exceptionMessage));
+        result.put("Exception", new AnnotationException(exceptionObject));
         return result;
     }
 }
