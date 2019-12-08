@@ -65,7 +65,7 @@ class Backtrace {
         if(this.config.getRequestHandler() != null){
             return this.config.getRequestHandler().onRequest(backtraceData);
         }
-        return ApiSender.sendReport(config.getServerUrl(), backtraceData);
+        return ApiSender.sendReport(config.getSubmissionUrl(), backtraceData);
     }
 
     private void handleResponse(BacktraceResult result, BacktraceMessage backtraceMessage){

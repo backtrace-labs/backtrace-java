@@ -7,8 +7,8 @@
 * Supports offline database for error report storage and re-submission in case of network outage.
 * Fully customizable and extendable event handlers and base classes for custom implementations.
 
-# Installation <a name="installation"></a>
-## Download library via Gradle or Maven
+# Installation via Gradle or Maven<a name="installation"></a>
+
 * Gradle
 ```
 dependencies {
@@ -37,6 +37,12 @@ BacktraceConfig config = new BacktraceConfig("https://myserver.sp.backtrace.io:6
 BacktraceClient client = new BacktraceClient(config);
 ```
 
+Another option for creating a BacktraceCredentials object is using the URL to which the report is to be sent, pass URL string as parameter to BacktraceCredentials constructor:
+
+```java
+BacktraceConfig config = new BacktraceConfig("https://submit.backtrace.io/{universe}/{token}/json");
+```
+
 ## Setting application name and version
 
 In order to easily distinguish which errors belong to which application it is recommended to set the application version and its name. This data will be sent as attributes to the Backtrace console.
@@ -47,9 +53,43 @@ backtraceClient.setApplicationVersion("1.0.0");
 ```
 
 ## Database <a name=""></a>
-TODO:
 
+### 
+By default, BacktraceClient stores error reports to the local disk using BacktraceDatabase. Each report is serialized and stored in separate file in database directory.
 
+### Disabling database
+If you don't want to use local file database, you can disable that.
+```java
+backtraceConfig.disableDatabase();
+```
+
+If the database is disabled, you can enable it.
+
+```java
+backtraceConfig.enableDatabase();
+```
+
+### Max database size
+You can set a maximum database size in bytes, by default size is unlimited. If the database size reaches the limit, the oldest error reports will be deleted.
+
+```java
+backtraceConfig.setMaxDatabaseSize(size);
+```
+
+### Max record count
+
+If a limit is set, the oldest error reports will be deleted if there will be try to exceed the limit.
+```java
+backtraceConfig.setMaxRecordCount(numberOfRecords);
+```
+
+### Max retry limit
+
+The retry limit specifies the number of times `BacktraceClient` will try to send the error report again if sending will finished with fail.
+
+```java
+backtraceConfig.setDatabaseRetryLimit(retryLimit);
+```
 
 ## Sending an error report <a name="using-backtrace-sending-report"></a>
 Method `BacktraceClient.send` will send an error report to the Backtrace endpoint specified. There `send` method is overloaded, see examples below:
@@ -80,7 +120,7 @@ Method `send` behind the mask use dedicated thread which sending report to serve
         client.send(report, new OnServerResponseEvent() {
             @Override
             public void onEvent(BacktraceResult backtraceResult) {
-                   // process result here
+                // process result here
             }
         });
 ```
@@ -107,7 +147,7 @@ try {
   backtraceClient.send(exception);
   
   // pass your custom message to send method
-  backtraceClient.send("Message");
+  backtraceClient.send("message");
 }
 ```
 
@@ -131,7 +171,7 @@ backtraceClient.setBeforeSendEvent(new BeforeSendEvent() {
 - `RequestHandler`
 
 ## Reporting unhandled application exceptions
-`BacktraceClient` also supports reporting of unhandled application exceptions not captured by your try-catch blocks. To enable reporting of unhandled exceptions:
+`BacktraceClient` supports reporting of unhandled application exceptions not captured by your try-catch blocks. To enable reporting of unhandled exceptions run the code below.
 ```java
 backtraceClient.enableUncaughtExceptionsHandler();
 ```
@@ -139,13 +179,12 @@ backtraceClient.enableUncaughtExceptionsHandler();
 # Documentation  <a name="documentation"></a>
 
 ## BacktraceReport  <a name="documentation-BacktraceReport"></a>
-**`BacktraceReport`** is a class that describe a single error report.
+**`BacktraceReport`** is a class that describe a single error report. Contains attributes, message, exception stack and paths to attachments.
 
 ## BacktraceClient  <a name="documentation-BacktraceClient"></a>
-
-
+`BacktraceClient` is a class that allows you to instantiate a client instance that interacts with Backtrace. This class sets up connection to the Backtrace endpoint and manages error reporting behavior. It also prepares error report, gather device attributes and add to queue from which special thread gets report and sends to Backtrace. This class also allows to enable `UncaughtExceptionsHandler` or set custom events.
 ## BacktraceData  <a name="documentation-BacktraceData"></a>
-**`BacktraceData`** is a serializable class that holds the data to create a diagnostic JSON to be sent to the Backtrace Console endpoint . You can add additional pre-processors for `BacktraceData` by attaching an event handler to the `BacktraceClient.setBeforeSendEvent(event)` event. `BacktraceData` require `BacktraceReport` and `BacktraceClient` client attributes.
+**`BacktraceData`** is a serializable class that holds the data to create a diagnostic JSON to be sent to the Backtrace endpoint . You can add additional pre-processors for `BacktraceData` by attaching an event handler to the `BacktraceClient.setBeforeSendEvent(event)` event. `BacktraceData` require `BacktraceReport` and `BacktraceClient` client attributes.
 
 ## BacktraceResult  <a name="documentation-BacktraceResult"></a>
 **`BacktraceResult`** is a class that holds response and result from a `send` method call. The class contains a `status` property that indicates whether the call was completed (`OK`), the call returned with an error (`ServerError`). Additionally, the class has a `message` property that contains details about the status.

@@ -1,9 +1,13 @@
 package backtrace.io;
 
 
+import java.net.URI;
+
 class BacktraceCredentials {
-    private String endpointUrl;
-    private String submissionToken;
+    @SuppressWarnings("FieldCanBeLocal")
+    private final static String FORMAT = "json";
+
+    private URI backtraceHostUri;
 
     /**
      * Creates Backtrace credentials instance
@@ -12,25 +16,22 @@ class BacktraceCredentials {
      * @param submissionToken server access token
      */
     BacktraceCredentials(String endpointUrl, String submissionToken) {
-        this.endpointUrl = endpointUrl;
-        this.submissionToken = submissionToken;
+        this(String.format("%spost?format=%s&token=%s", endpointUrl, FORMAT, submissionToken));
+    }
+
+    BacktraceCredentials(String backtraceHostUri){
+        this(URI.create(backtraceHostUri));
+    }
+
+    BacktraceCredentials(URI backtraceHostUri){
+        this.backtraceHostUri = backtraceHostUri;
     }
 
     /**
-     * Returns URL to Backtrace server API
-     *
-     * @return Endpoint url
+     * Get submission URL to Backtrace API
+     * @return URL to Backtrace API
      */
-    String getEndpointUrl() {
-        return endpointUrl;
-    }
-
-    /**
-     * Returns an access token to Backtrace server API
-     *
-     * @return Access token
-     */
-    String getSubmissionToken() {
-        return submissionToken;
+    URI getSubmissionUrl() {
+        return backtraceHostUri;
     }
 }

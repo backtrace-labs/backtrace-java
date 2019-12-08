@@ -3,9 +3,11 @@ package backtrace.io;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.net.URI;
+
 public class BacktraceConfigTest {
     @Test
-    public void initBacktraceCredentials(){
+    public void initBacktraceCredentialsWithUrlAndToken(){
         // GIVEN
         String token = "token";
         String url = "url";
@@ -14,8 +16,33 @@ public class BacktraceConfigTest {
         BacktraceCredentials credentials = new BacktraceCredentials(url, token);
 
         // THEN
-        Assert.assertEquals(token, credentials.getSubmissionToken());
-        Assert.assertEquals(url, credentials.getEndpointUrl());
+        Assert.assertNotNull(token, credentials.getSubmissionUrl());
+    }
+
+    @Test
+    public void initBacktraceCredentialsWithUriString(){
+        // GIVEN
+        String uriString = "https://submit.backtrace.io/test_universe/test_token/json";
+
+        // WHEN
+        BacktraceCredentials credentials = new BacktraceCredentials(uriString);
+
+        // THEN
+        Assert.assertEquals(uriString, credentials.getSubmissionUrl().toString());
+        Assert.assertNotNull(credentials.getSubmissionUrl());
+    }
+
+    @Test
+    public void initBacktraceCredentialsWithUri(){
+        // GIVEN
+        URI uriString = URI.create("https://submit.backtrace.io/test_universe/test_token/json");
+
+        // WHEN
+        BacktraceCredentials credentials = new BacktraceCredentials(uriString);
+
+        // THEN
+        Assert.assertEquals(uriString, credentials.getSubmissionUrl());
+        Assert.assertNotNull(credentials.getSubmissionUrl());
     }
 
     @Test(expected = NullPointerException.class)

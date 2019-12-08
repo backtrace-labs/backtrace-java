@@ -45,6 +45,10 @@ public class BacktraceDatabaseConfig {
         this.USE_DATABASE = false;
     }
 
+    void enableDatabase() {
+        this.USE_DATABASE = true;
+    }
+
     void setDatabasePath(String databasePath) {
         this.DATABASE_PATH = databasePath;
     }
