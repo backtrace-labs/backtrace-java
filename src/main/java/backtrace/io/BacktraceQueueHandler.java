@@ -12,6 +12,7 @@ class BacktraceQueueHandler {
 
     /**
      * Creates instance of BacktraceQueueHandler
+     *
      * @param config Library configuration
      */
     BacktraceQueueHandler(BacktraceConfig config) {
@@ -21,9 +22,10 @@ class BacktraceQueueHandler {
 
     /**
      * Creates BacktraceMessage based on report and attributes and adds message to queue
-     * @param report Current report which contains information about error
+     *
+     * @param report     Current report which contains information about error
      * @param attributes Custom user attributes
-     * @param callback Event which will be executed after receiving the response
+     * @param callback   Event which will be executed after receiving the response
      */
     void send(BacktraceReport report, Map<String, Object> attributes, OnServerResponseEvent callback) {
         BacktraceData backtraceData = new BacktraceData(report, attributes);

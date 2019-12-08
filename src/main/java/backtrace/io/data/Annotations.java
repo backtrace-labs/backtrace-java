@@ -26,7 +26,8 @@ class Annotations {
 
     /**
      * Creates annotation object with complex attributes, environments variables and exception details
-     * @param exceptionObject exception string message
+     *
+     * @param exceptionObject   exception string message
      * @param complexAttributes user complex attributes
      * @return annotation object
      */

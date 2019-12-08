@@ -1,6 +1,7 @@
 package backtrace.io.database;
 
-import backtrace.io.*;
+import backtrace.io.BacktraceConfig;
+import backtrace.io.BacktraceMessage;
 import backtrace.io.data.BacktraceData;
 import backtrace.io.data.BacktraceReport;
 import backtrace.io.helpers.FileHelper;
@@ -95,13 +96,10 @@ public class BacktraceDatabase {
             files.remove(0);
         }
 
-        if ((!config.isDatabaseNumberOfRecordsLimited() && !config.isDatabaseSizeLimited()) ||
+        // enough space
+        return (!config.isDatabaseNumberOfRecordsLimited() && !config.isDatabaseSizeLimited()) ||
                 (config.isDatabaseNumberOfRecordsLimited() && this.getTotalNumberOfRecords() < config.getDatabaseMaxRecordCount()) ||
-                (config.isDatabaseSizeLimited() && this.getDatabaseSize() < config.getDatabaseMaxSize())) {
-            // enough space
-            return true;
-        }
-        return false;
+                (config.isDatabaseSizeLimited() && this.getDatabaseSize() < config.getDatabaseMaxSize());
     }
 
     public void removeReport(BacktraceData backtraceData) {

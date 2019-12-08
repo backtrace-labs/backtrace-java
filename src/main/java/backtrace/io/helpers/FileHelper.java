@@ -59,12 +59,13 @@ public class FileHelper {
 
     /**
      * Delete recursive all files
+     *
      * @param f File
      * @throws Exception if failed deleting file
      */
     public static void deleteRecursive(File f) throws Exception {
         try {
-            if (!f.exists()){
+            if (!f.exists()) {
                 return;
             }
             if (f.isDirectory()) {
@@ -75,14 +76,14 @@ public class FileHelper {
             if (!f.delete()) {
                 throw new Exception("Delete command returned false for file: " + f);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.error("Failed to delete the folder: " + f, e);
         }
     }
 
     /**
      * Custom comparator which compare two file names
+     *
      * @return Custom comparator which compare two file names
      */
     public static Comparator<File> getFileNameComparator() {

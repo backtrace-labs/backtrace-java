@@ -93,6 +93,7 @@ class Attributes {
 
     /**
      * Generate a unique identifier that uniquely determines the device
+     *
      * @return unique device identifier
      */
     private String generateMachineId() {

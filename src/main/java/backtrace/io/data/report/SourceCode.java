@@ -26,6 +26,7 @@ public class SourceCode implements Serializable {
 
     /**
      * Create SourceCode instance
+     *
      * @param stackFrame current StackFrame
      */
     SourceCode(BacktraceStackFrame stackFrame) {

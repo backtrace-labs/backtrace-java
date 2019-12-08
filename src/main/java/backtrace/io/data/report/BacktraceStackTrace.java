@@ -38,12 +38,13 @@ public class BacktraceStackTrace implements Serializable {
     /**
      * Get collection of stacktrace elements from current exception/thread
      * after filtering out frames from inside the Backtrace library
+     *
      * @return collection of stacktrace frames
      */
     private ArrayList<BacktraceStackFrame> gatherStacktraceInformation() {
         StackTraceElement[] stackTraceElements = this.exception != null ?
                 this.exception.getStackTrace() : Thread.currentThread().getStackTrace();
-        
+
         if (stackTraceElements == null || stackTraceElements.length == 0) {
             return null;
         }
@@ -56,7 +57,7 @@ public class BacktraceStackTrace implements Serializable {
             }
             result.add(new BacktraceStackFrame(frame));
         }
-        
+
         return result;
     }
 }

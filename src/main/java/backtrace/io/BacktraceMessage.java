@@ -13,8 +13,9 @@ public class BacktraceMessage {
 
     /**
      * Creates new instance of BacktraceMessage
+     *
      * @param backtraceData Message which contains information about error, attributes and threads
-     * @param callback Event which will be executed after receiving the response
+     * @param callback      Event which will be executed after receiving the response
      */
     public BacktraceMessage(BacktraceData backtraceData, OnServerResponseEvent callback) {
         this.backtraceData = backtraceData;

@@ -23,7 +23,8 @@ public class BacktraceSerializeHelper {
 
     /**
      * Deserialize the specified Json into an object of the specified class
-     * @param <T> the type of the desired object
+     *
+     * @param <T>  the type of the desired object
      * @param json the string from which the object is to be deserialized
      * @param type the class of T
      * @return an object of type T from the string. Returns {@code null} if {@code json} is {@code null}

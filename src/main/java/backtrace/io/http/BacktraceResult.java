@@ -46,6 +46,7 @@ public class BacktraceResult {
         setStatus(status);
         this.message = message;
     }
+
     @SuppressWarnings({"UnusedDeclaration"})
     public BacktraceReport getBacktraceReport() {
         return backtraceReport;
@@ -84,11 +85,12 @@ public class BacktraceResult {
 
     /**
      * Returns result when the report was successfully sent
-     * @param report executed report
+     *
+     * @param report  executed report
      * @param message message from Backtrace API
      * @return BacktraceResult with message from Backtrace API
      */
-    public static BacktraceResult OnSuccess(BacktraceReport report, String message){
+    public static BacktraceResult OnSuccess(BacktraceReport report, String message) {
         return new BacktraceResult(report, message, BacktraceResultStatus.Ok);
     }
 }

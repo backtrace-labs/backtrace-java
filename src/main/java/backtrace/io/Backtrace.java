@@ -20,8 +20,9 @@ class Backtrace {
 
     /**
      * Creates Backtrace instance
+     *
      * @param config Library configuration
-     * @param queue Queue containing error reports that should be sent to the Backtrace console
+     * @param queue  Queue containing error reports that should be sent to the Backtrace console
      */
     Backtrace(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceMessage> queue) {
         this.database = BacktraceDatabase.init(config, queue);
@@ -50,6 +51,7 @@ class Backtrace {
 
     /**
      * Process a single message from the queue
+     *
      * @param backtraceMessage message containing error report and callback
      */
     private void processSingleBacktraceMessage(BacktraceMessage backtraceMessage) {
@@ -60,11 +62,11 @@ class Backtrace {
             return;
         }
 
-        if(config.getDatabaseConfig().isDatabaseEnabled()) {
+        if (config.getDatabaseConfig().isDatabaseEnabled()) {
             this.database.saveReport(backtraceData);
         }
 
-        if(config.getBeforeSendEvent() != null){
+        if (config.getBeforeSendEvent() != null) {
             backtraceData = config.getBeforeSendEvent().onEvent(backtraceData);
         }
 
@@ -80,11 +82,12 @@ class Backtrace {
 
     /**
      * Sends a error report using custom request handler or send it to the Backtrace console by a default method
+     *
      * @param backtraceData error report
      * @return server response
      */
-    private BacktraceResult sendReport(BacktraceData backtraceData){
-        if(this.config.getRequestHandler() != null){
+    private BacktraceResult sendReport(BacktraceData backtraceData) {
+        if (this.config.getRequestHandler() != null) {
             return this.config.getRequestHandler().onRequest(backtraceData);
         }
         return ApiSender.sendReport(config.getSubmissionUrl(), backtraceData);
@@ -94,20 +97,21 @@ class Backtrace {
      * Depending on the status of the response from the server, it performs various processing flows.
      * If successful, it marks the report as sent and deletes it from the database.
      * In case of failure, if the repetition limit is not exceeded, it adds to the queue.
-     * @param result server response
+     *
+     * @param result           server response
      * @param backtraceMessage message containing error report and callback
      */
-    private void handleResponse(BacktraceResult result, BacktraceMessage backtraceMessage){
+    private void handleResponse(BacktraceResult result, BacktraceMessage backtraceMessage) {
         if (result.getStatus() == BacktraceResultStatus.Ok) {
             backtraceMessage.getBacktraceData().getReport().markAsSent();
-            if(config.getDatabaseConfig().isDatabaseEnabled()) {
+            if (config.getDatabaseConfig().isDatabaseEnabled()) {
                 database.removeReport(backtraceMessage.getBacktraceData());
             }
             return;
         }
 
         BacktraceReport report = backtraceMessage.getBacktraceData().getReport();
-        if(report.getRetryCounter() < config.getDatabaseConfig().getDatabaseRetryLimit()){
+        if (report.getRetryCounter() < config.getDatabaseConfig().getDatabaseRetryLimit()) {
             report.incrementRetryCounter();
             this.queue.add(backtraceMessage);
         }

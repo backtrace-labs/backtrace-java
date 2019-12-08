@@ -21,22 +21,25 @@ class BacktraceCredentials {
 
     /**
      * Creates Backtrace credentials instance
+     *
      * @param backtraceHostUri submission uri string
      */
-    BacktraceCredentials(String backtraceHostUri){
+    BacktraceCredentials(String backtraceHostUri) {
         this(URI.create(backtraceHostUri));
     }
 
     /**
      * Creates Backtrace credentials instance
+     *
      * @param backtraceHostUri submission uri
      */
-    BacktraceCredentials(URI backtraceHostUri){
+    BacktraceCredentials(URI backtraceHostUri) {
         this.backtraceHostUri = backtraceHostUri;
     }
 
     /**
      * Get submission URL to Backtrace API
+     *
      * @return URL to Backtrace API
      */
     URI getSubmissionUrl() {

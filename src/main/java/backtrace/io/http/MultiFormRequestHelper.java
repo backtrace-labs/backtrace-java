@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -62,7 +63,7 @@ class MultiFormRequestHelper {
         outputStream.write((MultiFormRequestHelper.getFileInfo("upload_file")).getBytes());
         outputStream.write((MultiFormRequestHelper.CRLF).getBytes());
 
-        byte[] bytes = json.getBytes("utf-8");
+        byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
         outputStream.write(bytes);
         outputStream.write((MultiFormRequestHelper.CRLF).getBytes());
     }

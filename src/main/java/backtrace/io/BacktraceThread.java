@@ -12,8 +12,9 @@ public class BacktraceThread extends Thread {
 
     /**
      * Creates new thread for handling and sending error reports passed to queue
+     *
      * @param config library configuration
-     * @param queue queue containing error reports that should be sent to the Backtrace console
+     * @param queue  queue containing error reports that should be sent to the Backtrace console
      */
     private BacktraceThread(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceMessage> queue) {
         super();
@@ -22,8 +23,9 @@ public class BacktraceThread extends Thread {
 
     /**
      * Creates, configures and start BacktraceThread which will handle and send error reports passed to queue
+     *
      * @param config library configuration
-     * @param queue queue containing error reports that should be sent to the Backtrace console
+     * @param queue  queue containing error reports that should be sent to the Backtrace console
      */
     static void init(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceMessage> queue) {
         LOGGER.info("Initialize BacktraceThread");

@@ -107,7 +107,7 @@ public class BacktraceConfig {
         this.databaseConfig.disableDatabase();
     }
 
-    public void enableDatabase(){
+    public void enableDatabase() {
         this.databaseConfig.enableDatabase();
     }
 }

@@ -1,11 +1,10 @@
 package backtrace.io.data;
 
-import backtrace.io.helpers.FileHelper;
 import backtrace.io.data.report.SourceCode;
 import backtrace.io.data.report.SourceCodeData;
 import backtrace.io.data.report.ThreadData;
-
 import backtrace.io.data.report.ThreadInformation;
+import backtrace.io.helpers.FileHelper;
 import com.google.gson.annotations.SerializedName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -174,6 +173,7 @@ public class BacktraceData implements Serializable {
 
     /**
      * Get library version based on package information
+     *
      * @return library version
      */
     private String getLibraryVersion() {

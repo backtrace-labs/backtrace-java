@@ -218,10 +218,11 @@ public class BacktraceReport implements Serializable {
 
     /**
      * Creates object during deserialization
+     *
      * @param in Stream
-     * @throws  ClassNotFoundException if the class of a serialized object
-     *          could not be found.
-     * @throws  IOException if an I/O error occurs.
+     * @throws ClassNotFoundException if the class of a serialized object
+     *                                could not be found.
+     * @throws IOException            if an I/O error occurs.
      */
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
@@ -257,7 +258,7 @@ public class BacktraceReport implements Serializable {
         return message;
     }
 
-    public BacktraceReportSendingStatus.SendingStatus getSendingStatus(){
+    public BacktraceReportSendingStatus.SendingStatus getSendingStatus() {
         return this.status.getSendingStatus();
     }
 
@@ -284,10 +285,11 @@ public class BacktraceReport implements Serializable {
 
     /**
      * Blocks current thread until report will be sent
+     *
      * @param timeout the maximum time to wait
-     * @param unit the time unit of the {@code timeout} argument
+     * @param unit    the time unit of the {@code timeout} argument
      * @throws InterruptedException if the current thread is interrupted
-     *         while waiting
+     *                              while waiting
      */
     public void await(long timeout, TimeUnit unit) throws InterruptedException {
         LOGGER.info("Wait until the report will be sent");
@@ -296,8 +298,9 @@ public class BacktraceReport implements Serializable {
 
     /**
      * Blocks current thread until report will be sent
+     *
      * @throws InterruptedException if the current thread is interrupted
-     *         while waiting
+     *                              while waiting
      */
     public void await() throws InterruptedException {
         LOGGER.info("Wait until the report will be sent");
