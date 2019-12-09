@@ -85,4 +85,53 @@ public class BacktraceConfigTest {
         // THEN
         Assert.assertEquals(retryNumber, backtraceConfig.getDatabaseConfig().getDatabaseRetryLimit());
     }
+
+    @Test
+    public void initConfigClientWithTokenUrl() {
+        // GIVEN
+        String token = "token";
+        String endpoint = "endpoint";
+
+        // WHEN
+        BacktraceConfig config = new BacktraceConfig(endpoint, token);
+
+        // THEN
+        Assert.assertNotNull(config.getSubmissionUrl());
+    }
+
+    @Test
+    public void initConfigWithStringUri() {
+        // GIVEN
+        String url = "https://submit.backtrace.io/universe/token/json";
+
+        // WHEN
+        BacktraceConfig config = new BacktraceConfig(url);
+
+        // THEN
+        Assert.assertEquals(url, config.getSubmissionUrl());
+    }
+
+    @Test
+    public void initConfigWithUri() {
+        // GIVEN
+        URI url = URI.create("https://submit.backtrace.io/universe/token/json");
+
+        // WHEN
+        BacktraceConfig config = new BacktraceConfig(url);
+
+        // THEN
+        Assert.assertEquals(url.toString(), config.getSubmissionUrl());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void initBacktraceClientWithNullStringUrl() {
+        // WHEN
+        new BacktraceConfig((String) null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void initBacktraceClientWithNullUrl() {
+        // WHEN
+        new BacktraceConfig((URI) null);
+    }
 }

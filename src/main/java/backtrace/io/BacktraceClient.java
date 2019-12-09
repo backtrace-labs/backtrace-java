@@ -148,4 +148,12 @@ public class BacktraceClient {
     public void enableUncaughtExceptionsHandler(boolean blockThread) {
         BacktraceExceptionHandler.enable(this, blockThread);
     }
+
+    /**
+     * Disable using BacktraceExceptionHandler and sets default uncaught exception handler
+     */
+    @SuppressWarnings("unused")
+    public void disableUncaughtExceptionsHandler() {
+        BacktraceExceptionHandler.disable();
+    }
 }
