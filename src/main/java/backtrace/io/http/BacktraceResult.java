@@ -9,12 +9,14 @@ import com.google.gson.annotations.SerializedName;
  */
 public class BacktraceResult {
 
+
+
     /**
      * Object identifier
      */
     @SerializedName("_rxid")
     @SuppressWarnings({"UnusedDeclaration"})
-    public String rxId;
+    private String rxId;
 
 
     /**
@@ -48,8 +50,8 @@ public class BacktraceResult {
     }
 
     @SuppressWarnings({"UnusedDeclaration"})
-    public BacktraceReport getBacktraceReport() {
-        return backtraceReport;
+    public String getRxId() {
+        return rxId;
     }
 
     @SuppressWarnings({"UnusedDeclaration"})
@@ -60,6 +62,11 @@ public class BacktraceResult {
     @SuppressWarnings({"UnusedDeclaration"})
     public BacktraceResultStatus getStatus() {
         return status;
+    }
+
+    @SuppressWarnings({"UnusedDeclaration"})
+    public BacktraceReport getBacktraceReport() {
+        return backtraceReport;
     }
 
     void setBacktraceReport(BacktraceReport backtraceReport) {

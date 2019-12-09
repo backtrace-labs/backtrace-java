@@ -18,5 +18,6 @@ dependencies {
     implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.29'
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.powermock:powermock-mockito-release-full:1.6.4'
     testImplementation 'net.jodah:concurrentunit:0.4.4'
 }
