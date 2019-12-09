@@ -117,12 +117,12 @@ try {
 Method `send` behind the mask use dedicated thread which sending report to server. You can specify the method that should be performed after completion.
 
 ```java
-        client.send(report, new OnServerResponseEvent() {
-            @Override
-            public void onEvent(BacktraceResult backtraceResult) {
-                // process result here
-            }
-        });
+client.send(report, new OnServerResponseEvent() {
+    @Override
+    public void onEvent(BacktraceResult backtraceResult) {
+        // process result here
+    }
+});
 ```
 
 Method `await` of BacktraceReport allows to block current thread until report will be sent, as a parameter you can set set the maximum time you want to wait for an answer.
