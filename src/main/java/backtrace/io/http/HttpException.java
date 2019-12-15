@@ -11,16 +11,6 @@ public class HttpException extends Exception {
     private Integer httpStatus;
 
     /**
-     * Create new instance with message
-     *
-     * @param message received exception message
-     */
-    @SuppressWarnings("unused")
-    public HttpException(String message) {
-        this(null, message);
-    }
-
-    /**
      * Create new instance with HTTP status
      *
      * @param httpStatus received HTTP status code
