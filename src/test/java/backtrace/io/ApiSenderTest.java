@@ -5,6 +5,7 @@ import backtrace.io.data.BacktraceReport;
 import backtrace.io.http.ApiSender;
 import backtrace.io.http.BacktraceResult;
 import backtrace.io.http.BacktraceResultStatus;
+import backtrace.io.http.HttpException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,6 +13,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import javax.xml.ws.http.HTTPException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.net.HttpURLConnection;
@@ -21,6 +23,16 @@ import java.net.URLConnection;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({URL.class, URLConnection.class, ApiSender.class})
 public class ApiSenderTest {
+    @Test
+    public void createHttpException(){
+        // WHEN
+        HttpException exception = new HttpException(200);
+
+        // THEN
+        Assert.assertEquals(200, exception.getHttpStatus());
+        Assert.assertNull(exception.getMessage());
+    }
+
     @Test
     public void sendRequestForInvalidUrl() {
         // GIVEN
