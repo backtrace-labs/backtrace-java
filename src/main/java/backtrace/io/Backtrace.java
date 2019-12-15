@@ -62,9 +62,7 @@ class Backtrace {
             return;
         }
 
-        if (config.getDatabaseConfig().isDatabaseEnabled()) {
-            this.database.saveReport(backtraceData);
-        }
+        this.database.saveReport(backtraceData);
 
         if (config.getBeforeSendEvent() != null) {
             backtraceData = config.getBeforeSendEvent().onEvent(backtraceData);

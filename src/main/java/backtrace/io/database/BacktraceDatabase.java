@@ -65,6 +65,10 @@ public class BacktraceDatabase {
 
 
     public void saveReport(BacktraceData backtraceData) {
+        if (!config.isDatabaseEnabled()) {
+            return;
+        }
+
         boolean enoughSpace = this.deleteExcessDatabaseRecords();
 
         if (!enoughSpace) {
