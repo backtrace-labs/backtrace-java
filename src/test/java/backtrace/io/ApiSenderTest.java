@@ -6,31 +6,62 @@ import backtrace.io.http.ApiSender;
 import backtrace.io.http.BacktraceResult;
 import backtrace.io.http.BacktraceResultStatus;
 import backtrace.io.http.HttpException;
+
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import javax.xml.ws.http.HTTPException;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({URL.class, URLConnection.class, ApiSender.class})
 public class ApiSenderTest {
+    final private String fileAttachmentName = "test.txt";
+
     @Test
-    public void createHttpException(){
+    public void createHttpException() {
         // WHEN
         HttpException exception = new HttpException(200);
 
         // THEN
         Assert.assertEquals(200, exception.getHttpStatus());
         Assert.assertNull(exception.getMessage());
+    }
+
+
+    @Before
+    public void createFileAttachment() {
+        try {
+            String content = "This is the content to write into a file";
+            File file = new File(fileAttachmentName);
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(content);
+            bw.close();
+        } catch (Exception exception) {
+            Assert.fail(exception.getMessage());
+        }
+    }
+
+    @After
+    public void removeFileAttachment() {
+        try {
+            File file = new File(this.fileAttachmentName);
+            file.delete();
+        } catch (Exception exception) {
+            Assert.fail(exception.getMessage());
+        }
     }
 
     @Test
@@ -106,4 +137,35 @@ public class ApiSenderTest {
         Assert.assertEquals(message, result.getMessage());
     }
 
+    @Test
+    public void sendAttachmentFile() throws Exception {
+        // GIVEN
+        String url = "https://backtrace.io/";
+        String rxId = "03000000-cdf4-a003-0000-000000000000";
+        String jsonSuccessResponse = "{\"response\":\"ok\",\"_rxid\":\"" + rxId + "\"}";
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        BacktraceReport backtraceReport = new BacktraceReport("", new HashMap<String, Object>() {{
+            put("custom-attribute", "custom-value");
+        }}, new ArrayList<String>() {{
+            add(fileAttachmentName);
+        }});
+
+        // GIVEN - mock URL and HttpURLConnection
+        URL u = PowerMockito.mock(URL.class);
+        PowerMockito.whenNew(URL.class).withArguments(url).thenReturn(u);
+        HttpURLConnection huc = PowerMockito.mock(HttpURLConnection.class);
+        PowerMockito.when(u.openConnection()).thenReturn(huc);
+        PowerMockito.when(huc.getResponseCode()).thenReturn(HttpURLConnection.HTTP_OK);
+
+        PowerMockito.doNothing().when(huc).connect();
+        PowerMockito.when(huc.getOutputStream()).thenReturn(outputStream);
+        PowerMockito.when(huc.getInputStream()).thenReturn(new ByteArrayInputStream(jsonSuccessResponse.getBytes()));
+
+        // WHEN
+        BacktraceResult result = ApiSender.sendReport(url, new BacktraceData(backtraceReport));
+
+        // THEN
+        Assert.assertEquals(BacktraceResultStatus.Ok, result.getStatus());
+        Assert.assertTrue(outputStream.size() > 0);
+    }
 }
