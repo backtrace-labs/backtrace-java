@@ -2,6 +2,9 @@
 
 [Backtrace](http://backtrace.io/)'s integration with Java applications which allows customers to capture and report handled and unhandled java exceptions to their Backtrace instance, instantly offering the ability to prioritize and debug software errors.
 
+[![Build Status](https://travis-ci.org/backtrace-labs/backtrace-java.png?branch=master)](https://travis-ci.org/backtrace-labs/backtrace-android)
+[![codecov](https://codecov.io/gh/backtrace-labs/backtrace-java/branch/master/graph/badge.svg)](https://codecov.io/gh/backtrace-labs/backtrace-java)
+
 # Features Summary <a name="features-summary"></a>
 * Light-weight Java client library that quickly submits exceptions and crashes to your Backtrace dashboard. Can include callstack, system metadata, custom metadata and file attachments if needed.
 * Supports offline database for error report storage and re-submission in case of network outage.
