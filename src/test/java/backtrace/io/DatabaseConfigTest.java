@@ -150,4 +150,26 @@ public class DatabaseConfigTest {
         Assert.assertTrue(maxSize > database.getDatabaseSize());
         Assert.assertEquals(data.size(), database.getTotalNumberOfRecords());
     }
+
+    @Test
+    public void disableAndEnableDatabase() {
+        // GIVEN
+        final BacktraceConfig config = new BacktraceConfig("");
+        config.setDatabasePath(databasePath);
+        final BacktraceDatabase database = BacktraceDatabase.init(config, new LinkedList<>());
+        config.disableDatabase();
+
+        // WHEN
+        database.saveReport(new BacktraceData(new BacktraceReport("Without database")));
+        int databaseSizeAfterFirstSave = database.getTotalNumberOfRecords();
+
+        config.enableDatabase();
+
+        database.saveReport(new BacktraceData(new BacktraceReport("With database")));
+        int databaseSizeAfterSecondSave = database.getTotalNumberOfRecords();
+
+        // THEN
+        Assert.assertEquals(0, databaseSizeAfterFirstSave);
+        Assert.assertEquals(1, databaseSizeAfterSecondSave);
+    }
 }
