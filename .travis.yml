@@ -1,11 +1,11 @@
+language: java
+
 matrix:
   include:
     - os: linux
       jdk: openjdk11
     - os: linux
       jdk: openjdk8
-
-language: java
 
 before_install:
   - chmod +x gradlew
