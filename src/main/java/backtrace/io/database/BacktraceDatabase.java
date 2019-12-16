@@ -6,7 +6,6 @@ import backtrace.io.data.BacktraceData;
 import backtrace.io.data.BacktraceReport;
 import backtrace.io.helpers.FileHelper;
 import com.google.common.io.Files;
-import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +24,7 @@ public class BacktraceDatabase {
         this.config = config;
 
         if (config.isDatabaseEnabled() && !createDatabaseDir()) {
-            throw new ValueException("Database path doesn't exist and can not be created");
+            throw new IllegalArgumentException("Database path doesn't exist and can not be created");
         }
     }
 
