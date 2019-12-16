@@ -4,10 +4,6 @@ matrix:
       jdk: openjdk11
     - os: linux
       jdk: openjdk8
-    - os: linux
-      jdk: openjdk7
-    - os: osx
-      osx_image: xcode8.2
 
 language: java
 
