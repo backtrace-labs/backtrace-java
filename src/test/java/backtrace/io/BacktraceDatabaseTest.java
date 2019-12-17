@@ -86,11 +86,10 @@ public class BacktraceDatabaseTest {
     @Test
     public void saveAndLoadReport() {
         // GIVEN
-        BacktraceDatabase database = BacktraceDatabase.init(this.backtraceConfig, new LinkedList<>());
+        BacktraceDatabase.init(this.backtraceConfig, new LinkedList<>()).saveReport(backtraceData);
 
         // WHEN
-        database.saveReport(new BacktraceData(new BacktraceReport(this.message)));
-        database = BacktraceDatabase.init(this.backtraceConfig, this.queue);
+        BacktraceDatabase database = BacktraceDatabase.init(this.backtraceConfig, this.queue);
 
         // THEN
         Assert.assertEquals(1, database.getTotalNumberOfRecords());
