@@ -86,7 +86,7 @@ public class BacktraceDatabaseTest {
     @Test
     public void saveAndLoadReport() {
         // GIVEN
-        BacktraceDatabase database = BacktraceDatabase.init(this.backtraceConfig, this.queue);
+        BacktraceDatabase database = BacktraceDatabase.init(this.backtraceConfig, new LinkedList<>());
 
         // WHEN
         database.saveReport(this.backtraceData);
