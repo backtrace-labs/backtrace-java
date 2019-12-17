@@ -14,7 +14,7 @@ import java.util.LinkedList;
 
 public class BacktraceDatabaseTest {
 
-    private final String databasePath = "backtrace_test/";
+    private final String databasePath = "backtrace_test";
     private final String message = "message";
 
     private BacktraceConfig backtraceConfig;
@@ -70,18 +70,18 @@ public class BacktraceDatabaseTest {
         Assert.assertEquals(0, database.getDatabaseSize());
         Assert.assertEquals(0, queue.size());
     }
-//
-//    @Test
-//    public void saveReportToDatabase() {
-//        // GIVEN
-//        BacktraceDatabase database = BacktraceDatabase.init(backtraceConfig, queue);
-//
-//        // WHEN
-//        database.saveReport(backtraceData);
-//        // THEN
-//        Assert.assertEquals(1, database.getTotalNumberOfRecords());
-//        Assert.assertEquals(0, queue.size());
-//    }
+
+    @Test
+    public void saveReportToDatabase() {
+        // GIVEN
+        BacktraceDatabase database = BacktraceDatabase.init(backtraceConfig, queue);
+
+        // WHEN
+        database.saveReport(backtraceData);
+        // THEN
+        Assert.assertEquals(1, database.getTotalNumberOfRecords());
+        Assert.assertEquals(0, queue.size());
+    }
 
 //    @Test
 //    public void saveAndLoadReport() {
