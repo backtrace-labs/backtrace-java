@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
@@ -104,6 +103,10 @@ class Attributes {
 
             byte[] mac = network.getHardwareAddress();
 
+            if (mac == null || mac.length == 0) {
+                throw new Exception("Mac address is null or empty");
+            }
+
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < mac.length; i++) {
                 sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));
@@ -111,7 +114,7 @@ class Attributes {
             String macAddress = sb.toString();
             String hex = macAddress.replace(":", "").replace("-", "");
             return UUID.nameUUIDFromBytes(hex.getBytes()).toString();
-        } catch (SocketException | UnknownHostException exception) {
+        } catch (Exception exception) {
             LOGGER.error("Can not get device MAC address", exception);
         }
         return UUID.randomUUID().toString();
