@@ -70,18 +70,18 @@ public class BacktraceDatabaseTest {
         Assert.assertEquals(0, database.getDatabaseSize());
         Assert.assertEquals(0, queue.size());
     }
-
-    @Test
-    public void saveReportToDatabase() {
-        // GIVEN
-        BacktraceDatabase database = BacktraceDatabase.init(backtraceConfig, queue);
-
-        // WHEN
-        database.saveReport(backtraceData);
-        // THEN
-        Assert.assertEquals(1, database.getTotalNumberOfRecords());
-        Assert.assertEquals(0, queue.size());
-    }
+//
+//    @Test
+//    public void saveReportToDatabase() {
+//        // GIVEN
+//        BacktraceDatabase database = BacktraceDatabase.init(backtraceConfig, queue);
+//
+//        // WHEN
+//        database.saveReport(backtraceData);
+//        // THEN
+//        Assert.assertEquals(1, database.getTotalNumberOfRecords());
+//        Assert.assertEquals(0, queue.size());
+//    }
 
     @Test
     public void saveAndLoadReport() {
