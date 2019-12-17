@@ -3,6 +3,7 @@ package backtrace.io.data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.UnknownHostException;
@@ -14,7 +15,7 @@ import java.util.UUID;
 /**
  * Class instance to get a built-in attributes from current application
  */
-class Attributes {
+class Attributes implements Serializable {
     private static final transient Logger LOGGER = LoggerFactory.getLogger(Attributes.class);
     /**
      * Gets built-in primitive attributes
