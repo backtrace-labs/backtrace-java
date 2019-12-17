@@ -15,7 +15,7 @@ public class ThreadData implements Serializable {
     /**
      * All collected application threads information
      */
-    HashMap<String, ThreadInformation> threadInformation = new HashMap<>();
+    Map<String, ThreadInformation> threadInformation = new HashMap<>();
 
     /**
      * Get main thread id
@@ -26,7 +26,7 @@ public class ThreadData implements Serializable {
         return mainThread;
     }
 
-    public HashMap<String, ThreadInformation> getThreadInformation() {
+    public Map<String, ThreadInformation> getThreadInformation() {
         return threadInformation;
     }
 
