@@ -23,4 +23,4 @@ after_success:
 
 script:
   - ./gradlew assemble
-  - ./gradlew check --stacktrace --debug
+  - ./gradlew check test --stacktrace --debug
