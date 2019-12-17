@@ -83,20 +83,20 @@ public class BacktraceDatabaseTest {
         Assert.assertEquals(0, queue.size());
     }
 
-//    @Test
-//    public void saveAndLoadReport() {
-//        // GIVEN
-//        BacktraceDatabase database = BacktraceDatabase.init(this.backtraceConfig, this.queue);
-//
-//        // WHEN
-//        database.saveReport(this.backtraceData);
-//        database = BacktraceDatabase.init(this.backtraceConfig, this.queue);
-//
-//        // THEN
-//        Assert.assertEquals(1, database.getTotalNumberOfRecords());
-//        Assert.assertEquals(1, this.queue.size());
-//        Assert.assertEquals(this.message, this.queue.getFirst().getBacktraceData().getReport().getMessage());
-//    }
+    @Test
+    public void saveAndLoadReport() {
+        // GIVEN
+        BacktraceDatabase database = BacktraceDatabase.init(this.backtraceConfig, this.queue);
+
+        // WHEN
+        database.saveReport(this.backtraceData);
+        database = BacktraceDatabase.init(this.backtraceConfig, this.queue);
+
+        // THEN
+        Assert.assertEquals(1, database.getTotalNumberOfRecords());
+        Assert.assertEquals(1, this.queue.size());
+        Assert.assertEquals(this.message, this.queue.getFirst().getBacktraceData().getReport().getMessage());
+    }
 
     @Test
     public void saveAndDelete() {
