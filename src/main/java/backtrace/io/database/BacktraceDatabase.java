@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
@@ -55,7 +56,7 @@ public class BacktraceDatabase {
     }
 
     private String getFilePath(BacktraceReport backtraceReport) {
-        return getDatabaseDir() + "\\" + getFileName(backtraceReport);
+        return Paths.get(getDatabaseDir(), getFileName(backtraceReport)).toString();
     }
 
     private String getFileName(BacktraceReport report) {
