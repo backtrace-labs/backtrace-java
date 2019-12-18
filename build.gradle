@@ -1,3 +1,5 @@
+apply plugin: 'jacoco'
+
 plugins {
     id 'java-library'
 }
@@ -23,3 +25,12 @@ dependencies {
     testImplementation 'org.powermock:powermock-module-junit4:2.0.0'
     testImplementation 'net.jodah:concurrentunit:0.4.4'
 }
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled false
+    }
+}
+
+check.dependsOn jacocoTestReport
