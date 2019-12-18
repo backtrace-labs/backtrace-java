@@ -33,11 +33,17 @@ class Annotations {
      */
     static Map<String, Object> getAnnotations(Object exceptionObject, Map<String, Object> complexAttributes) {
         Map<String, Object> result = new HashMap<>();
-        result.put("Environment Variables", System.getenv());
+
+        Map<String, String> environmentVariables = new HashMap<>();
+        for (Map.Entry<String,String> entry : System.getenv().entrySet()){
+            environmentVariables.put(entry.getKey(), entry.getValue());
+        }
+
+        result.put("Environment Variables", environmentVariables);
         if (complexAttributes != null) {
             result.putAll(complexAttributes);
         }
-
+        
         result.put("Exception", new AnnotationException(exceptionObject));
         return result;
     }

@@ -15,7 +15,7 @@ import java.util.UUID;
 /**
  * Class instance to get a built-in attributes from current application
  */
-class Attributes implements Serializable {
+class Attributes {
     private static final transient Logger LOGGER = LoggerFactory.getLogger(Attributes.class);
     /**
      * Gets built-in primitive attributes
