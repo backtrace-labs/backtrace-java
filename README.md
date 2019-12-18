@@ -37,7 +37,7 @@ First create a `BacktraceConfig` instance with your `Backtrace endpoint URL` (e.
 Java
 ```java
 BacktraceConfig config = new BacktraceConfig("https://myserver.sp.backtrace.io:6097/", "4dca18e8769d0f5d10db0d1b665e64b3d716f76bf182fbcdad5d1d8070c12db0");
-BacktraceClient client = new BacktraceClient(config);
+BacktraceClient backtraceClient = new BacktraceClient(config);
 ```
 
 Another option for creating a BacktraceCredentials object is using the URL to which the report is to be sent, pass URL string as parameter to BacktraceCredentials constructor:
