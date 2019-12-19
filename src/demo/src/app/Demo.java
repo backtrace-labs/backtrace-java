@@ -1,22 +1,19 @@
 package app;
 
 import backtrace.io.BacktraceClient;
+import backtrace.io.BacktraceConfig;
 import backtrace.io.data.BacktraceReport;
 
 public class Demo {
     public static void main(String[] args) {
         BacktraceReport report = new BacktraceReport("test message");
-        BacktraceClient client = new BacktraceClient();
+        BacktraceClient client = new BacktraceClient(new BacktraceConfig("<endpoint url>", "<submission token>"));
         client.send(report);
         try {
-            System.out.println("[Main Thread] waiting..");
-            report.waitUntilSent();
-            System.out.println("[Main Thread] Sleeping..");
-            Thread.sleep(20000);
+            report.await(); // wait for sending report
         }
         catch (Exception e){
-            System.out.println(e);
+            e.printStackTrace();
         }
-        System.out.println("[Main Thread] end.");
     }
 }
