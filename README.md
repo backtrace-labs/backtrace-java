@@ -14,17 +14,16 @@
 * Gradle
 ```
 dependencies {
-    implementation ''
+    implementation 'com.github.backtrace-labs.backtrace-java:backtrace-java:1.0.0-rc.1'
 }
 ```
 
 * Maven
 ```
 <dependency>
-  <groupId></groupId>
-  <artifactId></artifactId>
-  <version></version>
-  <type>aar</type>
+  <groupId>com.github.backtrace-labs.backtrace-java</groupId>
+  <artifactId>backtrace-java</artifactId>
+  <version>1.0.0-rc.1</version>
 </dependency>
 ```
 
