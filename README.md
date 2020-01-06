@@ -30,19 +30,20 @@ dependencies {
 # Using Backtrace library  <a name="using-backtrace"></a>
 ## Initialize a new BacktraceClient <a name="using-backtrace-initialization"></a>
 
-First create a `BacktraceConfig` instance with your `Backtrace endpoint URL`. This endpoint URL will either be through a central https://submit.backtrace.io server on standard port 80/443, or directly to your Backtrace instance through a listener on port 6097/6098 (e.g. https://xxx.sp.backtrace.io:6098). EIther integration will require a submission token to be included in the endpoint
+First create a `BacktraceConfig` instance with your `Backtrace endpoint URL`. This endpoint URL will either be through a central https://submit.backtrace.io server on standard port 80/443, or directly to your Backtrace instance through a listener on port 6097/6098 (e.g. https://xxx.sp.backtrace.io:6098). Either integration will require a submission token to be included in the endpoint
 
 Option 1 - https://submit.backtrace.io URL format option for creating a BacktraceConfig object. Use the URL to which the report is to be sent, pass URL string as parameter to BacktraceConfig constructor:
 
 ```java
-BacktraceConfig config = new BacktraceConfig("https://submit.backtrace.io/{universe}/{token}/json");
+BacktraceConfig config = new BacktraceConfig("https://submit.backtrace.io/{yourInstance}/{token}/json");
+BacktraceClient backtraceClient = new BacktraceClient(config);
 ```
 
 Option 2 - https://<yourInstance>.sp,backtrace.io:6098 format for creating BacktraceCredentials object. Pass in both your instance submission URL and token as parameters of the BacktraceConfig constructor:
 
 Java
 ```java
-BacktraceConfig config = new BacktraceConfig("https://<myserver>.sp.backtrace.io:6098/", "4dca18e8769d0f5d10db0d1b665e64b3d716f76bf182fbcdad5d1d8070c12db0");
+BacktraceConfig config = new BacktraceConfig("https://<yourInstance>.sp.backtrace.io:6098/", "<submissionToken>");
 BacktraceClient backtraceClient = new BacktraceClient(config);
 ```
 
