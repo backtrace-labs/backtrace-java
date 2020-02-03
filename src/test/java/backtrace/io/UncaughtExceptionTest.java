@@ -141,7 +141,7 @@ public class UncaughtExceptionTest {
         // THEN
         try {
             testThread.join();
-            waiter.await(3000, TimeUnit.SECONDS);
+            waiter.await(5, TimeUnit.SECONDS);
         } catch (InterruptedException | TimeoutException exception) {
             Assert.fail(exception.getMessage());
         }
