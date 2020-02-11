@@ -143,7 +143,7 @@ public class CustomEventsTest {
     }
 
     @Test
-    public void sendRequestWithCustomAttributes() {B
+    public void sendRequestWithCustomAttributes() {
         // GIVEN
         BacktraceReport report = new BacktraceReport(message);
         String attributeKey = "custom-attribute";
