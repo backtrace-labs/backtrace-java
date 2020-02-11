@@ -16,7 +16,7 @@ import java.util.List;
  * Helper class for building multipart/form-data request
  */
 class MultiFormRequestHelper {
-    private static final transient Logger LOGGER = LoggerFactory.getLogger(MultiFormRequestHelper.class);
+    private static final transient Logger LOGGER = LoggerFactory.getLogger(backtrace.io.http.MultiFormRequestHelper.class);
     private static final String BOUNDARY = "*****";
     private static final String CRLF = "\r\n";
     private static final String TWO_HYPHENS = "--";
@@ -27,7 +27,7 @@ class MultiFormRequestHelper {
      * @return string with content type and information about boundary
      */
     static String getContentType() {
-        return "multipart/form-data;boundary=" + MultiFormRequestHelper.BOUNDARY;
+        return "multipart/form-data;boundary=" + BOUNDARY;
     }
 
     /**
@@ -42,8 +42,8 @@ class MultiFormRequestHelper {
             return;
         }
 
-        outputStream.write((MultiFormRequestHelper.TWO_HYPHENS + MultiFormRequestHelper.BOUNDARY +
-                MultiFormRequestHelper.TWO_HYPHENS + MultiFormRequestHelper.CRLF).getBytes());
+        outputStream.write((TWO_HYPHENS + BOUNDARY +
+                TWO_HYPHENS + CRLF).getBytes());
     }
 
     /**
@@ -58,14 +58,14 @@ class MultiFormRequestHelper {
             LOGGER.warn("JSON is null/empty or output stream is null");
             return;
         }
-        outputStream.write((MultiFormRequestHelper.TWO_HYPHENS + MultiFormRequestHelper.BOUNDARY +
-                MultiFormRequestHelper.CRLF).getBytes());
-        outputStream.write((MultiFormRequestHelper.getFileInfo("upload_file")).getBytes());
-        outputStream.write((MultiFormRequestHelper.CRLF).getBytes());
+        outputStream.write((TWO_HYPHENS + BOUNDARY +
+                CRLF).getBytes());
+        outputStream.write((getFileInfo("upload_file")).getBytes());
+        outputStream.write((CRLF).getBytes());
 
         byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
         outputStream.write(bytes);
-        outputStream.write((MultiFormRequestHelper.CRLF).getBytes());
+        outputStream.write((CRLF).getBytes());
     }
 
     /***
@@ -100,15 +100,15 @@ class MultiFormRequestHelper {
         String fileName = Paths.get(absolutePath).getFileName().toString();
         String fileContentType = URLConnection.guessContentTypeFromName(fileName);
 
-        outputStream.write((MultiFormRequestHelper.TWO_HYPHENS + MultiFormRequestHelper.BOUNDARY +
-                MultiFormRequestHelper.CRLF).getBytes());
-        outputStream.write((MultiFormRequestHelper.getFileInfo("attachment_" + fileName)).getBytes());
-        outputStream.write(("Content-Type: " + fileContentType + MultiFormRequestHelper.CRLF)
+        outputStream.write((TWO_HYPHENS + BOUNDARY +
+                CRLF).getBytes());
+        outputStream.write((getFileInfo("attachment_" + fileName)).getBytes());
+        outputStream.write(("Content-Type: " + fileContentType + CRLF)
                 .getBytes
                         ());
-        outputStream.write((MultiFormRequestHelper.CRLF).getBytes());
+        outputStream.write((CRLF).getBytes());
         streamFile(outputStream, absolutePath);
-        outputStream.write((MultiFormRequestHelper.CRLF).getBytes());
+        outputStream.write((CRLF).getBytes());
 
     }
 
@@ -141,6 +141,6 @@ class MultiFormRequestHelper {
     private static String getFileInfo(String fileName) {
         return "Content-Disposition: form-data; name=\"" +
                 fileName + "\";filename=\"" +
-                fileName + "\"" + MultiFormRequestHelper.CRLF;
+                fileName + "\"" + CRLF;
     }
 }

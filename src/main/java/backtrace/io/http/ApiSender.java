@@ -35,16 +35,17 @@ public class ApiSender {
     private static BacktraceResult sendReport(String serverUrl, String json, BacktraceReport report, List<String> attachments) {
         HttpURLConnection urlConnection = null;
         BacktraceResult result;
-
+        System.out.println("11111111");
         try {
             urlConnection = getUrlConnection(serverUrl);
-
+            System.out.println("222222");
             LOGGER.debug("HttpURLConnection successfully initialized");
+            System.out.println("333333");
             DataOutputStream request = new DataOutputStream(urlConnection.getOutputStream());
-
-            MultiFormRequestHelper.addJson(request, json);
-            MultiFormRequestHelper.addFiles(request, attachments);
-            MultiFormRequestHelper.addEndOfRequest(request);
+            System.out.println("4444");
+            backtrace.io.http.MultiFormRequestHelper.addJson(request, json);
+            backtrace.io.http.MultiFormRequestHelper.addFiles(request, attachments);
+            backtrace.io.http.MultiFormRequestHelper.addEndOfRequest(request);
 
             request.flush();
             request.close();
@@ -53,10 +54,10 @@ public class ApiSender {
             LOGGER.debug("Received response status from Backtrace API for HTTP request is: " + statusCode);
 
             if (statusCode == HttpURLConnection.HTTP_OK) {
-                result = ApiSender.handleSuccessResponse(urlConnection, report);
+                result = handleSuccessResponse(urlConnection, report);
             } else {
                 throw new HttpException(statusCode, String.format("%s: %s",
-                        Integer.toString(statusCode), ApiSender.getErrorMessage(urlConnection)));
+                        Integer.toString(statusCode), getErrorMessage(urlConnection)));
             }
 
         } catch (Exception e) {
@@ -103,7 +104,7 @@ public class ApiSender {
         urlConnection.setRequestProperty("Cache-Control", "no-cache");
 
         urlConnection.setRequestProperty("Content-Type",
-                MultiFormRequestHelper.getContentType());
+                backtrace.io.http.MultiFormRequestHelper.getContentType());
 
         return urlConnection;
     }

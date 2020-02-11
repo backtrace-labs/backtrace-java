@@ -84,8 +84,8 @@ public class BacktraceResult {
      * @param exception current exception
      * @return BacktraceResult with exception information
      */
-    public static BacktraceResult OnError(BacktraceReport report, Exception exception) {
-        return new BacktraceResult(
+    public static backtrace.io.http.BacktraceResult OnError(BacktraceReport report, Exception exception) {
+        return new backtrace.io.http.BacktraceResult(
                 report, exception.getMessage(),
                 BacktraceResultStatus.ServerError);
     }
@@ -97,7 +97,7 @@ public class BacktraceResult {
      * @param message message from Backtrace API
      * @return BacktraceResult with message from Backtrace API
      */
-    public static BacktraceResult OnSuccess(BacktraceReport report, String message) {
-        return new BacktraceResult(report, message, BacktraceResultStatus.Ok);
+    public static backtrace.io.http.BacktraceResult OnSuccess(BacktraceReport report, String message) {
+        return new backtrace.io.http.BacktraceResult(report, message, BacktraceResultStatus.Ok);
     }
 }

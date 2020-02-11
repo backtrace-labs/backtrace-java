@@ -21,7 +21,7 @@ public class BacktraceConfig {
         if (submissionUrl == null) {
             throw new NullPointerException("Endpoint URL can not be null");
         }
-        credentials = new BacktraceCredentials(submissionUrl);
+        credentials = new backtrace.io.BacktraceCredentials(submissionUrl);
     }
 
     /**
@@ -33,7 +33,7 @@ public class BacktraceConfig {
         if (submissionUrl == null) {
             throw new NullPointerException("Endpoint URL can not be null");
         }
-        credentials = new BacktraceCredentials(submissionUrl);
+        credentials = new backtrace.io.BacktraceCredentials(submissionUrl);
     }
 
     /**
@@ -50,7 +50,7 @@ public class BacktraceConfig {
         if (submissionToken == null) {
             throw new NullPointerException("Submission token can not be null");
         }
-        credentials = new BacktraceCredentials(endpointUrl, submissionToken);
+        credentials = new backtrace.io.BacktraceCredentials(endpointUrl, submissionToken);
     }
 
     /**

@@ -38,7 +38,9 @@ public class CustomEventsTest {
     @After
     public void cleanDatabaseDir() throws Exception {
         File file = new File(databasePath);
+        file.mkdir();
         FileHelper.deleteRecursive(file);
+        file.mkdir();
     }
 
 
@@ -62,7 +64,7 @@ public class CustomEventsTest {
 
         // THEN
         try {
-            report.await(1, TimeUnit.SECONDS);
+            backtraceClient.await(1, TimeUnit.SECONDS);
         } catch (Exception e) {
             Assert.fail(e.getMessage());
         }
@@ -127,13 +129,12 @@ public class CustomEventsTest {
                 return newData;
             }
         });
-
         backtraceClient.send(new Exception(message));
         backtraceClient.send(report);
 
         // THEN
         try {
-            report.await();
+            backtraceClient.await();
         } catch (Exception e) {
             Assert.fail(e.getMessage());
         }
@@ -142,7 +143,7 @@ public class CustomEventsTest {
     }
 
     @Test
-    public void sendRequestWithCustomAttributes() {
+    public void sendRequestWithCustomAttributes() {B
         // GIVEN
         BacktraceReport report = new BacktraceReport(message);
         String attributeKey = "custom-attribute";
@@ -161,15 +162,15 @@ public class CustomEventsTest {
                 return null;
             }
         });
-
         backtraceClient.send(report);
 
         // THEN
         try {
-            report.await(3, TimeUnit.SECONDS);
+            backtraceClient.await();
         } catch (Exception e) {
             Assert.fail(e.getMessage());
         }
+        System.out.println(outputAttributes.size());
         Assert.assertNotEquals(0, outputAttributes.size());
         Assert.assertTrue(outputAttributes.containsKey(attributeKey));
         Assert.assertEquals(attributeValue, outputAttributes.get(attributeKey));

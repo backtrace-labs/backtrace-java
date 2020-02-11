@@ -6,9 +6,10 @@ import backtrace.io.events.OnServerResponseEvent;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.TimeUnit;
 
 class BacktraceQueueHandler {
-    private ConcurrentLinkedQueue<BacktraceMessage> queue;
+    private BacktraceQueue queue;
 
     /**
      * Creates instance of BacktraceQueueHandler
@@ -16,7 +17,7 @@ class BacktraceQueueHandler {
      * @param config Library configuration
      */
     BacktraceQueueHandler(BacktraceConfig config) {
-        queue = new ConcurrentLinkedQueue<>();
+        queue = new BacktraceQueue();
         BacktraceThread.init(config, queue);
     }
 
@@ -30,5 +31,13 @@ class BacktraceQueueHandler {
     void send(BacktraceReport report, Map<String, Object> attributes, OnServerResponseEvent callback) {
         BacktraceData backtraceData = new BacktraceData(report, attributes);
         queue.add(new BacktraceMessage(backtraceData, callback));
+    }
+
+    public void await() throws InterruptedException {
+        this.queue.await();
+    }
+
+    public void await(long timeout, TimeUnit unit) throws InterruptedException {
+        this.queue.await(timeout, unit);
     }
 }

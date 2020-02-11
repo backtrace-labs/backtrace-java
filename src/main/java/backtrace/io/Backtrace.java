@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 class Backtrace {
     private static final transient Logger LOGGER = LoggerFactory.getLogger(Backtrace.class);
-    private ConcurrentLinkedQueue<BacktraceMessage> queue;
+    private BacktraceQueue queue;
     private BacktraceDatabase database;
     private final BacktraceConfig config;
 
@@ -24,7 +24,7 @@ class Backtrace {
      * @param config Library configuration
      * @param queue  Queue containing error reports that should be sent to the Backtrace console
      */
-    Backtrace(BacktraceConfig config, ConcurrentLinkedQueue<BacktraceMessage> queue) {
+    Backtrace(BacktraceConfig config, BacktraceQueue queue) {
         this.database = BacktraceDatabase.init(config, queue);
         this.config = config;
         this.queue = queue;
@@ -36,11 +36,18 @@ class Backtrace {
     void handleBacktraceMessages() {
         while (true) {
             try {
+                if(queue.isEmpty()){
+                    this.queue.release();
+                    continue;
+                }
+
                 BacktraceMessage message = queue.poll();
 
                 if (message == null) {
                     continue;
                 }
+
+                this.queue.lock();
 
                 processSingleBacktraceMessage(message);
             } catch (Exception e) {
@@ -63,7 +70,7 @@ class Backtrace {
         }
 
         this.database.saveReport(backtraceData);
-
+        LOGGER.debug("Message from current raport: " + backtraceData.getReport().getMessage());
         if (config.getBeforeSendEvent() != null) {
             backtraceData = config.getBeforeSendEvent().onEvent(backtraceData);
         }
@@ -101,7 +108,6 @@ class Backtrace {
      */
     private void handleResponse(BacktraceResult result, BacktraceMessage backtraceMessage) {
         if (result.getStatus() == BacktraceResultStatus.Ok) {
-            backtraceMessage.getBacktraceData().getReport().markAsSent();
             if (config.getDatabaseConfig().isDatabaseEnabled()) {
                 database.removeReport(backtraceMessage.getBacktraceData());
             }

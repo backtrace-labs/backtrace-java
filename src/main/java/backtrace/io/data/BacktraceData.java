@@ -18,7 +18,7 @@ import java.util.Map;
  * Serializable Backtrace API data object
  */
 public class BacktraceData implements Serializable {
-    private static final transient Logger LOGGER = LoggerFactory.getLogger(BacktraceData.class);
+    private static final transient Logger LOGGER = LoggerFactory.getLogger(backtrace.io.data.BacktraceData.class);
 
     /**
      * 16 bytes of randomness in human readable UUID format
@@ -153,7 +153,7 @@ public class BacktraceData implements Serializable {
      */
     private void setAttributes(Map<String, Object> clientAttributes) {
         LOGGER.debug("Setting attributes");
-        Attributes attributes = new Attributes(report, clientAttributes);
+        backtrace.io.data.Attributes attributes = new backtrace.io.data.Attributes(report, clientAttributes);
         this.attributes = attributes.getAttributes();
         this.annotations = attributes.getAnnotations();
     }

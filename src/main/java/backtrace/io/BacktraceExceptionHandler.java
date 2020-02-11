@@ -14,7 +14,7 @@ import java.util.concurrent.CountDownLatch;
  */
 public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandler {
 
-    private static final transient Logger LOGGER = LoggerFactory.getLogger(BacktraceExceptionHandler.class);
+    private static final transient Logger LOGGER = LoggerFactory.getLogger(backtrace.io.BacktraceExceptionHandler.class);
 
     private final Thread.UncaughtExceptionHandler rootHandler;
     private final CountDownLatch signal = new CountDownLatch(1);
@@ -45,11 +45,11 @@ public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandle
      *                    which will be used to send information about exception
      */
     static void enable(BacktraceClient client, boolean blockThread) {
-        if (Thread.getDefaultUncaughtExceptionHandler() instanceof BacktraceExceptionHandler) {
+        if (Thread.getDefaultUncaughtExceptionHandler() instanceof backtrace.io.BacktraceExceptionHandler) {
             // BacktraceExceptionHandler already enabled
             return;
         }
-        new BacktraceExceptionHandler(client, blockThread);
+        new backtrace.io.BacktraceExceptionHandler(client, blockThread);
     }
 
     /**
@@ -58,7 +58,7 @@ public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandle
      * @param client Current Backtrace client instance which will be used to send information about exception
      */
     public static void enable(BacktraceClient client) {
-        new BacktraceExceptionHandler(client, false);
+        new backtrace.io.BacktraceExceptionHandler(client, false);
     }
 
     /**
@@ -66,8 +66,8 @@ public class BacktraceExceptionHandler implements Thread.UncaughtExceptionHandle
      */
     public static void disable() {
         Thread.UncaughtExceptionHandler threadDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
-        if (threadDefaultHandler instanceof BacktraceExceptionHandler) {
-            BacktraceExceptionHandler backtraceExceptionHandler = (BacktraceExceptionHandler) threadDefaultHandler;
+        if (threadDefaultHandler instanceof backtrace.io.BacktraceExceptionHandler) {
+            backtrace.io.BacktraceExceptionHandler backtraceExceptionHandler = (backtrace.io.BacktraceExceptionHandler) threadDefaultHandler;
             Thread.setDefaultUncaughtExceptionHandler(backtraceExceptionHandler.rootHandler);
         }
     }

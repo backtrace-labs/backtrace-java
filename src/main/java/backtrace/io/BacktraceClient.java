@@ -8,6 +8,7 @@ import backtrace.io.events.RequestHandler;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class BacktraceClient {
     private BacktraceQueueHandler backtrace;
@@ -129,6 +130,14 @@ public class BacktraceClient {
      */
     public void send(Exception exception, OnServerResponseEvent callback) {
         this.send(new BacktraceReport(exception), callback);
+    }
+
+    public void await() throws InterruptedException {
+        this.backtrace.await();
+    }
+
+    public void await(long timeout, TimeUnit unit) throws InterruptedException {
+        this.backtrace.await(timeout, unit);
     }
 
     /**
