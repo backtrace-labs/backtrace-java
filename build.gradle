@@ -3,6 +3,8 @@ plugins {
     id 'jacoco'
 }
 
+apply from: 'publish.gradle'
+
 group = 'com.github.backtrace.io'
 version = '1.0.0-SNAPSHOT'
 
