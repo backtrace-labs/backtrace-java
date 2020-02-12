@@ -126,7 +126,7 @@ client.send(report, new OnServerResponseEvent() {
 });
 ```
 
-Method `await` of BacktraceReport allows to block current thread until report will be sent, as a parameter you can set set the maximum time you want to wait for an answer.
+Method `await` of BacktraceClient allows to block current thread until all passed reports will be sent, as a parameter you can optionally set the maximum time you want to wait for an answer.
 
 ```java
 report.await(5, TimeUnit.SECONDS);
