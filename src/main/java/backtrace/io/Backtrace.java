@@ -10,8 +10,6 @@ import backtrace.io.http.BacktraceResultStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 class Backtrace {
     private static final transient Logger LOGGER = LoggerFactory.getLogger(Backtrace.class);
     private BacktraceQueue queue;
@@ -37,21 +35,20 @@ class Backtrace {
         while (true) {
             try {
                 if(queue.isEmpty()){
-                    this.queue.release();
                     continue;
                 }
 
                 BacktraceMessage message = queue.poll();
 
-                if (message == null) {
-                    continue;
+                if (message != null) {
+                    processSingleBacktraceMessage(message);
                 }
-
-                this.queue.lock();
-
-                processSingleBacktraceMessage(message);
             } catch (Exception e) {
                 LOGGER.error("Exception during pipeline for message from queue..", e);
+            }
+
+            if(queue.isEmpty()){
+                this.queue.unlock();
             }
         }
     }
@@ -121,7 +118,7 @@ class Backtrace {
         BacktraceReport report = backtraceMessage.getBacktraceData().getReport();
         if (report.getRetryCounter() < config.getDatabaseConfig().getDatabaseRetryLimit()) {
             report.incrementRetryCounter();
-            this.queue.add(backtraceMessage);
+            this.queue.addWithLock(backtraceMessage);
         }
     }
 }

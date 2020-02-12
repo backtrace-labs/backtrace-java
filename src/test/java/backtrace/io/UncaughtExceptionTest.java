@@ -32,7 +32,7 @@ public class UncaughtExceptionTest {
             @Override
             public BacktraceResult onRequest(BacktraceData data) {
                 waiter.resume();
-                return BacktraceResult.OnSuccess(new BacktraceReport("test"), "test");
+                return BacktraceResult.onSuccess(new BacktraceReport("test"), "test");
             }
         });
 

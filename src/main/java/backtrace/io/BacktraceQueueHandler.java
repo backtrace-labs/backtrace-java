@@ -30,14 +30,14 @@ class BacktraceQueueHandler {
      */
     void send(BacktraceReport report, Map<String, Object> attributes, OnServerResponseEvent callback) {
         BacktraceData backtraceData = new BacktraceData(report, attributes);
-        queue.add(new BacktraceMessage(backtraceData, callback));
+        queue.addWithLock(new BacktraceMessage(backtraceData, callback));
     }
 
     public void await() throws InterruptedException {
         this.queue.await();
     }
 
-    public void await(long timeout, TimeUnit unit) throws InterruptedException {
-        this.queue.await(timeout, unit);
+    public boolean await(long timeout, TimeUnit unit) throws InterruptedException {
+        return this.queue.await(timeout, unit);
     }
 }

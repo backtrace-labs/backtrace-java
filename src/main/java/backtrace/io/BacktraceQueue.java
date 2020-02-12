@@ -10,9 +10,14 @@ import java.util.concurrent.TimeUnit;
 class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
 
     private static final transient Logger LOGGER = LoggerFactory.getLogger(BacktraceQueue.class);
-    private final CountLatch lock = new CountLatch(1, 0);
+    private final CountLatch lock = new CountLatch(0, 0);
 
-    void release() {
+    boolean addWithLock(BacktraceMessage message){
+        this.lock();
+        return this.add(message);
+    }
+
+    void unlock() {
         if (lock.getCount() == 0) {
             return;
         }
@@ -35,10 +40,11 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
         LOGGER.debug("After waiting for semaphore");
     }
 
-    void await(long timeout,
+    boolean await(long timeout,
                TimeUnit unit) throws InterruptedException {
         LOGGER.debug("Waiting for semaphore");
-        lock.await(timeout, unit);
+        boolean result =  lock.await(timeout, unit);
         LOGGER.debug("After waiting for semaphore");
+        return result;
     }
 }

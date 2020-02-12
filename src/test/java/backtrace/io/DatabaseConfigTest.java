@@ -53,7 +53,7 @@ public class DatabaseConfigTest {
         client.setCustomRequestHandler(new RequestHandler() {
             @Override
             public BacktraceResult onRequest(BacktraceData data) {
-                return BacktraceResult.OnError(data.getReport(), new Exception());
+                return BacktraceResult.onError(data.getReport(), new Exception());
             }
         });
 

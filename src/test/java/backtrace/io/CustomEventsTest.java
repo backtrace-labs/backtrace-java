@@ -5,47 +5,37 @@ import backtrace.io.data.BacktraceReport;
 import backtrace.io.events.BeforeSendEvent;
 import backtrace.io.events.OnServerResponseEvent;
 import backtrace.io.events.RequestHandler;
+import backtrace.io.helpers.CountLatch;
 import backtrace.io.helpers.FileHelper;
 import backtrace.io.http.BacktraceResult;
 import net.jodah.concurrentunit.Waiter;
-import org.apache.log4j.BasicConfigurator;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.*;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 
 public class CustomEventsTest {
-    private static final transient Logger LOGGER = LoggerFactory.getLogger(CustomEventsTest.class);
-
     private final String databasePath = "backtrace_test/";
     private final String message = "message";
     private BacktraceClient backtraceClient;
     private BacktraceConfig config;
 
     @Before
-    public void init() {
+    public void init() throws Exception{
+        this.cleanDatabaseDir();
         config = new BacktraceConfig("url", "token");
         config.setDatabasePath(this.databasePath);
         this.backtraceClient = new BacktraceClient(config);
     }
 
-    @Before
     @After
     public void cleanDatabaseDir() throws Exception {
-        File file = new File(databasePath);
-        file.mkdir();
-        FileHelper.deleteRecursive(file);
-        file.mkdir();
+        FileHelper.deleteRecursive(new File(databasePath));
     }
 
 
@@ -57,7 +47,7 @@ public class CustomEventsTest {
             @Override
             public BacktraceResult onRequest(BacktraceData data) {
                 result.add(1);
-                return BacktraceResult.OnSuccess(data.getReport(), "");
+                return BacktraceResult.onSuccess(data.getReport(), "");
             }
         };
         BacktraceReport report = new BacktraceReport(message);
@@ -84,7 +74,7 @@ public class CustomEventsTest {
         RequestHandler customRequestHandler = new RequestHandler() {
             @Override
             public BacktraceResult onRequest(BacktraceData data) {
-                return BacktraceResult.OnSuccess(data.getReport(), message);
+                return BacktraceResult.onSuccess(data.getReport(), message);
             }
         };
         backtraceClient.setCustomRequestHandler(customRequestHandler);
@@ -116,12 +106,11 @@ public class CustomEventsTest {
         BacktraceReport report = new BacktraceReport(message);
         String newMessage = "new message";
         final BacktraceData newData = new BacktraceData(new BacktraceReport(newMessage));
-        final List<BacktraceResult> result = new LinkedList<>();
+        List<BacktraceResult> result = new LinkedList<>();
         RequestHandler customRequestHandler = new RequestHandler() {
             @Override
             public BacktraceResult onRequest(BacktraceData data) {
-                LOGGER.debug("[Test] Executing request handler");
-                BacktraceResult backtraceResult = BacktraceResult.OnSuccess(data.getReport(), "");
+                BacktraceResult backtraceResult = BacktraceResult.onSuccess(data.getReport(), "");
                 result.add(backtraceResult);
                 return backtraceResult;
             }
@@ -132,18 +121,15 @@ public class CustomEventsTest {
         backtraceClient.setBeforeSendEvent(new BeforeSendEvent() {
             @Override
             public BacktraceData onEvent(BacktraceData data) {
-                LOGGER.debug("[Test] Executing before send event");
                 return newData;
             }
         });
-
         backtraceClient.send(new Exception(message));
         backtraceClient.send(report);
 
         // THEN
         try {
             backtraceClient.await();
-            LOGGER.debug("[Test] After awaiting..");
         } catch (Exception e) {
             Assert.fail(e.getMessage());
         }
@@ -152,11 +138,76 @@ public class CustomEventsTest {
     }
 
     @Test
+    public void testAwaitingTimeExpectedInterruptedException() throws InterruptedException {
+        // GIVEN
+        Waiter waiter = new Waiter();
+        backtraceClient = new BacktraceClient(config);
+        backtraceClient.setCustomRequestHandler(new RequestHandler() {
+            @Override
+            public BacktraceResult onRequest(BacktraceData data) {
+                try {
+                    System.out.println("Waiting on request");
+                    Thread.sleep(10000);
+                    waiter.fail();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        });
+
+        // WHEN
+        backtraceClient.send("");
+
+        // THEN
+        try{
+            boolean result = backtraceClient.await(2, TimeUnit.SECONDS);
+            Assert.assertFalse(result);
+        }
+        catch (Exception e){
+            Assert.fail(e.toString());
+        }
+    }
+
+
+    @Test
+    public void sendManyRequests(){
+        // GIVEN
+        int iterations = 100;
+        backtraceClient = new BacktraceClient(config);
+        final ArrayList<Integer> result = new ArrayList<>();
+        backtraceClient.setCustomRequestHandler(new RequestHandler() {
+            @Override
+            public BacktraceResult onRequest(BacktraceData data) {
+                result.add(Integer.parseInt(data.getReport().getMessage()));
+                return BacktraceResult.onSuccess(data.getReport(), "Success");
+            }
+        });
+
+        // WHEN
+        for (int i = 1; i <= iterations; i++) {
+            backtraceClient.send(Integer.toString(i));
+        }
+
+        // THEN
+        try {
+            backtraceClient.await();
+        } catch (Exception e) {
+            Assert.fail(e.getMessage());
+        }
+
+        Assert.assertEquals(iterations, result.size());
+        Assert.assertEquals(new Integer(1) , result.get(0));
+        Assert.assertEquals(new Integer(iterations), result.get(iterations - 1));
+    }
+
+    @Test
     public void sendRequestWithCustomAttributes() {
         // GIVEN
         BacktraceReport report = new BacktraceReport(message);
         String attributeKey = "custom-attribute";
         String attributeValue = "custom-value";
+
         Map<String, Object> attributes = new HashMap<>();
         attributes.put(attributeKey, attributeValue);
 

@@ -136,8 +136,8 @@ public class BacktraceClient {
         this.backtrace.await();
     }
 
-    public void await(long timeout, TimeUnit unit) throws InterruptedException {
-        this.backtrace.await(timeout, unit);
+    public boolean await(long timeout, TimeUnit unit) throws InterruptedException {
+        return this.backtrace.await(timeout, unit);
     }
 
     /**

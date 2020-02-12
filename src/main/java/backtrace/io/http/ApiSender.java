@@ -62,7 +62,7 @@ public class ApiSender {
 
         } catch (Exception e) {
             LOGGER.error("Sending HTTP request failed to Backtrace API", e);
-            result = BacktraceResult.OnError(report, e);
+            result = BacktraceResult.onError(report, e);
         } finally {
             if (urlConnection != null) {
                 try {
@@ -70,7 +70,7 @@ public class ApiSender {
                     LOGGER.debug("Disconnecting HttpUrlConnection successful");
                 } catch (Exception e) {
                     LOGGER.error("Disconnecting HttpUrlConnection failed", e);
-                    result = BacktraceResult.OnError(report, e);
+                    result = BacktraceResult.onError(report, e);
                 }
             }
         }
