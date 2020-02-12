@@ -70,8 +70,9 @@ class Backtrace {
         }
 
         this.database.saveReport(backtraceData);
-        LOGGER.debug("Message from current raport: " + backtraceData.getReport().getMessage());
+        LOGGER.debug("Message from current report: " + backtraceData.getReport().getMessage());
         if (config.getBeforeSendEvent() != null) {
+            LOGGER.debug("Custom before sending event");
             backtraceData = config.getBeforeSendEvent().onEvent(backtraceData);
         }
 
@@ -81,6 +82,7 @@ class Backtrace {
 
         OnServerResponseEvent callback = backtraceMessage.getCallback();
         if (callback != null) {
+            LOGGER.debug("Custom callback");
             callback.onEvent(result);
         }
     }
@@ -93,8 +95,10 @@ class Backtrace {
      */
     private BacktraceResult sendReport(BacktraceData backtraceData) {
         if (this.config.getRequestHandler() != null) {
+            LOGGER.debug("Custom request handler");
             return this.config.getRequestHandler().onRequest(backtraceData);
         }
+        LOGGER.debug("Default request handler");
         return ApiSender.sendReport(config.getSubmissionUrl(), backtraceData);
     }
 

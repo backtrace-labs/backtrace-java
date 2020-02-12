@@ -8,10 +8,13 @@ import backtrace.io.events.RequestHandler;
 import backtrace.io.helpers.FileHelper;
 import backtrace.io.http.BacktraceResult;
 import net.jodah.concurrentunit.Waiter;
+import org.apache.log4j.BasicConfigurator;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.HashMap;
@@ -22,6 +25,8 @@ import java.util.concurrent.TimeUnit;
 
 
 public class CustomEventsTest {
+    private static final transient Logger LOGGER = LoggerFactory.getLogger(CustomEventsTest.class);
+
     private final String databasePath = "backtrace_test/";
     private final String message = "message";
     private BacktraceClient backtraceClient;
@@ -111,10 +116,11 @@ public class CustomEventsTest {
         BacktraceReport report = new BacktraceReport(message);
         String newMessage = "new message";
         final BacktraceData newData = new BacktraceData(new BacktraceReport(newMessage));
-        List<BacktraceResult> result = new LinkedList<>();
+        final List<BacktraceResult> result = new LinkedList<>();
         RequestHandler customRequestHandler = new RequestHandler() {
             @Override
             public BacktraceResult onRequest(BacktraceData data) {
+                LOGGER.debug("[Test] Executing request handler");
                 BacktraceResult backtraceResult = BacktraceResult.OnSuccess(data.getReport(), "");
                 result.add(backtraceResult);
                 return backtraceResult;
@@ -126,15 +132,18 @@ public class CustomEventsTest {
         backtraceClient.setBeforeSendEvent(new BeforeSendEvent() {
             @Override
             public BacktraceData onEvent(BacktraceData data) {
+                LOGGER.debug("[Test] Executing before send event");
                 return newData;
             }
         });
+
         backtraceClient.send(new Exception(message));
         backtraceClient.send(report);
 
         // THEN
         try {
             backtraceClient.await();
+            LOGGER.debug("[Test] After awaiting..");
         } catch (Exception e) {
             Assert.fail(e.getMessage());
         }
@@ -148,7 +157,6 @@ public class CustomEventsTest {
         BacktraceReport report = new BacktraceReport(message);
         String attributeKey = "custom-attribute";
         String attributeValue = "custom-value";
-
         Map<String, Object> attributes = new HashMap<>();
         attributes.put(attributeKey, attributeValue);
 

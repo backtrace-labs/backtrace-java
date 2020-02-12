@@ -2,12 +2,12 @@ package backtrace.io.database;
 
 public class BacktraceDatabaseConfig {
     @SuppressWarnings("FieldCanBeLocal")
-    private String FILE_EXTENSION = "backtrace_report";
-    private String DATABASE_PATH = ".backtrace.io";
-    private boolean USE_DATABASE = true;
-    private int RETRY_LIMIT = 3;
-    private int MAX_RECORD_COUNT = -1;
-    private long MAX_DATABASE_SIZE = -1; // -1 is unlimited
+    private volatile String FILE_EXTENSION = "backtrace_report";
+    private volatile String DATABASE_PATH = ".backtrace.io";
+    private volatile boolean USE_DATABASE = true;
+    private volatile int RETRY_LIMIT = 3;
+    private volatile int MAX_RECORD_COUNT = -1;
+    private volatile long MAX_DATABASE_SIZE = -1; // -1 is unlimited
 
     int getDatabaseMaxRecordCount() {
         return MAX_RECORD_COUNT;
