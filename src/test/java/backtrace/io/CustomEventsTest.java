@@ -138,7 +138,7 @@ public class CustomEventsTest {
     }
 
     @Test
-    public void testAwaitingTimeExpectedInterruptedException() throws InterruptedException {
+    public void awaitingTime() {
         // GIVEN
         Waiter waiter = new Waiter();
         backtraceClient = new BacktraceClient(config);
