@@ -169,6 +169,35 @@ public class CustomEventsTest {
         }
     }
 
+    @Test
+    public void multipleAwait() throws InterruptedException {
+        // GIVEN
+        backtraceClient = new BacktraceClient(config);
+        final ArrayList<Integer> result = new ArrayList<>();
+        backtraceClient.setCustomRequestHandler(new RequestHandler() {
+            @Override
+            public BacktraceResult onRequest(BacktraceData data) {
+                result.add(1);
+                return BacktraceResult.onSuccess(data.getReport(), "Success");
+            }
+        });
+
+        // WHEN
+        backtraceClient.send("");
+        backtraceClient.send("");
+        backtraceClient.await();
+        int counterAfterFirstAwait =  result.size();
+
+        backtraceClient.send("");
+        backtraceClient.send("");
+        backtraceClient.await();
+        int counterAfterSecondAwait =  result.size();
+
+        // THEN
+        Assert.assertEquals(2, counterAfterFirstAwait);
+        Assert.assertEquals(4, counterAfterSecondAwait);
+    }
+
 
     @Test
     public void sendManyRequests(){
