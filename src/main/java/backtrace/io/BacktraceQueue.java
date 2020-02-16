@@ -25,7 +25,7 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
         lock.countDown();
     }
 
-    void lock() {
+    private void lock() {
         if (lock.getCount() != 0) {
             return;
         }
