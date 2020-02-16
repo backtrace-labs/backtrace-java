@@ -8,7 +8,7 @@ import java.util.concurrent.CountDownLatch;
 
 public class BacktraceThread extends Thread {
     private static final transient Logger LOGGER = LoggerFactory.getLogger(BacktraceThread.class);
-    private final static String THREAD_NAME = "backtrace-deamon";
+    private final static String THREAD_NAME = "backtrace-daemon";
     private Backtrace backtrace;
     private volatile boolean running = true;
     private CountDownLatch closing = new CountDownLatch(1);
