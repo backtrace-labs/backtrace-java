@@ -3,11 +3,15 @@ package backtrace.io;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.CountDownLatch;
+
 
 public class BacktraceThread extends Thread {
-    private static final transient Logger LOGGER = LoggerFactory.getLogger(backtrace.io.BacktraceThread.class);
+    private static final transient Logger LOGGER = LoggerFactory.getLogger(BacktraceThread.class);
     private final static String THREAD_NAME = "backtrace-deamon";
     private Backtrace backtrace;
+    private volatile boolean running = true;
+    private CountDownLatch closing = new CountDownLatch(1);
 
     /**
      * Creates new thread for handling and sending error reports passed to queue
@@ -26,17 +30,30 @@ public class BacktraceThread extends Thread {
      * @param config library configuration
      * @param queue  queue containing error reports that should be sent to the Backtrace console
      */
-    static void init(BacktraceConfig config, BacktraceQueue queue) {
-        LOGGER.info("Initialize BacktraceThread");
-        backtrace.io.BacktraceThread thread = new backtrace.io.BacktraceThread(config, queue);
+    static BacktraceThread init(BacktraceConfig config, BacktraceQueue queue) {
+        LOGGER.info("Initializing BacktraceThread");
+        BacktraceThread thread = new BacktraceThread(config, queue);
         thread.setDaemon(true);
         thread.setName(THREAD_NAME);
         thread.start();
+        return thread;
+    }
+
+    /**
+     * TODO:
+     * @throws InterruptedException
+     */
+    void close() throws InterruptedException {
+        LOGGER.info("Closing BacktraceThread");
+        this.running = false;
+        this.closing.await();
     }
 
     @Override
     public void run() {
-
-        backtrace.handleBacktraceMessages();
+        while(running) {
+            backtrace.handleBacktraceMessage();
+        }
+        this.closing.countDown();
     }
 }

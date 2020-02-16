@@ -132,6 +132,10 @@ public class BacktraceClient {
         this.send(new BacktraceReport(exception), callback);
     }
 
+    public void close() throws InterruptedException {
+        this.backtrace.close();
+    }
+
     public void await() throws InterruptedException {
         this.backtrace.await();
     }

@@ -28,28 +28,27 @@ class Backtrace {
         this.queue = queue;
     }
 
+
     /**
      * Handles the queue of incoming error reports
      */
-    void handleBacktraceMessages() {
-        while (true) {
-            try {
-                if(queue.isEmpty()){
-                    continue;
-                }
-
-                BacktraceMessage message = queue.poll();
-
-                if (message != null) {
-                    processSingleBacktraceMessage(message);
-                }
-            } catch (Exception e) {
-                LOGGER.error("Exception during pipeline for message from queue..", e);
-            }
-
+    void handleBacktraceMessage() {
+        try {
             if(queue.isEmpty()){
-                this.queue.unlock();
+                return;
             }
+
+            BacktraceMessage message = queue.poll();
+
+            if (message != null) {
+                processSingleBacktraceMessage(message);
+            }
+        } catch (Exception e) {
+            LOGGER.error("Exception during pipeline for message from queue..", e);
+        }
+
+        if(queue.isEmpty()){
+            this.queue.unlock();
         }
     }
 

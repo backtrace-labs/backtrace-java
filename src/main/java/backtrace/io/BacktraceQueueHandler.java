@@ -10,15 +10,15 @@ import java.util.concurrent.TimeUnit;
 
 class BacktraceQueueHandler {
     private BacktraceQueue queue;
-
+    private BacktraceThread thread;
     /**
      * Creates instance of BacktraceQueueHandler
      *
      * @param config Library configuration
      */
     BacktraceQueueHandler(BacktraceConfig config) {
-        queue = new BacktraceQueue();
-        BacktraceThread.init(config, queue);
+        this.queue = new BacktraceQueue();
+        this.thread = BacktraceThread.init(config, queue);
     }
 
     /**
@@ -33,11 +33,30 @@ class BacktraceQueueHandler {
         queue.addWithLock(new BacktraceMessage(backtraceData, callback));
     }
 
-    public void await() throws InterruptedException {
+    /**
+     * TODO:
+     * @throws InterruptedException
+     */
+    void close() throws InterruptedException {
+        this.thread.close();
+    }
+
+    /**
+     * c
+     * @throws InterruptedException
+     */
+    void await() throws InterruptedException {
         this.queue.await();
     }
 
-    public boolean await(long timeout, TimeUnit unit) throws InterruptedException {
+    /**
+     * c
+     * @param timeout
+     * @param unit
+     * @return
+     * @throws InterruptedException
+     */
+    boolean await(long timeout, TimeUnit unit) throws InterruptedException {
         return this.queue.await(timeout, unit);
     }
 }
