@@ -35,14 +35,10 @@ public class ApiSender {
     private static BacktraceResult sendReport(String serverUrl, String json, BacktraceReport report, List<String> attachments) {
         HttpURLConnection urlConnection = null;
         BacktraceResult result;
-        System.out.println("11111111");
         try {
             urlConnection = getUrlConnection(serverUrl);
-            System.out.println("222222");
             LOGGER.debug("HttpURLConnection successfully initialized");
-            System.out.println("333333");
             DataOutputStream request = new DataOutputStream(urlConnection.getOutputStream());
-            System.out.println("4444");
             backtrace.io.http.MultiFormRequestHelper.addJson(request, json);
             backtrace.io.http.MultiFormRequestHelper.addFiles(request, attachments);
             backtrace.io.http.MultiFormRequestHelper.addEndOfRequest(request);
