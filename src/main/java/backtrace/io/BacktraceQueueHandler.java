@@ -34,27 +34,28 @@ class BacktraceQueueHandler {
     }
 
     /**
-     * TODO:
-     * @throws InterruptedException
+     * Stop Backtrace Thread and wait until last message will be sent
+     * @throws InterruptedException if the current thread is interrupted while waiting
      */
     void close() throws InterruptedException {
         this.thread.close();
     }
 
     /**
-     * TODO:
-     * @throws InterruptedException
+     * Wait until all messages in queue will be sent
+     * @throws InterruptedException if the current thread is interrupted while waiting
      */
     void await() throws InterruptedException {
         this.queue.await();
     }
 
     /**
-     * TODO:
-     * @param timeout
-     * @param unit
-     * @return
-     * @throws InterruptedException
+     * Wait until all messages in queue will be sent
+     * @param timeout the maximum time to wait
+     * @param unit the time unit of the {@code timeout} argument
+     * @return {@code true} if all messages are sent in passed time and {@code false}
+     * if the waiting time elapsed before all messages has been sent
+     * @throws InterruptedException if the current thread is interrupted while waiting
      */
     boolean await(long timeout, TimeUnit unit) throws InterruptedException {
         return this.queue.await(timeout, unit);

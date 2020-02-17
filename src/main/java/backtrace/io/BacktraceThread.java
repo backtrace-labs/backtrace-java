@@ -40,8 +40,8 @@ public class BacktraceThread extends Thread {
     }
 
     /**
-     * TODO:
-     * @throws InterruptedException
+     * Stop Backtrace Thread and wait until last message will be sent
+     * @throws InterruptedException if the current thread is interrupted while waiting
      */
     void close() throws InterruptedException {
         LOGGER.info("Closing BacktraceThread");
