@@ -18,9 +18,10 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
 
     /**
      * Add message to queue with locking semaphore to inform that at least one of messages are processing
-     * @param message  error report
+     *
+     * @param message error report
      */
-    void addWithLock(BacktraceMessage message){
+    void addWithLock(BacktraceMessage message) {
         this.lock();
         this.add(message);
     }
@@ -50,6 +51,7 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
 
     /**
      * Wait until all messages in queue will be sent
+     *
      * @throws InterruptedException if the current thread is interrupted while waiting
      */
     void await() throws InterruptedException {
@@ -60,16 +62,17 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
 
     /**
      * Wait until all messages in queue will be sent
+     *
      * @param timeout the maximum time to wait
-     * @param unit the time unit of the {@code timeout} argument
+     * @param unit    the time unit of the {@code timeout} argument
      * @return {@code true} if all messages are sent in passed time and {@code false}
      * if the waiting time elapsed before all messages has been sent
      * @throws InterruptedException if the current thread is interrupted while waiting
      */
     boolean await(long timeout,
-               TimeUnit unit) throws InterruptedException {
+                  TimeUnit unit) throws InterruptedException {
         LOGGER.debug("Waiting for the semaphore");
-        boolean result =  lock.await(timeout, unit);
+        boolean result = lock.await(timeout, unit);
         LOGGER.debug("The semaphore has been released");
         return result;
     }

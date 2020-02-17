@@ -41,6 +41,7 @@ public class BacktraceThread extends Thread {
 
     /**
      * Stop Backtrace Thread and wait until last message will be sent
+     *
      * @throws InterruptedException if the current thread is interrupted while waiting
      */
     void close() throws InterruptedException {
@@ -51,7 +52,7 @@ public class BacktraceThread extends Thread {
 
     @Override
     public void run() {
-        while(running) {
+        while (running) {
             backtrace.handleBacktraceMessage();
         }
         this.closing.countDown();

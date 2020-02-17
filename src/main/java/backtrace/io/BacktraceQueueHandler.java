@@ -5,12 +5,12 @@ import backtrace.io.data.BacktraceReport;
 import backtrace.io.events.OnServerResponseEvent;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 
 class BacktraceQueueHandler {
     private BacktraceQueue queue;
     private BacktraceThread thread;
+
     /**
      * Creates instance of BacktraceQueueHandler
      *
@@ -35,6 +35,7 @@ class BacktraceQueueHandler {
 
     /**
      * Stop Backtrace Thread and wait until last message will be sent
+     *
      * @throws InterruptedException if the current thread is interrupted while waiting
      */
     void close() throws InterruptedException {
@@ -43,6 +44,7 @@ class BacktraceQueueHandler {
 
     /**
      * Wait until all messages in queue will be sent
+     *
      * @throws InterruptedException if the current thread is interrupted while waiting
      */
     void await() throws InterruptedException {
@@ -51,8 +53,9 @@ class BacktraceQueueHandler {
 
     /**
      * Wait until all messages in queue will be sent
+     *
      * @param timeout the maximum time to wait
-     * @param unit the time unit of the {@code timeout} argument
+     * @param unit    the time unit of the {@code timeout} argument
      * @return {@code true} if all messages are sent in passed time and {@code false}
      * if the waiting time elapsed before all messages has been sent
      * @throws InterruptedException if the current thread is interrupted while waiting

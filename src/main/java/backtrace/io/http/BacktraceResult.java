@@ -10,7 +10,6 @@ import com.google.gson.annotations.SerializedName;
 public class BacktraceResult {
 
 
-
     /**
      * Object identifier
      */

@@ -35,7 +35,7 @@ class Annotations {
         Map<String, Object> result = new HashMap<>();
 
         Map<String, String> environmentVariables = new HashMap<>();
-        for (Map.Entry<String,String> entry : System.getenv().entrySet()){
+        for (Map.Entry<String, String> entry : System.getenv().entrySet()) {
             environmentVariables.put(entry.getKey(), entry.getValue());
         }
 
@@ -43,7 +43,7 @@ class Annotations {
         if (complexAttributes != null) {
             result.putAll(complexAttributes);
         }
-        
+
         result.put("Exception", new AnnotationException(exceptionObject));
         return result;
     }

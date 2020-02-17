@@ -34,7 +34,7 @@ class Backtrace {
      */
     void handleBacktraceMessage() {
         try {
-            if(queue.isEmpty()){
+            if (queue.isEmpty()) {
                 return;
             }
 
@@ -47,7 +47,7 @@ class Backtrace {
             LOGGER.error("Exception during pipeline for message from queue..", e);
         }
 
-        if(queue.isEmpty()){
+        if (queue.isEmpty()) {
             this.queue.unlock();
         }
     }
