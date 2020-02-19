@@ -9,19 +9,19 @@ public class BacktraceDatabaseConfig {
     private volatile int MAX_RECORD_COUNT = -1;
     private volatile long MAX_DATABASE_SIZE = -1; // -1 is unlimited
 
-    int getDatabaseMaxRecordCount() {
+    public int getDatabaseMaxRecordCount() {
         return MAX_RECORD_COUNT;
     }
 
-    long getDatabaseMaxSize() {
+    public long getDatabaseMaxSize() {
         return MAX_DATABASE_SIZE;
     }
 
-    String getFileExtension() {
+    public String getFileExtension() {
         return FILE_EXTENSION;
     }
 
-    String getDatabasePath() {
+    public String getDatabasePath() {
         return DATABASE_PATH;
     }
 
