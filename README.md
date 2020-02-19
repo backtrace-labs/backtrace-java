@@ -14,7 +14,7 @@
 * Gradle
 ```
 dependencies {
-    implementation 'com.github.backtrace-labs.backtrace-java:backtrace-java:1.0.0-rc.1'
+    implementation 'com.github.backtrace-labs.backtrace-java:backtrace-java:1.0.0'
 }
 ```
 
@@ -23,7 +23,7 @@ dependencies {
 <dependency>
   <groupId>com.github.backtrace-labs.backtrace-java</groupId>
   <artifactId>backtrace-java</artifactId>
-  <version>1.0.0-rc.1</version>
+  <version>1.0.0</version>
 </dependency>
 ```
 
@@ -129,7 +129,7 @@ client.send(report, new OnServerResponseEvent() {
 Method `await` of BacktraceClient allows to block current thread until all passed reports will be sent, as a parameter you can optionally set the maximum time you want to wait for an answer.
 
 ```java
-report.await(5, TimeUnit.SECONDS);
+backtraceClient.await(5, TimeUnit.SECONDS);
 ```
 
 ### Other `BacktraceReport` overloads
@@ -184,6 +184,13 @@ backtraceClient.enableUncaughtExceptionsHandler();
 
 ## BacktraceClient  <a name="documentation-BacktraceClient"></a>
 `BacktraceClient` is a class that allows you to instantiate a client instance that interacts with Backtrace. This class sets up connection to the Backtrace endpoint and manages error reporting behavior. It also prepares error report, gather device attributes and add to queue from which special thread gets report and sends to Backtrace. This class also allows to enable `UncaughtExceptionsHandler` or set custom events.
+
+if you want to safely close all resources used by the this library, execute `close` method. This method will do this after processing last message in queue:
+
+```java
+backtraceClient.close()
+```
+
 ## BacktraceData  <a name="documentation-BacktraceData"></a>
 **`BacktraceData`** is a serializable class that holds the data to create a diagnostic JSON to be sent to the Backtrace endpoint . You can add additional pre-processors for `BacktraceData` by attaching an event handler to the `BacktraceClient.setBeforeSendEvent(event)` event. `BacktraceData` require `BacktraceReport` and `BacktraceClient` client attributes.
 
