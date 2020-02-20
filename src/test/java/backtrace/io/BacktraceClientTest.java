@@ -77,6 +77,7 @@ public class BacktraceClientTest {
         for (Thread t : threads) {
             System.out.println(t.getName());
             if (t.getName().equals(THREAD_NAME)) {
+                System.out.println(t.getState().name());
                 return true;
             }
         }
