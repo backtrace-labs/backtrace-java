@@ -29,7 +29,6 @@ public class BacktraceClientTest {
         // WHEN
         System.out.println("working threads..");
         boolean isBacktraceThreadRunning = isBacktraceThreadRunning();
-        backtraceClient.send("test-message");
         backtraceClient.close();
         System.out.println("working threads..");
         boolean isBacktraceThreadRunningAfterClose = isBacktraceThreadRunning();
