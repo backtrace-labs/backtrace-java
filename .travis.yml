@@ -3,6 +3,7 @@ language: java
 env:
   global:
 #    GRADLE_OPTS=-Xmx2048m
+    GRADLE_OPTS="-Xmx2048m -Dorg.gradle.jvmargs='-Xmx256m -XX:MaxPermSize=64m'"
     JAVA_OPTS="-Xmx2048m -XX:MaxPermSize=64m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
 matrix:
   include:
