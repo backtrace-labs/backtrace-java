@@ -33,7 +33,7 @@ public class BacktraceClientTest {
         backtraceClient.close();
         System.out.println("working threads..");
         //Let's wait to see server thread stopped
-        TimeUnit.MILLISECONDS.sleep(2000);
+        TimeUnit.MILLISECONDS.sleep(20000);
         boolean isBacktraceThreadRunningAfterClose = isBacktraceThreadRunning();
 
         System.out.println(isBacktraceThreadRunning);
