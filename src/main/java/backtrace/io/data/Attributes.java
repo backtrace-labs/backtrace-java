@@ -115,7 +115,7 @@ class Attributes {
             String hex = macAddress.replace(":", "").replace("-", "");
             return UUID.nameUUIDFromBytes(hex.getBytes()).toString();
         } catch (Exception exception) {
-            LOGGER.error("Can not get device MAC address", exception);
+            LOGGER.warn("Can not get device MAC address");
         }
         return UUID.randomUUID().toString();
     }
