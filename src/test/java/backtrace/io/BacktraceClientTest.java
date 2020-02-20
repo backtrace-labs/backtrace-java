@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 
@@ -31,6 +32,8 @@ public class BacktraceClientTest {
         boolean isBacktraceThreadRunning = isBacktraceThreadRunning();
         backtraceClient.close();
         System.out.println("working threads..");
+        //Let's wait to see server thread stopped
+        TimeUnit.MILLISECONDS.sleep(200);
         boolean isBacktraceThreadRunningAfterClose = isBacktraceThreadRunning();
 
         System.out.println(isBacktraceThreadRunning);
@@ -62,6 +65,7 @@ public class BacktraceClientTest {
 //        boolean isBacktraceThreadRunning = isBacktraceThreadRunning();
 //        backtraceClient.send("test-message");
 //        backtraceClient.close();
+//        TimeUnit.MILLISECONDS.sleep(200);
 //        boolean isBacktraceThreadRunningAfterClose = isBacktraceThreadRunning();
 //        waiter.await();
 //
