@@ -40,6 +40,7 @@ class BacktraceQueueHandler {
      */
     void close() throws InterruptedException {
         this.thread.close();
+        this.thread.join();
     }
 
     /**
