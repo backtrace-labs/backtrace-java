@@ -31,9 +31,14 @@ public class BacktraceClientTest {
         System.out.println("working threads..");
         boolean isBacktraceThreadRunning = isBacktraceThreadRunning();
         backtraceClient.close();
+
+        // TRAVIS-CI workaround
+        backtraceClient = null;
+        System.gc();
         System.out.println("working threads..");
         //Let's wait to see server thread stopped
         TimeUnit.MILLISECONDS.sleep(20000);
+
         boolean isBacktraceThreadRunningAfterClose = isBacktraceThreadRunning();
 
         System.out.println(isBacktraceThreadRunning);
