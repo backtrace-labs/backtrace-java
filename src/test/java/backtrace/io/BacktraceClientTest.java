@@ -66,7 +66,7 @@ public class BacktraceClientTest {
 
         System.out.println("working threads..");
         //Let's wait to see server thread stopped
-        TimeUnit.MILLISECONDS.sleep(200);
+        TimeUnit.MILLISECONDS.sleep(2000);
 
         boolean isBacktraceThreadRunningAfterClose = isBacktraceThreadRunning();
 
@@ -109,9 +109,26 @@ public class BacktraceClientTest {
 //    }
 
     private boolean isBacktraceThreadRunning(){
-        Set<Thread> threads = Thread.getAllStackTraces().keySet();
+        ThreadGroup rootGroup = Thread.currentThread().getThreadGroup();
+        ThreadGroup parentGroup;
+        while ((parentGroup = rootGroup.getParent()) != null) {
+            rootGroup = parentGroup;
+        }
+
+        Thread[] threads = new Thread[rootGroup.activeCount()];
+        while (rootGroup.enumerate(threads, true ) == threads.length) {
+            threads = new Thread[threads.length * 2];
+        }
+//        while (rootGroup.enumerate(threads, true ) == threads.length) {
+//            threads = new Thread[threads.length * 2];
+//        }
+//
+//        Set<Thread> threads = Thread.getAllStackTraces().keySet();
 
         for (Thread t : threads) {
+            if (t == null){
+                continue;
+            }
             System.out.println(t.getName());
             if (t.getName().equals(THREAD_NAME)) {
                 System.out.println(t.getState().name());
