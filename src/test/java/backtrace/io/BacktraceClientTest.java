@@ -28,13 +28,8 @@ public class BacktraceClientTest {
         BacktraceClient backtraceClient = new BacktraceClient(backtraceConfig);
 
         // WHEN
-        System.out.println("working threads..");
         boolean isBacktraceThreadRunning = isBacktraceThreadRunning();
         backtraceClient.close();
-
-        System.out.println("working threads..");
-        //Let's wait to see server thread stopped
-        TimeUnit.MILLISECONDS.sleep(2000);
 
         boolean isBacktraceThreadRunningAfterClose = isBacktraceThreadRunning();
 
@@ -67,7 +62,6 @@ public class BacktraceClientTest {
         boolean isBacktraceThreadRunning = isBacktraceThreadRunning();
         backtraceClient.send("test-message");
         backtraceClient.close();
-        TimeUnit.MILLISECONDS.sleep(200);
         boolean isBacktraceThreadRunningAfterClose = isBacktraceThreadRunning();
         waiter.await();
 
@@ -83,9 +77,7 @@ public class BacktraceClientTest {
             if (t == null){
                 continue;
             }
-            System.out.println(t.getName());
             if (t.getName().equals(THREAD_NAME)) {
-                System.out.println(t.getState().name());
                 return true;
             }
         }
