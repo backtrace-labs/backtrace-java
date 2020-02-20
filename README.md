@@ -30,18 +30,21 @@ dependencies {
 # Using Backtrace library  <a name="using-backtrace"></a>
 ## Initialize a new BacktraceClient <a name="using-backtrace-initialization"></a>
 
-First create a `BacktraceConfig` instance with your `Backtrace endpoint URL` (e.g. https://xxx.sp.backtrace.io:6098) and `submission token`, and supply it as a parameter in the `BacktraceClient` constructor:
+First create a `BacktraceConfig` instance with your `Backtrace endpoint URL`. This endpoint URL will either be through a central https://submit.backtrace.io server on standard port 80/443, or directly to your Backtrace instance through a listener on port 6097/6098 (e.g. https://xxx.sp.backtrace.io:6098). Either integration will require a submission token to be included in the endpoint
 
-Java
+Option 1 - https://submit.backtrace.io URL format option for creating a BacktraceConfig object. Use the URL to which the report is to be sent, pass URL string as parameter to BacktraceConfig constructor:
+
 ```java
-BacktraceConfig config = new BacktraceConfig("https://myserver.sp.backtrace.io:6097/", "4dca18e8769d0f5d10db0d1b665e64b3d716f76bf182fbcdad5d1d8070c12db0");
+BacktraceConfig config = new BacktraceConfig("https://submit.backtrace.io/{yourInstance}/{token}/json");
 BacktraceClient backtraceClient = new BacktraceClient(config);
 ```
 
-Another option for creating a BacktraceCredentials object is using the URL to which the report is to be sent, pass URL string as parameter to BacktraceCredentials constructor:
+Option 2 - https://<yourInstance>.sp,backtrace.io:6098 format for creating BacktraceCredentials object. Pass in both your instance submission URL and token as parameters of the BacktraceConfig constructor:
 
+Java
 ```java
-BacktraceConfig config = new BacktraceConfig("https://submit.backtrace.io/{universe}/{token}/json");
+BacktraceConfig config = new BacktraceConfig("https://<yourInstance>.sp.backtrace.io:6098/", "<submissionToken>");
+BacktraceClient backtraceClient = new BacktraceClient(config);
 ```
 
 ## Setting application name and version
