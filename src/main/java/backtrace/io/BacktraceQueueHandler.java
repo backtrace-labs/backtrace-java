@@ -39,6 +39,9 @@ class BacktraceQueueHandler {
      * @throws InterruptedException if the current thread is interrupted while waiting
      */
     void close() throws InterruptedException {
+        if(!this.thread.isAlive()){
+            return;
+        }
         this.thread.close();
         this.thread.join();
     }
