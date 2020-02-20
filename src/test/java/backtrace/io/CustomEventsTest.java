@@ -38,6 +38,10 @@ public class CustomEventsTest {
         FileHelper.deleteRecursive(new File(databasePath));
     }
 
+    @After
+    public void closeBacktraceClient() throws InterruptedException {
+        this.backtraceClient.close();
+    }
 
     @Test
     public void useRequestHandler() {
@@ -137,37 +141,7 @@ public class CustomEventsTest {
         Assert.assertEquals(newMessage, result.get(0).getBacktraceReport().getMessage());
     }
 
-    @Test
-    public void awaitingTime() {
-        // GIVEN
-        Waiter waiter = new Waiter();
-        backtraceClient = new BacktraceClient(config);
-        backtraceClient.setCustomRequestHandler(new RequestHandler() {
-            @Override
-            public BacktraceResult onRequest(BacktraceData data) {
-                try {
-                    System.out.println("Waiting on request");
-                    Thread.sleep(10000);
-                    waiter.fail();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-        });
 
-        // WHEN
-        backtraceClient.send("");
-
-        // THEN
-        try{
-            boolean result = backtraceClient.await(2, TimeUnit.SECONDS);
-            Assert.assertFalse(result);
-        }
-        catch (Exception e){
-            Assert.fail(e.toString());
-        }
-    }
 
     @Test
     public void multipleAwait() throws InterruptedException {
@@ -200,9 +174,9 @@ public class CustomEventsTest {
 
 
     @Test
-    public void sendManyRequests(){
+    public void send50Requests(){
         // GIVEN
-        int iterations = 100;
+        int iterations = 50;
         backtraceClient = new BacktraceClient(config);
         final ArrayList<Integer> result = new ArrayList<>();
         backtraceClient.setCustomRequestHandler(new RequestHandler() {

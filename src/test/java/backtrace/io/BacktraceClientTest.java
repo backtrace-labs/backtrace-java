@@ -22,6 +22,38 @@ public class BacktraceClientTest {
     }
 
     @Test
+    public void awaitingTime() throws InterruptedException {
+        // GIVEN
+        BacktraceConfig config = new BacktraceConfig("url", "token");
+        BacktraceClient backtraceClient = new BacktraceClient(config);
+        backtraceClient.setCustomRequestHandler(new RequestHandler() {
+            @Override
+            public BacktraceResult onRequest(BacktraceData data) {
+                try {
+                    System.out.println("Waiting on request");
+                    Thread.sleep(10000);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return BacktraceResult.onSuccess(data.getReport(), "");
+            }
+        });
+
+        // WHEN
+        backtraceClient.send("");
+
+        // THEN
+        try{
+            boolean result = backtraceClient.await(2, TimeUnit.SECONDS);
+            Assert.assertFalse(result);
+        }
+        catch (Exception e){
+            Assert.fail(e.toString());
+        }
+        backtraceClient.close();
+    }
+
+    @Test
     public void closeBacktraceClient() throws InterruptedException {
         // GIVEN
         BacktraceConfig backtraceConfig = new BacktraceConfig("https://backtrace.io/");
@@ -32,12 +64,9 @@ public class BacktraceClientTest {
         boolean isBacktraceThreadRunning = isBacktraceThreadRunning();
         backtraceClient.close();
 
-        // TRAVIS-CI workaround
-        backtraceClient = null;
-        System.gc();
         System.out.println("working threads..");
         //Let's wait to see server thread stopped
-        TimeUnit.MILLISECONDS.sleep(20000);
+        TimeUnit.MILLISECONDS.sleep(200);
 
         boolean isBacktraceThreadRunningAfterClose = isBacktraceThreadRunning();
 

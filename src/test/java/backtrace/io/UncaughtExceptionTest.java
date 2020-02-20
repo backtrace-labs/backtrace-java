@@ -5,6 +5,7 @@ import backtrace.io.data.BacktraceReport;
 import backtrace.io.events.RequestHandler;
 import backtrace.io.http.BacktraceResult;
 import net.jodah.concurrentunit.Waiter;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +23,11 @@ public class UncaughtExceptionTest {
         config = new BacktraceConfig("", "");
         config.disableDatabase();
         client = new BacktraceClient(config);
+    }
+
+    @After
+    public void close() throws InterruptedException{
+        client.close();
     }
 
     @Test
