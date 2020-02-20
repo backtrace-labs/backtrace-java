@@ -37,36 +37,36 @@ public class BacktraceClientTest {
 //        Assert.assertFalse(isBacktraceThreadRunningAfterClose);
 //    }
 
-    @Test
-    public void closeBacktraceClientWithSendingReport() throws InterruptedException, TimeoutException {
-        // GIVEN
-        BacktraceConfig backtraceConfig = new BacktraceConfig("https://backtrace.io/");
-        Waiter waiter = new Waiter();
-        backtraceConfig.setRequestHandler(new RequestHandler() {
-            @Override
-            public BacktraceResult onRequest(BacktraceData data) {
-                try {
-                    Thread.sleep(1000);
-                    waiter.resume();
-                } catch (InterruptedException e) {
-                    waiter.fail(e);
-                }
-                return BacktraceResult.onSuccess(data.getReport(), data.getReport().getMessage());
-            }
-        });
-        BacktraceClient backtraceClient = new BacktraceClient(backtraceConfig);
-
-        // WHEN
-        boolean isBacktraceThreadRunning = isBacktraceThreadRunning();
-        backtraceClient.send("test-message");
-        backtraceClient.close();
-        boolean isBacktraceThreadRunningAfterClose = isBacktraceThreadRunning();
-        waiter.await();
-
-        // THEN
-        Assert.assertTrue(isBacktraceThreadRunning);
-        Assert.assertFalse(isBacktraceThreadRunningAfterClose);
-    }
+//    @Test
+//    public void closeBacktraceClientWithSendingReport() throws InterruptedException, TimeoutException {
+//        // GIVEN
+//        BacktraceConfig backtraceConfig = new BacktraceConfig("https://backtrace.io/");
+//        Waiter waiter = new Waiter();
+//        backtraceConfig.setRequestHandler(new RequestHandler() {
+//            @Override
+//            public BacktraceResult onRequest(BacktraceData data) {
+//                try {
+//                    Thread.sleep(1000);
+//                    waiter.resume();
+//                } catch (InterruptedException e) {
+//                    waiter.fail(e);
+//                }
+//                return BacktraceResult.onSuccess(data.getReport(), data.getReport().getMessage());
+//            }
+//        });
+//        BacktraceClient backtraceClient = new BacktraceClient(backtraceConfig);
+//
+//        // WHEN
+//        boolean isBacktraceThreadRunning = isBacktraceThreadRunning();
+//        backtraceClient.send("test-message");
+//        backtraceClient.close();
+//        boolean isBacktraceThreadRunningAfterClose = isBacktraceThreadRunning();
+//        waiter.await();
+//
+//        // THEN
+//        Assert.assertTrue(isBacktraceThreadRunning);
+//        Assert.assertFalse(isBacktraceThreadRunningAfterClose);
+//    }
 
     private boolean isBacktraceThreadRunning(){
         Set<Thread> threads = Thread.getAllStackTraces().keySet();
