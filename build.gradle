@@ -13,7 +13,7 @@ repositories {
 }
 
 test {
-    exclude 'backtrace.io/BacktraceClientTest.class'
+    exclude 'backtrace/io/BacktraceClientTest.class'
 }
 
 dependencies {
