@@ -56,5 +56,6 @@ public class BacktraceThread extends Thread {
             backtrace.handleBacktraceMessage();
         }
         this.closing.countDown();
+        LOGGER.info("BacktraceThread has completed the run method");
     }
 }

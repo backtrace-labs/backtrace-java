@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 
@@ -29,8 +30,10 @@ public class BacktraceClientTest {
         // WHEN
         boolean isBacktraceThreadRunning = isBacktraceThreadRunning();
         backtraceClient.close();
+
         boolean isBacktraceThreadRunningAfterClose = isBacktraceThreadRunning();
 
+        System.out.println(isBacktraceThreadRunning);
         // THEN
         Assert.assertTrue(isBacktraceThreadRunning);
         Assert.assertFalse(isBacktraceThreadRunningAfterClose);
@@ -71,6 +74,9 @@ public class BacktraceClientTest {
         Set<Thread> threads = Thread.getAllStackTraces().keySet();
 
         for (Thread t : threads) {
+            if (t == null){
+                continue;
+            }
             if (t.getName().equals(THREAD_NAME)) {
                 return true;
             }
