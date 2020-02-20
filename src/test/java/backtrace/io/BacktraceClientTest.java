@@ -27,11 +27,14 @@ public class BacktraceClientTest {
         BacktraceClient backtraceClient = new BacktraceClient(backtraceConfig);
 
         // WHEN
+        System.out.println("working threads..");
         boolean isBacktraceThreadRunning = isBacktraceThreadRunning();
         backtraceClient.send("test-message");
         backtraceClient.close();
+        System.out.println("working threads..");
         boolean isBacktraceThreadRunningAfterClose = isBacktraceThreadRunning();
 
+        System.out.println(isBacktraceThreadRunning);
         // THEN
         Assert.assertTrue(isBacktraceThreadRunning);
         Assert.assertFalse(isBacktraceThreadRunningAfterClose);
@@ -72,6 +75,7 @@ public class BacktraceClientTest {
         Set<Thread> threads = Thread.getAllStackTraces().keySet();
 
         for (Thread t : threads) {
+            System.out.println(t.getName());
             if (t.getName().equals(THREAD_NAME)) {
                 return true;
             }
