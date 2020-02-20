@@ -1,5 +1,9 @@
 language: java
 
+env:
+  global:
+    GRADLE_OPTS=-Xmx2048m
+  
 matrix:
   include:
     - os: linux
