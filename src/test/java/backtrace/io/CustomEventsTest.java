@@ -172,6 +172,36 @@ public class CustomEventsTest {
         Assert.assertEquals(4, counterAfterSecondAwait);
     }
 
+    @Test
+    public void awaitingTime() throws InterruptedException {
+        // GIVEN
+        BacktraceConfig config = new BacktraceConfig("url", "token");
+        BacktraceClient backtraceClient = new BacktraceClient(config);
+        backtraceClient.setCustomRequestHandler(new RequestHandler() {
+            @Override
+            public BacktraceResult onRequest(BacktraceData data) {
+                try {
+                    System.out.println("Waiting on request");
+                    Thread.sleep(10000);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return BacktraceResult.onSuccess(data.getReport(), "");
+            }
+        });
+
+        // WHEN
+        backtraceClient.send("");
+
+        // THEN
+        try{
+            boolean result = backtraceClient.await(2, TimeUnit.SECONDS);
+            Assert.assertFalse(result);
+        }
+        catch (Exception e){
+            Assert.fail(e.toString());
+        }
+    }
 
     @Test
     public void send50Requests(){
