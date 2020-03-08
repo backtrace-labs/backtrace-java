@@ -21,7 +21,7 @@ public class BacktraceReportTest {
         // WHEN
         BacktraceReport report = new BacktraceReport(exception);
         // THEN
-        Assert.assertNull(report.getMessage());
+        Assert.assertEquals(message, report.getMessage());
         Assert.assertTrue(report.getExceptionTypeReport());
         Assert.assertEquals(exception, report.getException());
     }
@@ -89,5 +89,21 @@ public class BacktraceReportTest {
         Assert.assertNotNull(report);
         Assert.assertNotNull(report.getAttachmentPaths());
         Assert.assertEquals(attachments.size(), report.getAttachmentPaths().size());
+    }
+
+    @Test
+    public void initReportUsingMessageAndException() {
+        // GIVEN
+        String customMessage = "message";
+        String exceptionMessage = "exception-message";
+        Exception exception = new Exception(exceptionMessage);
+
+        // WHEN
+        BacktraceReport report = new BacktraceReport(message, exception);
+
+        // THEN
+        Assert.assertNotNull(report);
+        Assert.assertEquals(message, report.getMessage());
+        Assert.assertEquals(exception, report.getException());
     }
 }
