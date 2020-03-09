@@ -115,7 +115,7 @@ class Backtrace {
         }
 
         BacktraceReport report = backtraceMessage.getBacktraceData().getReport();
-        if (report.getRetryCounter() < config.getDatabaseConfig().getDatabaseRetryLimit()) {
+        if (result.shouldRetry() && report.getRetryCounter() < config.getDatabaseConfig().getDatabaseRetryLimit()) {
             report.incrementRetryCounter();
             this.queue.addWithLock(backtraceMessage);
         }

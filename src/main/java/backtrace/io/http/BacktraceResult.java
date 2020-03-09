@@ -3,6 +3,8 @@ package backtrace.io.http;
 import backtrace.io.data.BacktraceReport;
 import com.google.gson.annotations.SerializedName;
 
+import java.net.HttpURLConnection;
+
 
 /**
  * Send method result
@@ -26,6 +28,13 @@ public class BacktraceResult {
 
 
     /**
+     * Response HTTP status code
+     */
+
+    private Integer httpStatusCode;
+
+
+    /**
      * Result status eg. server error, ok
      */
     private BacktraceResultStatus status;
@@ -42,9 +51,10 @@ public class BacktraceResult {
      * @param message message
      * @param status  result status eg. ok, server error
      */
-    private BacktraceResult(BacktraceReport report, String message, BacktraceResultStatus status) {
+    private BacktraceResult(BacktraceReport report, String message, BacktraceResultStatus status, int responseHttpStatusCode) {
         setBacktraceReport(report);
         setStatus(status);
+        setHttpStatusCode(responseHttpStatusCode);
         this.message = message;
     }
 
@@ -68,6 +78,14 @@ public class BacktraceResult {
         return backtraceReport;
     }
 
+    public Integer getHttpStatusCode() {
+        return httpStatusCode;
+    }
+
+    private void setHttpStatusCode(Integer httpStatusCode) {
+        this.httpStatusCode = httpStatusCode;
+    }
+
     void setBacktraceReport(BacktraceReport backtraceReport) {
         this.backtraceReport = backtraceReport;
     }
@@ -83,10 +101,10 @@ public class BacktraceResult {
      * @param exception current exception
      * @return BacktraceResult with exception information
      */
-    public static backtrace.io.http.BacktraceResult onError(BacktraceReport report, Exception exception) {
+    public static backtrace.io.http.BacktraceResult onError(BacktraceReport report, Exception exception, Integer httpStatusCode) {
         return new backtrace.io.http.BacktraceResult(
                 report, exception.getMessage(),
-                BacktraceResultStatus.ServerError);
+                BacktraceResultStatus.ServerError, httpStatusCode);
     }
 
     /**
@@ -97,6 +115,12 @@ public class BacktraceResult {
      * @return BacktraceResult with message from Backtrace API
      */
     public static backtrace.io.http.BacktraceResult onSuccess(BacktraceReport report, String message) {
-        return new backtrace.io.http.BacktraceResult(report, message, BacktraceResultStatus.Ok);
+        return new backtrace.io.http.BacktraceResult(report, message, BacktraceResultStatus.Ok, HttpURLConnection.HTTP_OK);
+    }
+
+    public boolean shouldRetry() {
+        return httpStatusCode == null || httpStatusCode == HttpURLConnection.HTTP_GATEWAY_TIMEOUT ||
+                httpStatusCode == HttpURLConnection.HTTP_BAD_GATEWAY || httpStatusCode == HttpURLConnection.HTTP_INTERNAL_ERROR
+                || httpStatusCode == HttpURLConnection.HTTP_UNAVAILABLE || httpStatusCode == HttpURLConnection.HTTP_CLIENT_TIMEOUT;
     }
 }

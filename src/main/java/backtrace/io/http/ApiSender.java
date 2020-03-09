@@ -34,6 +34,7 @@ public class ApiSender {
 
     private static BacktraceResult sendReport(String serverUrl, String json, BacktraceReport report, List<String> attachments) {
         HttpURLConnection urlConnection = null;
+        Integer statusCode = null;
         BacktraceResult result;
         try {
             urlConnection = getUrlConnection(serverUrl);
@@ -46,7 +47,7 @@ public class ApiSender {
             request.flush();
             request.close();
 
-            int statusCode = urlConnection.getResponseCode();
+            statusCode = urlConnection.getResponseCode();
             LOGGER.debug("Received response status from Backtrace API for HTTP request is: " + statusCode);
 
             if (statusCode == HttpURLConnection.HTTP_OK) {
@@ -58,7 +59,7 @@ public class ApiSender {
 
         } catch (Exception e) {
             LOGGER.error("Sending HTTP request failed to Backtrace API", e);
-            result = BacktraceResult.onError(report, e);
+            result = BacktraceResult.onError(report, e, statusCode);
         } finally {
             if (urlConnection != null) {
                 try {
@@ -66,7 +67,7 @@ public class ApiSender {
                     LOGGER.debug("Disconnecting HttpUrlConnection successful");
                 } catch (Exception e) {
                     LOGGER.error("Disconnecting HttpUrlConnection failed", e);
-                    result = BacktraceResult.onError(report, e);
+                    result = BacktraceResult.onError(report, e, statusCode);
                 }
             }
         }
@@ -110,7 +111,7 @@ public class ApiSender {
      *
      * @param urlConnection current HTTP connection
      * @return response from HTTP request
-     * @throws IOException
+     * @throws IOException if an I/O error occurs
      */
     private static String getResponse(HttpURLConnection urlConnection) throws IOException {
         LOGGER.debug("Reading response from HTTP request");
