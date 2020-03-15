@@ -95,6 +95,13 @@ The retry limit specifies the number of times `BacktraceClient` will try to send
 backtraceConfig.setDatabaseRetryLimit(retryLimit);
 ```
 
+## Disabling gathering information about all threads
+By default library gathering stacktrace and other information about all running threads. If you want to disable that behavior and gather only information from thread in which caused exception, execute:
+
+```java
+backtraceConfig.setGatherAllThreads(false);
+``` 
+
 ## Sending an error report <a name="using-backtrace-sending-report"></a>
 Method `BacktraceClient.send` will send an error report to the Backtrace endpoint specified. There `send` method is overloaded, see examples below:
 

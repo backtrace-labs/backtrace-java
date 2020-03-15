@@ -11,6 +11,7 @@ public class BacktraceConfig {
     private volatile BacktraceDatabaseConfig databaseConfig = new BacktraceDatabaseConfig();
     private volatile RequestHandler requestHandler;
     private volatile BeforeSendEvent beforeSendEvent;
+    private volatile boolean gatherAllThreads = true;
 
     /**
      * Creates Backtrace credentials instance
@@ -21,7 +22,7 @@ public class BacktraceConfig {
         if (submissionUrl == null) {
             throw new NullPointerException("Endpoint URL can not be null");
         }
-        credentials = new backtrace.io.BacktraceCredentials(submissionUrl);
+        credentials = new BacktraceCredentials(submissionUrl);
     }
 
     /**
@@ -33,7 +34,7 @@ public class BacktraceConfig {
         if (submissionUrl == null) {
             throw new NullPointerException("Endpoint URL can not be null");
         }
-        credentials = new backtrace.io.BacktraceCredentials(submissionUrl);
+        credentials = new BacktraceCredentials(submissionUrl);
     }
 
     /**
@@ -50,7 +51,7 @@ public class BacktraceConfig {
         if (submissionToken == null) {
             throw new NullPointerException("Submission token can not be null");
         }
-        credentials = new backtrace.io.BacktraceCredentials(endpointUrl, submissionToken);
+        credentials = new BacktraceCredentials(endpointUrl, submissionToken);
     }
 
     /**
@@ -77,6 +78,14 @@ public class BacktraceConfig {
 
     BeforeSendEvent getBeforeSendEvent() {
         return beforeSendEvent;
+    }
+
+    boolean isGatherAllThreads() {
+        return gatherAllThreads;
+    }
+
+    public void setGatherAllThreads(boolean gatherAllThreads) {
+        this.gatherAllThreads = gatherAllThreads;
     }
 
     void setDatabasePath(String databasePath) {

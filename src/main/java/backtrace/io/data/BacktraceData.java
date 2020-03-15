@@ -3,6 +3,7 @@ package backtrace.io.data;
 import backtrace.io.data.report.SourceCode;
 import backtrace.io.data.report.SourceCodeData;
 import backtrace.io.data.report.ThreadData;
+
 import backtrace.io.data.report.ThreadInformation;
 import backtrace.io.helpers.FileHelper;
 import com.google.gson.annotations.SerializedName;
@@ -18,7 +19,7 @@ import java.util.Map;
  * Serializable Backtrace API data object
  */
 public class BacktraceData implements Serializable {
-    private static final transient Logger LOGGER = LoggerFactory.getLogger(backtrace.io.data.BacktraceData.class);
+    private static final transient Logger LOGGER = LoggerFactory.getLogger(BacktraceData.class);
 
     /**
      * 16 bytes of randomness in human readable UUID format
@@ -126,6 +127,17 @@ public class BacktraceData implements Serializable {
      * @param clientAttributes Attributes which should be added to BacktraceData object
      */
     public BacktraceData(BacktraceReport report, Map<String, Object> clientAttributes) {
+        this(report,clientAttributes, true);
+    }
+
+    /**
+     * Creates instance of report data
+     *
+     * @param report           Current report
+     * @param clientAttributes Attributes which should be added to BacktraceData object
+     * @param allThreads       if true information about all threads will be gathered
+     */
+    public BacktraceData(BacktraceReport report, Map<String, Object> clientAttributes, boolean allThreads) {
         if (report == null) {
             LOGGER.warn("Report passed to BacktraceData constructor is null");
             throw new NullPointerException("BacktraceReport can not be null");
@@ -133,8 +145,12 @@ public class BacktraceData implements Serializable {
         this.report = report;
 
         setReportInformation();
-        setThreadsInformation();
+        setThreadsInformation(allThreads);
         setAttributes(clientAttributes);
+    }
+
+    Map<String, ThreadInformation> getThreadInformationMap() {
+        return threadInformationMap;
     }
 
     /**
@@ -153,7 +169,7 @@ public class BacktraceData implements Serializable {
      */
     private void setAttributes(Map<String, Object> clientAttributes) {
         LOGGER.debug("Setting attributes");
-        backtrace.io.data.Attributes attributes = new backtrace.io.data.Attributes(report, clientAttributes);
+        Attributes attributes = new Attributes(report, clientAttributes);
         this.attributes = attributes.getAttributes();
         this.annotations = attributes.getAnnotations();
     }
@@ -187,10 +203,11 @@ public class BacktraceData implements Serializable {
 
     /**
      * Sets information about all threads
+     * @param allThreads if true information about all threads will be gathered
      */
-    private void setThreadsInformation() {
+    private void setThreadsInformation(boolean allThreads) {
         LOGGER.debug("Setting threads information");
-        ThreadData threadData = new ThreadData(report.diagnosticStack);
+        ThreadData threadData = new ThreadData(report.diagnosticStack, allThreads);
         this.mainThread = threadData.getMainThread();
         this.threadInformationMap = threadData.getThreadInformation();
         SourceCodeData sourceCodeData = new SourceCodeData(report.diagnosticStack);

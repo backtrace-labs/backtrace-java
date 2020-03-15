@@ -91,7 +91,7 @@ public class BacktraceClient {
      * @param callback Event which will be executed after receiving a response
      */
     public void send(BacktraceReport report, OnServerResponseEvent callback) {
-        this.backtrace.send(report, this.customAttributes, callback);
+        this.backtrace.send(report, this.customAttributes, callback, config.isGatherAllThreads());
     }
 
     /**

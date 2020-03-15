@@ -27,9 +27,10 @@ class BacktraceQueueHandler {
      * @param report     Current report which contains information about error
      * @param attributes Custom user attributes
      * @param callback   Event which will be executed after receiving the response
+     * @param allThreads if true information about all threads will be gathered
      */
-    void send(BacktraceReport report, Map<String, Object> attributes, OnServerResponseEvent callback) {
-        BacktraceData backtraceData = new BacktraceData(report, attributes);
+    void send(BacktraceReport report, Map<String, Object> attributes, OnServerResponseEvent callback, boolean allThreads) {
+        BacktraceData backtraceData = new BacktraceData(report, attributes, allThreads);
         queue.addWithLock(new BacktraceMessage(backtraceData, callback));
     }
 

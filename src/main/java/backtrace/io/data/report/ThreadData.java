@@ -41,9 +41,11 @@ public class ThreadData implements Serializable {
      *
      * @param exceptionStack current BacktraceReport exception stack
      */
-    public ThreadData(ArrayList<BacktraceStackFrame> exceptionStack) {
+    public ThreadData(ArrayList<BacktraceStackFrame> exceptionStack, boolean allThreads) {
         generateCurrentThreadInformation(exceptionStack);
-        processThreads();
+        if(allThreads) {
+            processThreads();
+        }
     }
 
     /**
