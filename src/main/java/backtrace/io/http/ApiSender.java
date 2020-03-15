@@ -21,6 +21,7 @@ public class ApiSender {
      * Send HTTP request for certain url server with information about device, error, attachments
      *
      * @param serverUrl server http address to which the request will be sent
+     * @param backtraceData error report
      * @return information from the server about the result of processing the request
      */
     public static BacktraceResult sendReport(String serverUrl, BacktraceData backtraceData) {
