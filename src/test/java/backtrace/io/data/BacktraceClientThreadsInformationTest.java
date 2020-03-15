@@ -13,7 +13,7 @@ public class BacktraceClientThreadsInformationTest {
     private final static String URL = "https://backtrace.io/";
 
     @Test
-    public void gatherInformationAboutAllThreadsFromBacktraceClient() throws TimeoutException {
+    public void gatherInformationAboutAllThreadsFromBacktraceClient() throws TimeoutException, InterruptedException {
         // GIVEN
         final Waiter waiter = new Waiter();
         final BacktraceConfig config = new BacktraceConfig(URL);
@@ -34,10 +34,11 @@ public class BacktraceClientThreadsInformationTest {
 
         // THEN
         waiter.await();
+        client.close();
     }
 
     @Test
-    public void gatherInformationAboutMainThreadFromBacktraceClient() throws TimeoutException {
+    public void gatherInformationAboutMainThreadFromBacktraceClient() throws TimeoutException, InterruptedException {
         // GIVEN
         final Waiter waiter = new Waiter();
         final BacktraceConfig config = new BacktraceConfig(URL);
@@ -58,5 +59,6 @@ public class BacktraceClientThreadsInformationTest {
 
         // THEN
         waiter.await();
+        client.close();
     }
 }
