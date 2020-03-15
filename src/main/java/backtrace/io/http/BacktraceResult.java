@@ -51,7 +51,7 @@ public class BacktraceResult {
      * @param message message
      * @param status  result status eg. ok, server error
      */
-    private BacktraceResult(BacktraceReport report, String message, BacktraceResultStatus status, int responseHttpStatusCode) {
+    private BacktraceResult(BacktraceReport report, String message, BacktraceResultStatus status, Integer responseHttpStatusCode) {
         setBacktraceReport(report);
         setStatus(status);
         setHttpStatusCode(responseHttpStatusCode);
@@ -82,7 +82,7 @@ public class BacktraceResult {
         return httpStatusCode;
     }
 
-    private void setHttpStatusCode(Integer httpStatusCode) {
+    void setHttpStatusCode(Integer httpStatusCode) {
         this.httpStatusCode = httpStatusCode;
     }
 
@@ -94,6 +94,7 @@ public class BacktraceResult {
         this.status = status;
     }
 
+
     /**
      * Returns result when error occurs while sending data to API
      *
@@ -101,8 +102,20 @@ public class BacktraceResult {
      * @param exception current exception
      * @return BacktraceResult with exception information
      */
-    public static backtrace.io.http.BacktraceResult onError(BacktraceReport report, Exception exception, Integer httpStatusCode) {
-        return new backtrace.io.http.BacktraceResult(
+    public static BacktraceResult onError(BacktraceReport report, Exception exception) {
+        return BacktraceResult.onError(report, exception, null);
+    }
+
+    /**
+     * Returns result when error occurs while sending data to API
+     *
+     * @param report    executed report
+     * @param exception current exception
+     * @param httpStatusCode returned http status code
+     * @return BacktraceResult with exception information
+     */
+    static BacktraceResult onError(BacktraceReport report, Exception exception, Integer httpStatusCode) {
+        return new BacktraceResult(
                 report, exception.getMessage(),
                 BacktraceResultStatus.ServerError, httpStatusCode);
     }
@@ -114,8 +127,8 @@ public class BacktraceResult {
      * @param message message from Backtrace API
      * @return BacktraceResult with message from Backtrace API
      */
-    public static backtrace.io.http.BacktraceResult onSuccess(BacktraceReport report, String message) {
-        return new backtrace.io.http.BacktraceResult(report, message, BacktraceResultStatus.Ok, HttpURLConnection.HTTP_OK);
+    public static BacktraceResult onSuccess(BacktraceReport report, String message) {
+        return new BacktraceResult(report, message, BacktraceResultStatus.Ok, HttpURLConnection.HTTP_OK);
     }
 
     public boolean shouldRetry() {

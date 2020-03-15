@@ -78,6 +78,7 @@ public class ApiSender {
         BacktraceResult result = BacktraceSerializeHelper.fromJson(getResponse(urlConnection), BacktraceResult.class);
         result.setStatus(BacktraceResultStatus.Ok);
         result.setBacktraceReport(report);
+        result.setHttpStatusCode(HttpURLConnection.HTTP_OK);
         return result;
     }
 
