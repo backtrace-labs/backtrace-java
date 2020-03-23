@@ -11,7 +11,7 @@ public class BacktraceConfig {
     private volatile BacktraceDatabaseConfig databaseConfig = new BacktraceDatabaseConfig();
     private volatile RequestHandler requestHandler;
     private volatile BeforeSendEvent beforeSendEvent;
-    private volatile boolean gatherAllThreads = true;
+    private volatile boolean gatherAllThreads = false;
 
     /**
      * Creates Backtrace credentials instance
