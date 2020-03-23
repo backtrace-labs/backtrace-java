@@ -2,8 +2,6 @@ package backtrace.io.data;
 
 import backtrace.io.data.report.BacktraceStackFrame;
 import backtrace.io.data.report.BacktraceStackTrace;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
