@@ -1,3 +1,5 @@
+# This library is currently in early access
+
 # Backtrace Java support
 
 [Backtrace](http://backtrace.io/)'s integration with Java applications which allows customers to capture and report handled and unhandled java exceptions to their Backtrace instance, instantly offering the ability to prioritize and debug software errors.
@@ -14,7 +16,7 @@
 * Gradle
 ```
 dependencies {
-    implementation 'com.github.backtrace-labs.backtrace-java:backtrace-java:1.0.0'
+    implementation 'com.github.backtrace-labs.backtrace-java:backtrace-java:0.9.0'
 }
 ```
 
@@ -23,7 +25,7 @@ dependencies {
 <dependency>
   <groupId>com.github.backtrace-labs.backtrace-java</groupId>
   <artifactId>backtrace-java</artifactId>
-  <version>1.0.0</version>
+  <version>0.9.0</version>
 </dependency>
 ```
 
