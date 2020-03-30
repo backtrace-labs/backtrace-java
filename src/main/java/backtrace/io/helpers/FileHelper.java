@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class FileHelper {
 
-    private static final transient Logger LOGGER = LoggerFactory.getLogger(FileHelper.class);
+    private static final transient Logger LOGGER = LoggerFactory.getLogger(backtrace.io.helpers.FileHelper.class);
 
     /***
      * Remove from path list invalid paths like empty or incorrect paths or not existing files

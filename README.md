@@ -1,3 +1,5 @@
+# This library is currently in early access
+
 # Backtrace Java support
 
 [Backtrace](http://backtrace.io/)'s integration with Java applications which allows customers to capture and report handled and unhandled java exceptions to their Backtrace instance, instantly offering the ability to prioritize and debug software errors.
@@ -14,7 +16,7 @@
 * Gradle
 ```
 dependencies {
-    implementation 'com.github.backtrace-labs.backtrace-java:backtrace-java:1.0.0-rc.1'
+    implementation 'com.github.backtrace-labs.backtrace-java:backtrace-java:0.9.0'
 }
 ```
 
@@ -23,7 +25,7 @@ dependencies {
 <dependency>
   <groupId>com.github.backtrace-labs.backtrace-java</groupId>
   <artifactId>backtrace-java</artifactId>
-  <version>1.0.0-rc.1</version>
+  <version>0.9.0</version>
 </dependency>
 ```
 
@@ -95,6 +97,13 @@ The retry limit specifies the number of times `BacktraceClient` will try to send
 backtraceConfig.setDatabaseRetryLimit(retryLimit);
 ```
 
+## Enabling gathering information about all threads
+By default library gathering stacktrace and other information only from thread in which caused exception. If you want to change that behavior and gather information about all running threads, execute:
+
+```java
+backtraceConfig.setGatherAllThreads(false);
+``` 
+
 ## Sending an error report <a name="using-backtrace-sending-report"></a>
 Method `BacktraceClient.send` will send an error report to the Backtrace endpoint specified. There `send` method is overloaded, see examples below:
 
@@ -129,10 +138,10 @@ client.send(report, new OnServerResponseEvent() {
 });
 ```
 
-Method `await` of BacktraceReport allows to block current thread until report will be sent, as a parameter you can set set the maximum time you want to wait for an answer.
+Method `await` of BacktraceClient allows to block current thread until all passed reports will be sent, as a parameter you can optionally set the maximum time you want to wait for an answer.
 
 ```java
-report.await(5, TimeUnit.SECONDS);
+backtraceClient.await(5, TimeUnit.SECONDS);
 ```
 
 ### Other `BacktraceReport` overloads
@@ -187,6 +196,13 @@ backtraceClient.enableUncaughtExceptionsHandler();
 
 ## BacktraceClient  <a name="documentation-BacktraceClient"></a>
 `BacktraceClient` is a class that allows you to instantiate a client instance that interacts with Backtrace. This class sets up connection to the Backtrace endpoint and manages error reporting behavior. It also prepares error report, gather device attributes and add to queue from which special thread gets report and sends to Backtrace. This class also allows to enable `UncaughtExceptionsHandler` or set custom events.
+
+if you want to safely close all resources used by the this library, execute `close` method. This method will do this after processing last message in queue:
+
+```java
+backtraceClient.close()
+```
+
 ## BacktraceData  <a name="documentation-BacktraceData"></a>
 **`BacktraceData`** is a serializable class that holds the data to create a diagnostic JSON to be sent to the Backtrace endpoint . You can add additional pre-processors for `BacktraceData` by attaching an event handler to the `BacktraceClient.setBeforeSendEvent(event)` event. `BacktraceData` require `BacktraceReport` and `BacktraceClient` client attributes.
 

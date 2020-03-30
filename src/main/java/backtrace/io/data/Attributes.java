@@ -3,9 +3,9 @@ package backtrace.io.data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +16,7 @@ import java.util.UUID;
  * Class instance to get a built-in attributes from current application
  */
 class Attributes {
-    private static final transient Logger LOGGER = LoggerFactory.getLogger(Attributes.class);
+    private static final transient Logger LOGGER = LoggerFactory.getLogger(backtrace.io.data.Attributes.class);
     /**
      * Gets built-in primitive attributes
      */
@@ -105,7 +105,8 @@ class Attributes {
             byte[] mac = network.getHardwareAddress();
 
             if (mac == null || mac.length == 0) {
-                throw new Exception("Mac address is null or empty");
+                LOGGER.debug("Can not get device MAC address");
+                return UUID.randomUUID().toString();
             }
 
             StringBuilder sb = new StringBuilder();
@@ -115,8 +116,8 @@ class Attributes {
             String macAddress = sb.toString();
             String hex = macAddress.replace(":", "").replace("-", "");
             return UUID.nameUUIDFromBytes(hex.getBytes()).toString();
-        } catch (Exception exception) {
-            LOGGER.error("Can not get device MAC address", exception);
+        } catch (SocketException | UnknownHostException exception) {
+            LOGGER.debug(String.format("%s %s", "Exception occurs during generating machine id", exception.getMessage()));
         }
         return UUID.randomUUID().toString();
     }

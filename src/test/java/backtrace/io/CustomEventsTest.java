@@ -5,19 +5,17 @@ import backtrace.io.data.BacktraceReport;
 import backtrace.io.events.BeforeSendEvent;
 import backtrace.io.events.OnServerResponseEvent;
 import backtrace.io.events.RequestHandler;
+import backtrace.io.helpers.CountLatch;
 import backtrace.io.helpers.FileHelper;
 import backtrace.io.http.BacktraceResult;
 import net.jodah.concurrentunit.Waiter;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 
@@ -28,19 +26,22 @@ public class CustomEventsTest {
     private BacktraceConfig config;
 
     @Before
-    public void init() {
+    public void init() throws Exception{
+        this.cleanDatabaseDir();
         config = new BacktraceConfig("url", "token");
         config.setDatabasePath(this.databasePath);
         this.backtraceClient = new BacktraceClient(config);
     }
 
-    @Before
     @After
     public void cleanDatabaseDir() throws Exception {
-        File file = new File(databasePath);
-        FileHelper.deleteRecursive(file);
+        FileHelper.deleteRecursive(new File(databasePath));
     }
 
+    @After
+    public void closeBacktraceClient() throws InterruptedException {
+        this.backtraceClient.close();
+    }
 
     @Test
     public void useRequestHandler() {
@@ -50,7 +51,7 @@ public class CustomEventsTest {
             @Override
             public BacktraceResult onRequest(BacktraceData data) {
                 result.add(1);
-                return BacktraceResult.OnSuccess(data.getReport(), "");
+                return BacktraceResult.onSuccess(data.getReport(), "");
             }
         };
         BacktraceReport report = new BacktraceReport(message);
@@ -62,7 +63,7 @@ public class CustomEventsTest {
 
         // THEN
         try {
-            report.await(1, TimeUnit.SECONDS);
+            backtraceClient.await(1, TimeUnit.SECONDS);
         } catch (Exception e) {
             Assert.fail(e.getMessage());
         }
@@ -77,7 +78,7 @@ public class CustomEventsTest {
         RequestHandler customRequestHandler = new RequestHandler() {
             @Override
             public BacktraceResult onRequest(BacktraceData data) {
-                return BacktraceResult.OnSuccess(data.getReport(), message);
+                return BacktraceResult.onSuccess(data.getReport(), message);
             }
         };
         backtraceClient.setCustomRequestHandler(customRequestHandler);
@@ -113,7 +114,7 @@ public class CustomEventsTest {
         RequestHandler customRequestHandler = new RequestHandler() {
             @Override
             public BacktraceResult onRequest(BacktraceData data) {
-                BacktraceResult backtraceResult = BacktraceResult.OnSuccess(data.getReport(), "");
+                BacktraceResult backtraceResult = BacktraceResult.onSuccess(data.getReport(), "");
                 result.add(backtraceResult);
                 return backtraceResult;
             }
@@ -127,18 +128,110 @@ public class CustomEventsTest {
                 return newData;
             }
         });
-
         backtraceClient.send(new Exception(message));
         backtraceClient.send(report);
 
         // THEN
         try {
-            report.await();
+            backtraceClient.await();
         } catch (Exception e) {
             Assert.fail(e.getMessage());
         }
         Assert.assertEquals(2, result.size());
         Assert.assertEquals(newMessage, result.get(0).getBacktraceReport().getMessage());
+    }
+
+
+
+    @Test
+    public void multipleAwait() throws InterruptedException {
+        // GIVEN
+        backtraceClient = new BacktraceClient(config);
+        final ArrayList<Integer> result = new ArrayList<>();
+        backtraceClient.setCustomRequestHandler(new RequestHandler() {
+            @Override
+            public BacktraceResult onRequest(BacktraceData data) {
+                result.add(1);
+                return BacktraceResult.onSuccess(data.getReport(), "Success");
+            }
+        });
+
+        // WHEN
+        backtraceClient.send("");
+        backtraceClient.send("");
+        backtraceClient.await();
+        int counterAfterFirstAwait =  result.size();
+
+        backtraceClient.send("");
+        backtraceClient.send("");
+        backtraceClient.await();
+        int counterAfterSecondAwait =  result.size();
+
+        // THEN
+        Assert.assertEquals(2, counterAfterFirstAwait);
+        Assert.assertEquals(4, counterAfterSecondAwait);
+    }
+
+    @Test
+    public void awaitingTime() throws InterruptedException {
+        // GIVEN
+        BacktraceConfig config = new BacktraceConfig("url", "token");
+        BacktraceClient backtraceClient = new BacktraceClient(config);
+        backtraceClient.setCustomRequestHandler(new RequestHandler() {
+            @Override
+            public BacktraceResult onRequest(BacktraceData data) {
+                try {
+                    System.out.println("Waiting on request");
+                    Thread.sleep(10000);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return BacktraceResult.onSuccess(data.getReport(), "");
+            }
+        });
+
+        // WHEN
+        backtraceClient.send("");
+
+        // THEN
+        try{
+            boolean result = backtraceClient.await(2, TimeUnit.SECONDS);
+            Assert.assertFalse(result);
+        }
+        catch (Exception e){
+            Assert.fail(e.toString());
+        }
+    }
+
+    @Test
+    public void send50Requests(){
+        // GIVEN
+        int iterations = 50;
+        backtraceClient = new BacktraceClient(config);
+        final ArrayList<Integer> result = new ArrayList<>();
+        backtraceClient.setCustomRequestHandler(new RequestHandler() {
+            @Override
+            public BacktraceResult onRequest(BacktraceData data) {
+                result.add(Integer.parseInt(data.getReport().getMessage()));
+                return BacktraceResult.onSuccess(data.getReport(), "Success");
+            }
+        });
+
+        // WHEN
+        for (int i = 1; i <= iterations; i++) {
+            backtraceClient.send(Integer.toString(i));
+        }
+
+        // THEN
+        try {
+            backtraceClient.await();
+        } catch (Exception e) {
+            Assert.fail(e.getMessage());
+        }
+
+        Assert.assertEquals(iterations, result.size());
+        Assert.assertEquals(new Integer(1) , result.get(0));
+        Assert.assertEquals(new Integer(iterations), result.get(iterations - 1));
     }
 
     @Test
@@ -161,15 +254,15 @@ public class CustomEventsTest {
                 return null;
             }
         });
-
         backtraceClient.send(report);
 
         // THEN
         try {
-            report.await(3, TimeUnit.SECONDS);
+            backtraceClient.await();
         } catch (Exception e) {
             Assert.fail(e.getMessage());
         }
+        System.out.println(outputAttributes.size());
         Assert.assertNotEquals(0, outputAttributes.size());
         Assert.assertTrue(outputAttributes.containsKey(attributeKey));
         Assert.assertEquals(attributeValue, outputAttributes.get(attributeKey));

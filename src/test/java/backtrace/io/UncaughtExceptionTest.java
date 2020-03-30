@@ -5,6 +5,7 @@ import backtrace.io.data.BacktraceReport;
 import backtrace.io.events.RequestHandler;
 import backtrace.io.http.BacktraceResult;
 import net.jodah.concurrentunit.Waiter;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +25,11 @@ public class UncaughtExceptionTest {
         client = new BacktraceClient(config);
     }
 
+    @After
+    public void close() throws InterruptedException{
+        client.close();
+    }
+
     @Test
     public void testUncaughtExceptionHandler() {
         // GIVEN
@@ -32,7 +38,7 @@ public class UncaughtExceptionTest {
             @Override
             public BacktraceResult onRequest(BacktraceData data) {
                 waiter.resume();
-                return BacktraceResult.OnSuccess(new BacktraceReport("test"), "test");
+                return BacktraceResult.onSuccess(new BacktraceReport("test"), "test");
             }
         });
 

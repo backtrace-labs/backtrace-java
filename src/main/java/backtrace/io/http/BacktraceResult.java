@@ -3,12 +3,13 @@ package backtrace.io.http;
 import backtrace.io.data.BacktraceReport;
 import com.google.gson.annotations.SerializedName;
 
+import java.net.HttpURLConnection;
+
 
 /**
  * Send method result
  */
 public class BacktraceResult {
-
 
 
     /**
@@ -24,6 +25,13 @@ public class BacktraceResult {
      */
     @SerializedName("response")
     private String message;
+
+
+    /**
+     * Response HTTP status code
+     */
+
+    private Integer httpStatusCode;
 
 
     /**
@@ -43,9 +51,10 @@ public class BacktraceResult {
      * @param message message
      * @param status  result status eg. ok, server error
      */
-    private BacktraceResult(BacktraceReport report, String message, BacktraceResultStatus status) {
+    private BacktraceResult(BacktraceReport report, String message, BacktraceResultStatus status, Integer responseHttpStatusCode) {
         setBacktraceReport(report);
         setStatus(status);
+        setHttpStatusCode(responseHttpStatusCode);
         this.message = message;
     }
 
@@ -69,6 +78,14 @@ public class BacktraceResult {
         return backtraceReport;
     }
 
+    public Integer getHttpStatusCode() {
+        return httpStatusCode;
+    }
+
+    void setHttpStatusCode(Integer httpStatusCode) {
+        this.httpStatusCode = httpStatusCode;
+    }
+
     void setBacktraceReport(BacktraceReport backtraceReport) {
         this.backtraceReport = backtraceReport;
     }
@@ -77,6 +94,7 @@ public class BacktraceResult {
         this.status = status;
     }
 
+
     /**
      * Returns result when error occurs while sending data to API
      *
@@ -84,10 +102,22 @@ public class BacktraceResult {
      * @param exception current exception
      * @return BacktraceResult with exception information
      */
-    public static BacktraceResult OnError(BacktraceReport report, Exception exception) {
+    public static BacktraceResult onError(BacktraceReport report, Exception exception) {
+        return BacktraceResult.onError(report, exception, null);
+    }
+
+    /**
+     * Returns result when error occurs while sending data to API
+     *
+     * @param report    executed report
+     * @param exception current exception
+     * @param httpStatusCode returned http status code
+     * @return BacktraceResult with exception information
+     */
+    static BacktraceResult onError(BacktraceReport report, Exception exception, Integer httpStatusCode) {
         return new BacktraceResult(
                 report, exception.getMessage(),
-                BacktraceResultStatus.ServerError);
+                BacktraceResultStatus.ServerError, httpStatusCode);
     }
 
     /**
@@ -97,7 +127,13 @@ public class BacktraceResult {
      * @param message message from Backtrace API
      * @return BacktraceResult with message from Backtrace API
      */
-    public static BacktraceResult OnSuccess(BacktraceReport report, String message) {
-        return new BacktraceResult(report, message, BacktraceResultStatus.Ok);
+    public static BacktraceResult onSuccess(BacktraceReport report, String message) {
+        return new BacktraceResult(report, message, BacktraceResultStatus.Ok, HttpURLConnection.HTTP_OK);
+    }
+
+    public boolean shouldRetry() {
+        return httpStatusCode == null || httpStatusCode == HttpURLConnection.HTTP_GATEWAY_TIMEOUT ||
+                httpStatusCode == HttpURLConnection.HTTP_BAD_GATEWAY || httpStatusCode == HttpURLConnection.HTTP_INTERNAL_ERROR
+                || httpStatusCode == HttpURLConnection.HTTP_UNAVAILABLE || httpStatusCode == HttpURLConnection.HTTP_CLIENT_TIMEOUT;
     }
 }

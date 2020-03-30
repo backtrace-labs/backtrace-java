@@ -17,7 +17,7 @@ import java.util.Queue;
 
 public class BacktraceDatabase {
 
-    private static final transient Logger LOGGER = LoggerFactory.getLogger(BacktraceDatabase.class);
+    private static final transient Logger LOGGER = LoggerFactory.getLogger(backtrace.io.database.BacktraceDatabase.class);
     private final BacktraceDatabaseConfig config;
 
 
@@ -34,7 +34,7 @@ public class BacktraceDatabase {
         return dir.exists() || dir.mkdir();
     }
 
-    public static BacktraceDatabase init(BacktraceConfig config, Queue<BacktraceMessage> queue) {
+    public static backtrace.io.database.BacktraceDatabase init(BacktraceConfig config, Queue<BacktraceMessage> queue) {
         if (config == null) {
             throw new NullPointerException("DatabaseConfig is null");
         }
@@ -43,7 +43,7 @@ public class BacktraceDatabase {
             throw new NullPointerException("Passed queue is null");
         }
 
-        BacktraceDatabase database = new BacktraceDatabase(config.getDatabaseConfig());
+        backtrace.io.database.BacktraceDatabase database = new backtrace.io.database.BacktraceDatabase(config.getDatabaseConfig());
         if (config.getDatabaseConfig().isDatabaseEnabled()) {
             database.loadReports(queue);
         }

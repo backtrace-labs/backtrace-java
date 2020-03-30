@@ -1,21 +1,16 @@
 package backtrace.io.data;
 
-import backtrace.io.data.report.BacktraceReportSendingStatus;
 import backtrace.io.data.report.BacktraceStackFrame;
 import backtrace.io.data.report.BacktraceStackTrace;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BacktraceReport implements Serializable {
 
-    private static final transient Logger LOGGER = LoggerFactory.getLogger(BacktraceReport.class);
     /**
      * 16 bytes of randomness in human readable UUID format
      * server will reject request if uuid is already found
@@ -72,10 +67,6 @@ public class BacktraceReport implements Serializable {
      */
     private transient AtomicInteger retryCounter;
 
-    /**
-     * Sending status (UNSENT, SENT)
-     */
-    private transient BacktraceReportSendingStatus status;
 
     /**
      * Create new instance of Backtrace report to sending a report with custom client message
@@ -85,8 +76,7 @@ public class BacktraceReport implements Serializable {
     public BacktraceReport(
             String message
     ) {
-        this((Exception) null, null, null);
-        this.message = message;
+        this(message, null, null, null);
     }
 
     /**
@@ -100,8 +90,7 @@ public class BacktraceReport implements Serializable {
             String message,
             Map<String, Object> attributes
     ) {
-        this((Exception) null, attributes, null);
-        this.message = message;
+        this(message, null, attributes, null);
     }
 
     /**
@@ -115,7 +104,7 @@ public class BacktraceReport implements Serializable {
             String message,
             List<String> attachmentPaths
     ) {
-        this(message, null, attachmentPaths);
+        this(message, null, null, attachmentPaths);
     }
 
 
@@ -132,8 +121,7 @@ public class BacktraceReport implements Serializable {
             Map<String, Object> attributes,
             List<String> attachmentPaths
     ) {
-        this((Exception) null, attributes, attachmentPaths);
-        this.message = message;
+        this(message, null, attributes, attachmentPaths);
     }
 
     /**
@@ -144,7 +132,7 @@ public class BacktraceReport implements Serializable {
      */
     public BacktraceReport(
             Exception exception) {
-        this(exception, null, null);
+        this(null, exception, null, null);
     }
 
     /**
@@ -157,7 +145,7 @@ public class BacktraceReport implements Serializable {
     public BacktraceReport(
             Exception exception,
             Map<String, Object> attributes) {
-        this(exception, attributes, null);
+        this(null, exception, attributes, null);
     }
 
     /**
@@ -170,7 +158,7 @@ public class BacktraceReport implements Serializable {
     public BacktraceReport(
             Exception exception,
             List<String> attachmentPaths) {
-        this(exception, null, attachmentPaths);
+        this(null, exception, null, attachmentPaths);
     }
 
     /**
@@ -185,14 +173,73 @@ public class BacktraceReport implements Serializable {
             Exception exception,
             Map<String, Object> attributes,
             List<String> attachmentPaths) {
+        this(null, exception, attributes, attachmentPaths);
+    }
 
+    /**
+     * Creates new instance of Backtrace report to sending a report
+     * with user message, application exception and attributes
+     *
+     * @param message         Custom client message
+     * @param exception       Current exception
+     * @param attributes      Additional information about application state
+     */
+    public BacktraceReport(
+            String message,
+            Exception exception,
+            Map<String, Object> attributes){
+        this(message, exception, attributes, null);
+    }
+
+    /**
+     * Creates new instance of Backtrace report to sending a report
+     * with message, application exception and attachments
+     *
+     * @param message         Custom client message
+     * @param exception       Current exception
+     * @param attachmentPaths Path to all report attachments
+     */
+    public BacktraceReport(
+            String message,
+            Exception exception,
+            List<String> attachmentPaths){
+        this(message, exception, null, attachmentPaths);
+    }
+
+    /**
+     * Creates new instance of Backtrace report to sending a report
+     * with message and application exception
+     *
+     * @param message         Custom client message
+     * @param exception       Current exception
+     */
+    public BacktraceReport(
+            String message,
+            Exception exception){
+        this(message, exception, null, null);
+    }
+
+    /**
+     * Creates new instance of Backtrace report to sending a report
+     * with message, application exception, attributes and attachments
+     *
+     * @param message         Custom client message
+     * @param exception       Current exception
+     * @param attributes      Additional information about application state
+     * @param attachmentPaths Path to all report attachments
+     */
+    public BacktraceReport(
+            String message,
+            Exception exception,
+            Map<String, Object> attributes,
+            List<String> attachmentPaths) {
+        this.setMessage(message, exception);
         this.attributes = attributes == null ? new HashMap<String, Object>() {
         } : attributes;
         this.attachmentPaths = attachmentPaths == null ? new ArrayList<>() : attachmentPaths;
         this.exception = exception;
         this.exceptionTypeReport = exception != null;
         this.diagnosticStack = new BacktraceStackTrace(exception).getStackFrames();
-        this.status = new BacktraceReportSendingStatus();
         this.retryCounter = new AtomicInteger(0);
         if (this.getExceptionTypeReport() && exception != null) {
             this.classifier = exception.getClass().getCanonicalName();
@@ -207,13 +254,23 @@ public class BacktraceReport implements Serializable {
      * @return Concatenated map of attributes from report and from passed attributes
      */
     static Map<String, Object> concatAttributes(
-            BacktraceReport report, Map<String, Object> attributes) {
+            backtrace.io.data.BacktraceReport report, Map<String, Object> attributes) {
         Map<String, Object> reportAttributes = report.attributes != null ? report.getAttributes() : new HashMap<>();
         if (attributes == null) {
             return reportAttributes;
         }
         reportAttributes.putAll(attributes);
         return reportAttributes;
+    }
+
+    private void setMessage(String message, Exception exception) {
+        if (exception != null) {
+            this.message = exception.getMessage();
+        }
+
+        if (message != null) {
+            this.message = message;
+        }
     }
 
     /**
@@ -226,16 +283,7 @@ public class BacktraceReport implements Serializable {
      */
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
-        status = new BacktraceReportSendingStatus();
         retryCounter = new AtomicInteger(0);
-    }
-
-    /**
-     * Sets that the report has been sent
-     */
-    public void markAsSent() {
-        LOGGER.info("Set report status as sent");
-        status.reportSent();
     }
 
     public UUID getUuid() {
@@ -258,10 +306,6 @@ public class BacktraceReport implements Serializable {
         return message;
     }
 
-    public BacktraceReportSendingStatus.SendingStatus getSendingStatus() {
-        return this.status.getSendingStatus();
-    }
-
     public Exception getException() {
         return exception;
     }
@@ -281,29 +325,5 @@ public class BacktraceReport implements Serializable {
     @SuppressWarnings("WeakerAccess")
     public Map<String, Object> getAttributes() {
         return attributes;
-    }
-
-    /**
-     * Blocks current thread until report will be sent
-     *
-     * @param timeout the maximum time to wait
-     * @param unit    the time unit of the {@code timeout} argument
-     * @throws InterruptedException if the current thread is interrupted
-     *                              while waiting
-     */
-    public void await(long timeout, TimeUnit unit) throws InterruptedException {
-        LOGGER.info("Wait until the report will be sent");
-        status.await(timeout, unit);
-    }
-
-    /**
-     * Blocks current thread until report will be sent
-     *
-     * @throws InterruptedException if the current thread is interrupted
-     *                              while waiting
-     */
-    public void await() throws InterruptedException {
-        LOGGER.info("Wait until the report will be sent");
-        status.await();
     }
 }

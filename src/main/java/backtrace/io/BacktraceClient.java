@@ -8,6 +8,7 @@ import backtrace.io.events.RequestHandler;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class BacktraceClient {
     private BacktraceQueueHandler backtrace;
@@ -90,7 +91,7 @@ public class BacktraceClient {
      * @param callback Event which will be executed after receiving a response
      */
     public void send(BacktraceReport report, OnServerResponseEvent callback) {
-        this.backtrace.send(report, this.customAttributes, callback);
+        this.backtrace.send(report, this.customAttributes, callback, config.isGatherAllThreads());
     }
 
     /**
@@ -129,6 +130,37 @@ public class BacktraceClient {
      */
     public void send(Exception exception, OnServerResponseEvent callback) {
         this.send(new BacktraceReport(exception), callback);
+    }
+
+    /**
+     * Stop Backtrace Thread and wait until last message will be sent
+     *
+     * @throws InterruptedException if the current thread is interrupted while waiting
+     */
+    public void close() throws InterruptedException {
+        this.backtrace.close();
+    }
+
+    /**
+     * Wait until all messages in queue will be sent
+     *
+     * @throws InterruptedException if the current thread is interrupted while waiting
+     */
+    public void await() throws InterruptedException {
+        this.backtrace.await();
+    }
+
+    /**
+     * Wait until all messages in queue will be sent
+     *
+     * @param timeout the maximum time to wait
+     * @param unit    the time unit of the {@code timeout} argument
+     * @return {@code true} if all messages are sent in passed time and {@code false}
+     * if the waiting time elapsed before all messages has been sent
+     * @throws InterruptedException if the current thread is interrupted while waiting
+     */
+    public boolean await(long timeout, TimeUnit unit) throws InterruptedException {
+        return this.backtrace.await(timeout, unit);
     }
 
     /**

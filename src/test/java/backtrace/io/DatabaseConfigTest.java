@@ -36,7 +36,7 @@ public class DatabaseConfigTest {
     }
 
     @Test
-    public void retryLimitTest() {
+    public void retryLimitTest() throws InterruptedException {
         // GIVEN
         int RETRY_LIMIT = 3;
         Waiter waiter = new Waiter();
@@ -53,7 +53,7 @@ public class DatabaseConfigTest {
         client.setCustomRequestHandler(new RequestHandler() {
             @Override
             public BacktraceResult onRequest(BacktraceData data) {
-                return BacktraceResult.OnError(data.getReport(), new Exception());
+                return BacktraceResult.onError(data.getReport(), new Exception());
             }
         });
 
@@ -70,6 +70,7 @@ public class DatabaseConfigTest {
         } catch (TimeoutException e) {
             Assert.fail(e.getMessage());
         }
+        client.close();
         Assert.assertEquals(RETRY_LIMIT, report.getRetryCounter());
     }
 

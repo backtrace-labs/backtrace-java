@@ -21,6 +21,7 @@ public class ApiSender {
      * Send HTTP request for certain url server with information about device, error, attachments
      *
      * @param serverUrl server http address to which the request will be sent
+     * @param backtraceData error report
      * @return information from the server about the result of processing the request
      */
     public static BacktraceResult sendReport(String serverUrl, BacktraceData backtraceData) {
@@ -34,34 +35,32 @@ public class ApiSender {
 
     private static BacktraceResult sendReport(String serverUrl, String json, BacktraceReport report, List<String> attachments) {
         HttpURLConnection urlConnection = null;
+        Integer statusCode = null;
         BacktraceResult result;
-
         try {
             urlConnection = getUrlConnection(serverUrl);
-
             LOGGER.debug("HttpURLConnection successfully initialized");
             DataOutputStream request = new DataOutputStream(urlConnection.getOutputStream());
-
-            MultiFormRequestHelper.addJson(request, json);
-            MultiFormRequestHelper.addFiles(request, attachments);
-            MultiFormRequestHelper.addEndOfRequest(request);
+            backtrace.io.http.MultiFormRequestHelper.addJson(request, json);
+            backtrace.io.http.MultiFormRequestHelper.addFiles(request, attachments);
+            backtrace.io.http.MultiFormRequestHelper.addEndOfRequest(request);
 
             request.flush();
             request.close();
 
-            int statusCode = urlConnection.getResponseCode();
+            statusCode = urlConnection.getResponseCode();
             LOGGER.debug("Received response status from Backtrace API for HTTP request is: " + statusCode);
 
             if (statusCode == HttpURLConnection.HTTP_OK) {
-                result = ApiSender.handleSuccessResponse(urlConnection, report);
+                result = handleSuccessResponse(urlConnection, report);
             } else {
                 throw new HttpException(statusCode, String.format("%s: %s",
-                        Integer.toString(statusCode), ApiSender.getErrorMessage(urlConnection)));
+                        Integer.toString(statusCode), getErrorMessage(urlConnection)));
             }
 
         } catch (Exception e) {
             LOGGER.error("Sending HTTP request failed to Backtrace API", e);
-            result = BacktraceResult.OnError(report, e);
+            result = BacktraceResult.onError(report, e, statusCode);
         } finally {
             if (urlConnection != null) {
                 try {
@@ -69,7 +68,7 @@ public class ApiSender {
                     LOGGER.debug("Disconnecting HttpUrlConnection successful");
                 } catch (Exception e) {
                     LOGGER.error("Disconnecting HttpUrlConnection failed", e);
-                    result = BacktraceResult.OnError(report, e);
+                    result = BacktraceResult.onError(report, e, statusCode);
                 }
             }
         }
@@ -80,6 +79,7 @@ public class ApiSender {
         BacktraceResult result = BacktraceSerializeHelper.fromJson(getResponse(urlConnection), BacktraceResult.class);
         result.setStatus(BacktraceResultStatus.Ok);
         result.setBacktraceReport(report);
+        result.setHttpStatusCode(HttpURLConnection.HTTP_OK);
         return result;
     }
 
@@ -103,7 +103,7 @@ public class ApiSender {
         urlConnection.setRequestProperty("Cache-Control", "no-cache");
 
         urlConnection.setRequestProperty("Content-Type",
-                MultiFormRequestHelper.getContentType());
+                backtrace.io.http.MultiFormRequestHelper.getContentType());
 
         return urlConnection;
     }
@@ -113,7 +113,7 @@ public class ApiSender {
      *
      * @param urlConnection current HTTP connection
      * @return response from HTTP request
-     * @throws IOException
+     * @throws IOException if an I/O error occurs
      */
     private static String getResponse(HttpURLConnection urlConnection) throws IOException {
         LOGGER.debug("Reading response from HTTP request");

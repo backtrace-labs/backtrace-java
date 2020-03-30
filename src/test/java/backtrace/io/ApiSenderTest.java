@@ -6,7 +6,6 @@ import backtrace.io.http.ApiSender;
 import backtrace.io.http.BacktraceResult;
 import backtrace.io.http.BacktraceResultStatus;
 import backtrace.io.http.HttpException;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -22,7 +21,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({URL.class, URLConnection.class, ApiSender.class})

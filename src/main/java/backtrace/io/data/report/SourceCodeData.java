@@ -13,7 +13,7 @@ import java.util.Map;
  * Collect all source data information about current program
  */
 public class SourceCodeData implements Serializable {
-    private static final transient Logger LOGGER = LoggerFactory.getLogger(SourceCodeData.class);
+    private static final transient Logger LOGGER = LoggerFactory.getLogger(backtrace.io.data.report.SourceCodeData.class);
 
     /**
      * Source code information about current executed program

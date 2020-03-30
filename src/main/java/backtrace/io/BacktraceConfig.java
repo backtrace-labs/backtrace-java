@@ -7,10 +7,11 @@ import backtrace.io.events.RequestHandler;
 import java.net.URI;
 
 public class BacktraceConfig {
-    private BacktraceCredentials credentials;
-    private BacktraceDatabaseConfig databaseConfig = new BacktraceDatabaseConfig();
-    private RequestHandler requestHandler;
-    private BeforeSendEvent beforeSendEvent;
+    private volatile BacktraceCredentials credentials;
+    private volatile BacktraceDatabaseConfig databaseConfig = new BacktraceDatabaseConfig();
+    private volatile RequestHandler requestHandler;
+    private volatile BeforeSendEvent beforeSendEvent;
+    private volatile boolean gatherAllThreads = false;
 
     /**
      * Creates Backtrace credentials instance
@@ -77,6 +78,14 @@ public class BacktraceConfig {
 
     BeforeSendEvent getBeforeSendEvent() {
         return beforeSendEvent;
+    }
+
+    boolean isGatherAllThreads() {
+        return gatherAllThreads;
+    }
+
+    public void setGatherAllThreads(boolean gatherAllThreads) {
+        this.gatherAllThreads = gatherAllThreads;
     }
 
     void setDatabasePath(String databasePath) {

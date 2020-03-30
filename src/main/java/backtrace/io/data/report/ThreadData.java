@@ -40,10 +40,13 @@ public class ThreadData implements Serializable {
      * Create instance of ThreadData class to collect information about used threads
      *
      * @param exceptionStack current BacktraceReport exception stack
+     * @param allThreads if true information about all threads will be gathered
      */
-    public ThreadData(ArrayList<BacktraceStackFrame> exceptionStack) {
+    public ThreadData(ArrayList<BacktraceStackFrame> exceptionStack, boolean allThreads) {
         generateCurrentThreadInformation(exceptionStack);
-        processThreads();
+        if(allThreads) {
+            processThreads();
+        }
     }
 
     /**
