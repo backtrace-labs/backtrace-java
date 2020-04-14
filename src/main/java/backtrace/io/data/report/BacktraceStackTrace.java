@@ -51,8 +51,18 @@ public class BacktraceStackTrace implements Serializable {
 
         ArrayList<BacktraceStackFrame> result = new ArrayList<>();
         for (StackTraceElement frame : stackTraceElements) {
-            if ((frame == null) || (!frame.getClassName().isEmpty() && frame.getClassName().toLowerCase().startsWith(NAME)) ||
-                    (frame.getClassName().toLowerCase().equals("java.lang.thread") && frame.getMethodName().equals("getStackTrace"))) {
+            if (
+                    (frame == null) ||
+                            (!frame.getClassName().isEmpty() && (
+                                    frame.getClassName().toLowerCase().startsWith(NAME) ||
+                                            frame.getClassName().toLowerCase().startsWith("org.apache.log4j") ||
+                                            frame.getClassName().toLowerCase().startsWith("org.apache.logging")))
+                            ||
+                            (
+                                    frame.getClassName().toLowerCase().equals("java.lang.thread") &&
+                                            frame.getMethodName().equals("getStackTrace")
+                            )
+            ) {
                 continue;
             }
             result.add(new BacktraceStackFrame(frame));

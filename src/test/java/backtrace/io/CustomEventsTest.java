@@ -64,6 +64,7 @@ public class CustomEventsTest {
         // THEN
         try {
             backtraceClient.await(1, TimeUnit.SECONDS);
+            backtraceClient.close();
         } catch (Exception e) {
             Assert.fail(e.getMessage());
         }
@@ -99,6 +100,7 @@ public class CustomEventsTest {
         // THEN
         try {
             waiter.await(1, TimeUnit.SECONDS);
+            backtraceClient.close();
         } catch (Exception e) {
             Assert.fail(e.getMessage());
         }
@@ -196,6 +198,7 @@ public class CustomEventsTest {
         // THEN
         try{
             boolean result = backtraceClient.await(2, TimeUnit.SECONDS);
+            backtraceClient.close();
             Assert.assertFalse(result);
         }
         catch (Exception e){
@@ -225,6 +228,7 @@ public class CustomEventsTest {
         // THEN
         try {
             backtraceClient.await();
+            backtraceClient.close();
         } catch (Exception e) {
             Assert.fail(e.getMessage());
         }
@@ -259,6 +263,7 @@ public class CustomEventsTest {
         // THEN
         try {
             backtraceClient.await();
+            backtraceClient.close();
         } catch (Exception e) {
             Assert.fail(e.getMessage());
         }
@@ -269,7 +274,7 @@ public class CustomEventsTest {
     }
 
     @Test
-    public void sendRequestWithAppVersionAndName() {
+    public void sendRequestWithAppVersionAndName() throws InterruptedException {
         // GIVEN
         BacktraceReport report = new BacktraceReport(message);
         String appVersion = "release-1.0";
@@ -296,6 +301,7 @@ public class CustomEventsTest {
 
         try {
             waiter.await(5, TimeUnit.SECONDS);
+            backtraceClient.close();
         } catch (Exception exception) {
             waiter.fail(exception);
         }
