@@ -16,7 +16,7 @@
 * Gradle
 ```
 dependencies {
-    implementation 'com.github.backtrace-labs.backtrace-java:backtrace-java:0.9.0'
+    implementation 'com.github.backtrace-labs.backtrace-java:backtrace-java:0.9.1'
 }
 ```
 
@@ -25,7 +25,7 @@ dependencies {
 <dependency>
   <groupId>com.github.backtrace-labs.backtrace-java</groupId>
   <artifactId>backtrace-java</artifactId>
-  <version>0.9.0</version>
+  <version>0.9.1</version>
 </dependency>
 ```
 
