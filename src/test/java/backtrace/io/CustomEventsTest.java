@@ -298,10 +298,10 @@ public class CustomEventsTest {
         });
 
         backtraceClient.send(report);
-        backtraceClient.close();
 
         try {
             waiter.await(5, TimeUnit.SECONDS);
+            backtraceClient.close();
         } catch (Exception exception) {
             waiter.fail(exception);
         }
