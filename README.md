@@ -29,7 +29,7 @@ dependencies {
 </dependency>
 ```
 
-# Using Backtrace library  <a name="using-backtrace"></a>
+# Using Backtrace library <a name="using-backtrace"></a>
 ## Initialize a new BacktraceClient <a name="using-backtrace-initialization"></a>
 
 First create a `BacktraceConfig` instance with your `Backtrace endpoint URL`. This endpoint URL will either be through a central https://submit.backtrace.io server on standard port 80/443, or directly to your Backtrace instance through a listener on port 6097/6098 (e.g. https://xxx.sp.backtrace.io:6098). Either integration will require a submission token to be included in the endpoint
