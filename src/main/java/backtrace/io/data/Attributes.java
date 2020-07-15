@@ -17,6 +17,9 @@ import java.util.UUID;
  */
 class Attributes {
     private static final transient Logger LOGGER = LoggerFactory.getLogger(backtrace.io.data.Attributes.class);
+    
+    private static final String MACHINE_ID = generateMachineId();
+    
     /**
      * Gets built-in primitive attributes
      */
@@ -84,7 +87,7 @@ class Attributes {
             LOGGER.error("Can not get hostname", exception);
         }
 
-        this.attributes.put("guid", generateMachineId());
+        this.attributes.put("guid", MACHINE_ID);
 
         this.attributes.put("system.memory.total", Runtime.getRuntime().totalMemory());
         this.attributes.put("system.memory.free", Runtime.getRuntime().freeMemory());
@@ -96,7 +99,7 @@ class Attributes {
      *
      * @return unique device identifier
      */
-    private String generateMachineId() {
+    private static String generateMachineId() {
         try {
             InetAddress ip = InetAddress.getLocalHost();
 
