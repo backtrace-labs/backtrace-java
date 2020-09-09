@@ -1,4 +1,5 @@
 # This library is currently in early access
+We are working closely with users for their initial rollouts of backtrace-java. Please reach out to us via your account rep or support@backtrace.io for more details. 
 
 # Backtrace Java support
 
