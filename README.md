@@ -8,7 +8,7 @@ We are working closely with users for their initial rollouts of backtrace-java. 
 [![Build Status](https://travis-ci.org/backtrace-labs/backtrace-java.png?branch=master)](https://travis-ci.org/backtrace-labs/backtrace-java)
 
 # Features Summary <a name="features-summary"></a>
-* Light-weight Java client library that quickly submits exceptions and crashes to your Backtrace dashboard. Can include callstack, system metadata, custom metadata and file attachments if needed.
+* Light-weight Java client library that quickly submits exceptions to your Backtrace dashboard. Can include callstack, system metadata, custom metadata and file attachments if needed.
 * Supports offline database for error report storage and re-submission in case of network outage.
 * Fully customizable and extendable event handlers and base classes for custom implementations.
 
@@ -164,6 +164,16 @@ try {
   backtraceClient.send("message");
 }
 ```
+
+### System Metadata
+The following system metadata is associated to a BacktraceReport
+- system global environment variables
+- number of cpu cores
+- OS name and version
+- hostname (if possible)
+- memory_total - total amount of memory in the Java virtual machine
+- memory_max - maximum amount of memory that the Java virtual machine will attempt to use
+- memory-free - free memory in the Java Virtual Machine
 
 
 ## Attaching custom event handlers <a name="documentation-events"></a>
