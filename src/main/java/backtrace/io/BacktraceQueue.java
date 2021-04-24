@@ -15,6 +15,7 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
 
     private static final transient Logger LOGGER = LoggerFactory.getLogger(BacktraceQueue.class);
     private final CountLatch lock = new CountLatch(0, 0);
+    private final CountLatch notEmptyQueue = new CountLatch(1, 0);
 
     /**
      * Add message to queue with locking semaphore to inform that at least one of messages are processing
@@ -35,6 +36,7 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
         }
         LOGGER.debug("Releasing semaphore..");
         lock.countDown();
+        notEmptyQueue.countUp();
     }
 
     /**
@@ -45,6 +47,7 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
             return;
         }
         LOGGER.debug("Locking semaphore..");
+        notEmptyQueue.countDown();
         lock.countUp();
         LOGGER.debug("Semaphore locked..");
     }
@@ -59,6 +62,24 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
         lock.await();
         LOGGER.debug("The semaphore has been released");
     }
+
+    void close() {
+        if(notEmptyQueue.getCount() == 1) {
+            notEmptyQueue.countDown();
+        }
+    }
+
+    /**
+     * Wait until all messages in queue will be sent
+     *
+     * @throws InterruptedException if the current thread is interrupted while waiting
+     */
+    void awaitNewMessage() throws InterruptedException {
+        LOGGER.debug("Waiting until queue will not be empty");
+        notEmptyQueue.await();
+        LOGGER.debug("Queue is not empty");
+    }
+
 
     /**
      * Wait until all messages in queue will be sent
