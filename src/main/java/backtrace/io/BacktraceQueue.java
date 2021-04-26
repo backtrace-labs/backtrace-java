@@ -31,23 +31,32 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
      * Unlock semaphore to inform that all messages from queue are sent
      */
     void unlock() {
+        LOGGER.debug("Releasing semaphore..");
+
+        if(notEmptyQueue.getCount() == 0) {
+            notEmptyQueue.countUp();
+        }
+
         if (lock.getCount() == 0) {
             return;
         }
-        LOGGER.debug("Releasing semaphore..");
+
         lock.countDown();
-        notEmptyQueue.countUp();
     }
 
     /**
      * Lock semaphore to inform that at least one of messages are processing
      */
     private void lock() {
+        if(notEmptyQueue.getCount() == 1) {
+            notEmptyQueue.countDown();
+        }
+
         if (lock.getCount() != 0) {
             return;
         }
+        
         LOGGER.debug("Locking semaphore..");
-        notEmptyQueue.countDown();
         lock.countUp();
         LOGGER.debug("Semaphore locked..");
     }
