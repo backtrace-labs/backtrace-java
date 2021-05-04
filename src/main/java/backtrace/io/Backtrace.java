@@ -28,15 +28,12 @@ class Backtrace {
         this.queue = queue;
     }
 
-
     /**
      * Handles the queue of incoming error reports
      */
     void handleBacktraceMessage() {
         try {
-            if (queue.isEmpty()) {
-                return;
-            }
+            this.queue.awaitNewMessage();
 
             BacktraceMessage message = queue.poll();
 
@@ -119,5 +116,9 @@ class Backtrace {
             report.incrementRetryCounter();
             this.queue.addWithLock(backtraceMessage);
         }
+    }
+
+    void close() {
+        this.queue.close();
     }
 }

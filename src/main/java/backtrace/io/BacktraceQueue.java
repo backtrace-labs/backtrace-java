@@ -15,6 +15,7 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
 
     private static final transient Logger LOGGER = LoggerFactory.getLogger(BacktraceQueue.class);
     private final CountLatch lock = new CountLatch(0, 0);
+    private final CountLatch notEmptyQueue = new CountLatch(1, 0);
 
     /**
      * Add message to queue with locking semaphore to inform that at least one of messages are processing
@@ -30,10 +31,16 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
      * Unlock semaphore to inform that all messages from queue are sent
      */
     void unlock() {
+        LOGGER.debug("Releasing semaphore..");
+
+        if(notEmptyQueue.getCount() == 0) {
+            notEmptyQueue.countUp();
+        }
+
         if (lock.getCount() == 0) {
             return;
         }
-        LOGGER.debug("Releasing semaphore..");
+
         lock.countDown();
     }
 
@@ -41,9 +48,14 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
      * Lock semaphore to inform that at least one of messages are processing
      */
     private void lock() {
+        if(notEmptyQueue.getCount() == 1) {
+            notEmptyQueue.countDown();
+        }
+
         if (lock.getCount() != 0) {
             return;
         }
+        
         LOGGER.debug("Locking semaphore..");
         lock.countUp();
         LOGGER.debug("Semaphore locked..");
@@ -59,6 +71,24 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
         lock.await();
         LOGGER.debug("The semaphore has been released");
     }
+
+    void close() {
+        if(notEmptyQueue.getCount() == 1) {
+            notEmptyQueue.countDown();
+        }
+    }
+
+    /**
+     * Wait until all messages in queue will be sent
+     *
+     * @throws InterruptedException if the current thread is interrupted while waiting
+     */
+    void awaitNewMessage() throws InterruptedException {
+        LOGGER.debug("Waiting until queue will not be empty");
+        notEmptyQueue.await();
+        LOGGER.debug("Queue is not empty");
+    }
+
 
     /**
      * Wait until all messages in queue will be sent

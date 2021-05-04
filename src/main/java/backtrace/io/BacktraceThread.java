@@ -47,6 +47,7 @@ public class BacktraceThread extends Thread {
     void close() throws InterruptedException {
         LOGGER.info("Closing BacktraceThread");
         this.running = false;
+        this.backtrace.close();
         this.closing.await();
     }
 
