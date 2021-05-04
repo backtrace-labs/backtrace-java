@@ -17,7 +17,7 @@ We are working closely with users for their initial rollouts of backtrace-java. 
 * Gradle
 ```
 dependencies {
-    implementation 'com.github.backtrace-labs.backtrace-java:backtrace-java:0.9.1'
+    implementation 'com.github.backtrace-labs.backtrace-java:backtrace-java:0.9.2'
 }
 ```
 
@@ -26,7 +26,7 @@ dependencies {
 <dependency>
   <groupId>com.github.backtrace-labs.backtrace-java</groupId>
   <artifactId>backtrace-java</artifactId>
-  <version>0.9.1</version>
+  <version>0.9.2</version>
 </dependency>
 ```
 
