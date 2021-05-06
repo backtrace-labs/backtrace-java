@@ -23,7 +23,9 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
      * @param message error report
      */
     void addWithLock(BacktraceMessage message) {
+        System.out.println("add with lock");
         this.lock();
+        System.out.println("add message");
         this.add(message);
     }
 
@@ -49,15 +51,20 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
      * Lock semaphore to inform that at least one of messages are processing
      */
     private void lock() {
+        System.out.println("lock");
+        System.out.println("notEmptyQueue.getCount()");
         if(notEmptyQueue.getCount() == 1) {
+            System.out.println("notEmptyQueue.getCount() == 1");
             notEmptyQueue.countDown();
         }
 
         if (lock.getCount() > 0) {
+            System.out.println("lock.getCount() > 0");
             return;
         }
 
         if (lock.getCount() == 0){
+            System.out.println("lock.countUp()");
             LOGGER.debug("Locking semaphore..");
             lock.countUp();
             LOGGER.debug("Semaphore locked..");

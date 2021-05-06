@@ -26,6 +26,7 @@ public class BacktraceClientThreadsInformationTest {
         client.setCustomRequestHandler(new RequestHandler() {
             @Override
             public BacktraceResult onRequest(BacktraceData data) {
+                System.out.println("on REQUEST WAT");
                 waiter.assertTrue(data.getThreadInformationMap().size() > 1);
                 waiter.resume();
                 return BacktraceResult.onSuccess(data.getReport(), "");
@@ -33,15 +34,20 @@ public class BacktraceClientThreadsInformationTest {
         });
 
         // WHEN
+        System.out.println("WAT");
         client.send("test-message");
-
         // THEN
         try {
-            waiter.await(5, TimeUnit.SECONDS);
+            System.out.println("AWAIT");
+            waiter.await(50, TimeUnit.SECONDS);
+            System.out.println("AWAIT2");
         } catch (Exception exception) {
+            System.out.println("FAIL");
             waiter.fail(exception);
         } finally {
+            System.out.println("FINALLY");
             client.close();
+            System.out.println("AFTER CLOSE");
         }
     }
 

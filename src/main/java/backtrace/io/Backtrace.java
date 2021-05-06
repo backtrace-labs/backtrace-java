@@ -33,11 +33,13 @@ class Backtrace {
      */
     void handleBacktraceMessage() {
         try {
+            System.out.println("awaitNewMessage");
             this.queue.awaitNewMessage();
-
+            System.out.println("new message!");
             BacktraceMessage message = queue.poll();
-
+            System.out.println("new message: " + message.getBacktraceData().getReport().getMessage());
             if (message != null) {
+
                 processSingleBacktraceMessage(message);
             }
         } catch (Exception e) {

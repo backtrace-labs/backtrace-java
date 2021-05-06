@@ -5,7 +5,6 @@ import backtrace.io.data.BacktraceReport;
 import backtrace.io.events.RequestHandler;
 import backtrace.io.http.BacktraceResult;
 import net.jodah.concurrentunit.Waiter;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,24 +15,18 @@ import java.util.concurrent.TimeoutException;
 public class UncaughtExceptionTest {
 
     BacktraceConfig config;
-    BacktraceClient client;
 
     @Before
     public void init() {
         config = new BacktraceConfig("", "");
         config.disableDatabase();
-        client = new BacktraceClient(config);
-    }
-
-    @After
-    public void close() throws InterruptedException{
-        client.close();
     }
 
     @Test
-    public void testUncaughtExceptionHandler() {
+    public void testUncaughtExceptionHandler() throws InterruptedException {
         // GIVEN
         final Waiter waiter = new Waiter();
+        final BacktraceClient client = new BacktraceClient(config);
         client.setCustomRequestHandler(new RequestHandler() {
             @Override
             public BacktraceResult onRequest(BacktraceData data) {
@@ -54,21 +47,24 @@ public class UncaughtExceptionTest {
         // THEN
         try {
             testThread.join();
-            waiter.await(2, TimeUnit.SECONDS);
+            waiter.await(5, TimeUnit.SECONDS);
         } catch (InterruptedException | TimeoutException exception) {
             Assert.fail(exception.getMessage());
         } finally {
+            client.close();
             testThread.interrupt();
         }
     }
 
     @Test
-    public void testUncaughtExceptionHandlerWithBlockingThread() {
+    public void testUncaughtExceptionHandlerWithBlockingThread() throws InterruptedException {
         // GIVEN
         final Waiter waiter = new Waiter();
+        final BacktraceClient client = new BacktraceClient(config);
         client.setCustomRequestHandler(new RequestHandler() {
             @Override
             public BacktraceResult onRequest(BacktraceData data) {
+                System.out.println("HANDLER");
                 waiter.resume();
                 return null;
             }
@@ -77,7 +73,9 @@ public class UncaughtExceptionTest {
         // WHEN
         Thread testThread = new Thread() {
             public void run() {
+                System.out.println("THREAD");
                 BacktraceExceptionHandler.enable(client);
+                System.out.println("NULL POINTER");
                 throw new NullPointerException("Expected!");
             }
         };
@@ -85,20 +83,25 @@ public class UncaughtExceptionTest {
 
         // THEN
         try {
+            System.out.println("JOIN");
             testThread.join();
-            waiter.await(2, TimeUnit.SECONDS);
+            System.out.println("AWAIT");
+            waiter.await(10, TimeUnit.SECONDS);
         } catch (InterruptedException | TimeoutException exception) {
+            System.out.println("CATCH");
             Assert.fail(exception.getMessage());
         } finally {
+            client.close();
+            System.out.println("FINALLY");
             testThread.interrupt();
         }
     }
 
     @Test
-    public void testEnableUncaughtExceptionHandler() {
+    public void testEnableUncaughtExceptionHandler() throws InterruptedException {
         // GIVEN
         final Waiter waiter = new Waiter();
-
+        final BacktraceClient client = new BacktraceClient(config);
         // WHEN
         Thread testThread = new Thread() {
             public void run() {
@@ -122,15 +125,16 @@ public class UncaughtExceptionTest {
         } catch (InterruptedException | TimeoutException exception) {
             Assert.fail(exception.getMessage());
         } finally {
+            client.close();
             testThread.interrupt();
         }
     }
 
     @Test
-    public void testEnableAndDisableUncaughtExceptionHandler() {
+    public void testEnableAndDisableUncaughtExceptionHandler() throws InterruptedException {
         // GIVEN
         final Waiter waiter = new Waiter();
-
+        final BacktraceClient client = new BacktraceClient(config);
         // WHEN
         Thread testThread = new Thread() {
             public void run() {
@@ -157,6 +161,7 @@ public class UncaughtExceptionTest {
         } catch (InterruptedException | TimeoutException exception) {
             Assert.fail(exception.getMessage());
         } finally {
+            client.close();
             testThread.interrupt();
         }
     }

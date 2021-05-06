@@ -31,23 +31,22 @@ public class DatabaseConfigTest {
     @Before
     @After
     public void cleanDatabaseDir() throws Exception {
-        File file = new File(databasePath);
+        final File file = new File(databasePath);
         FileHelper.deleteRecursive(file);
     }
 
     @Test
     public void retryLimitTest() throws InterruptedException {
         // GIVEN
-        int RETRY_LIMIT = 3;
-        Waiter waiter = new Waiter();
+        final int RETRY_LIMIT = 3;
+        final Waiter waiter = new Waiter();
 
-        BacktraceConfig config = new BacktraceConfig("", "");
+        final BacktraceConfig config = new BacktraceConfig("", "");
         config.disableDatabase();
-
         config.setDatabaseRetryLimit(RETRY_LIMIT);
 
-        BacktraceClient client = new BacktraceClient(config);
-        BacktraceReport report = new BacktraceReport("test-message");
+        final BacktraceClient client = new BacktraceClient(config);
+        final BacktraceReport report = new BacktraceReport("test-message");
 
         // WHEN
         client.setCustomRequestHandler(new RequestHandler() {
@@ -84,14 +83,14 @@ public class DatabaseConfigTest {
         config.setDatabasePath(databasePath);
         config.setMaxRecordCount(maxNumberOfRecordsInDatabase);
 
-        List<BacktraceData> data = new ArrayList<BacktraceData>() {{
+        final List<BacktraceData> data = new ArrayList<BacktraceData>() {{
             add(new BacktraceData(new BacktraceReport("1")));
             add(new BacktraceData(new BacktraceReport("2")));
             add(new BacktraceData(new BacktraceReport("3")));
             add(new BacktraceData(new BacktraceReport("4")));
         }};
 
-        BacktraceDatabase database = BacktraceDatabase.init(config, queue);
+        final BacktraceDatabase database = BacktraceDatabase.init(config, queue);
 
         // WHEN
         for (BacktraceData backtraceData : data) {
@@ -109,12 +108,12 @@ public class DatabaseConfigTest {
         final BacktraceConfig config = new BacktraceConfig("", "");
         config.setDatabasePath(databasePath);
 
-        List<BacktraceData> data = new ArrayList<BacktraceData>() {{
+        final List<BacktraceData> data = new ArrayList<BacktraceData>() {{
             add(new BacktraceData(new BacktraceReport("1")));
             add(new BacktraceData(new BacktraceReport("2")));
         }};
 
-        BacktraceDatabase database = BacktraceDatabase.init(config, new LinkedList<>());
+        final BacktraceDatabase database = BacktraceDatabase.init(config, new LinkedList<>());
         config.setMaxDatabaseSize(maxSize);
 
         // WHEN
@@ -133,14 +132,14 @@ public class DatabaseConfigTest {
         final long maxSize = 100000000; // huge number enough to store 4 reports
         final BacktraceConfig config = new BacktraceConfig("", "");
         config.setDatabasePath(databasePath);
-        List<BacktraceData> data = new ArrayList<BacktraceData>() {{
+        final List<BacktraceData> data = new ArrayList<BacktraceData>() {{
             add(new BacktraceData(new BacktraceReport("1")));
             add(new BacktraceData(new BacktraceReport("2")));
             add(new BacktraceData(new BacktraceReport("3")));
             add(new BacktraceData(new BacktraceReport("4")));
         }};
 
-        BacktraceDatabase database = BacktraceDatabase.init(config, new LinkedList<>());
+        final BacktraceDatabase database = BacktraceDatabase.init(config, new LinkedList<>());
         config.setMaxDatabaseSize(maxSize);
 
         // WHEN
@@ -163,12 +162,12 @@ public class DatabaseConfigTest {
 
         // WHEN
         database.saveReport(new BacktraceData(new BacktraceReport("Without database")));
-        int databaseSizeAfterFirstSave = database.getTotalNumberOfRecords();
+        final int databaseSizeAfterFirstSave = database.getTotalNumberOfRecords();
 
         config.enableDatabase();
 
         database.saveReport(new BacktraceData(new BacktraceReport("With database")));
-        int databaseSizeAfterSecondSave = database.getTotalNumberOfRecords();
+        final int databaseSizeAfterSecondSave = database.getTotalNumberOfRecords();
 
         // THEN
         Assert.assertEquals(0, databaseSizeAfterFirstSave);
