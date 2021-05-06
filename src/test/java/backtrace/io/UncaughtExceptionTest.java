@@ -57,6 +57,8 @@ public class UncaughtExceptionTest {
             waiter.await(2, TimeUnit.SECONDS);
         } catch (InterruptedException | TimeoutException exception) {
             Assert.fail(exception.getMessage());
+        } finally {
+            testThread.interrupt();
         }
     }
 
@@ -87,6 +89,8 @@ public class UncaughtExceptionTest {
             waiter.await(2, TimeUnit.SECONDS);
         } catch (InterruptedException | TimeoutException exception) {
             Assert.fail(exception.getMessage());
+        } finally {
+            testThread.interrupt();
         }
     }
 
@@ -117,6 +121,8 @@ public class UncaughtExceptionTest {
             waiter.await(4, TimeUnit.SECONDS);
         } catch (InterruptedException | TimeoutException exception) {
             Assert.fail(exception.getMessage());
+        } finally {
+            testThread.interrupt();
         }
     }
 
@@ -150,6 +156,8 @@ public class UncaughtExceptionTest {
             waiter.await(5, TimeUnit.SECONDS);
         } catch (InterruptedException | TimeoutException exception) {
             Assert.fail(exception.getMessage());
+        } finally {
+            testThread.interrupt();
         }
     }
 }

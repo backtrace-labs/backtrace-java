@@ -5,8 +5,11 @@ import backtrace.io.BacktraceConfig;
 import backtrace.io.events.RequestHandler;
 import backtrace.io.http.BacktraceResult;
 import net.jodah.concurrentunit.Waiter;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class BacktraceClientThreadsInformationTest {
@@ -33,8 +36,13 @@ public class BacktraceClientThreadsInformationTest {
         client.send("test-message");
 
         // THEN
-        waiter.await();
-        client.close();
+        try {
+            waiter.await(5, TimeUnit.SECONDS);
+        } catch (Exception exception) {
+            waiter.fail(exception);
+        } finally {
+            client.close();
+        }
     }
 
     @Test
@@ -58,7 +66,12 @@ public class BacktraceClientThreadsInformationTest {
         client.send("test-message");
 
         // THEN
-        waiter.await();
-        client.close();
+        try {
+            waiter.await(50, TimeUnit.SECONDS);
+        } catch (Exception exception) {
+            waiter.fail(exception);
+        } finally {
+            client.close();
+        }
     }
 }

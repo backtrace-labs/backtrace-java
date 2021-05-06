@@ -69,8 +69,9 @@ public class DatabaseConfigTest {
             waiter.await(10, TimeUnit.SECONDS, RETRY_LIMIT);
         } catch (TimeoutException e) {
             Assert.fail(e.getMessage());
+        } finally {
+            client.close();
         }
-        client.close();
         Assert.assertEquals(RETRY_LIMIT, report.getRetryCounter());
     }
 

@@ -62,8 +62,9 @@ public class BacktraceClientTest {
         boolean isBacktraceThreadRunning = isBacktraceThreadRunning();
         backtraceClient.send("test-message");
         backtraceClient.close();
+
         boolean isBacktraceThreadRunningAfterClose = isBacktraceThreadRunning();
-        waiter.await();
+        waiter.await(5, TimeUnit.SECONDS);
 
         // THEN
         Assert.assertTrue(isBacktraceThreadRunning);
