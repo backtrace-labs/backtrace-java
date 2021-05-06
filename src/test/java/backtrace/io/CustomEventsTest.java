@@ -161,12 +161,12 @@ public class CustomEventsTest {
         // WHEN
         backtraceClient.send("");
         backtraceClient.send("");
-        backtraceClient.await();
+        backtraceClient.await(5, TimeUnit.SECONDS);
         int counterAfterFirstAwait =  result.size();
 
         backtraceClient.send("");
         backtraceClient.send("");
-        backtraceClient.await();
+        backtraceClient.await(5, TimeUnit.SECONDS);
         int counterAfterSecondAwait =  result.size();
 
         // THEN

@@ -40,8 +40,9 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
         if (lock.getCount() == 0) {
             return;
         }
-
-        lock.countDown();
+        if (lock.getCount() == 1) {
+            lock.countDown();
+        }
     }
 
     /**
@@ -52,13 +53,15 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
             notEmptyQueue.countDown();
         }
 
-        if (lock.getCount() != 0) {
+        if (lock.getCount() > 0) {
             return;
         }
-        
-        LOGGER.debug("Locking semaphore..");
-        lock.countUp();
-        LOGGER.debug("Semaphore locked..");
+
+        if (lock.getCount() == 0){
+            LOGGER.debug("Locking semaphore..");
+            lock.countUp();
+            LOGGER.debug("Semaphore locked..");
+        }
     }
 
     /**
