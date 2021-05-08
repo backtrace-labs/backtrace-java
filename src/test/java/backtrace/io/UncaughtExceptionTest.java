@@ -64,7 +64,6 @@ public class UncaughtExceptionTest {
         client.setCustomRequestHandler(new RequestHandler() {
             @Override
             public BacktraceResult onRequest(BacktraceData data) {
-                System.out.println("HANDLER");
                 waiter.resume();
                 return null;
             }
@@ -73,9 +72,7 @@ public class UncaughtExceptionTest {
         // WHEN
         Thread testThread = new Thread() {
             public void run() {
-                System.out.println("THREAD");
                 BacktraceExceptionHandler.enable(client);
-                System.out.println("NULL POINTER");
                 throw new NullPointerException("Expected!");
             }
         };
@@ -83,16 +80,12 @@ public class UncaughtExceptionTest {
 
         // THEN
         try {
-            System.out.println("JOIN");
             testThread.join();
-            System.out.println("AWAIT");
             waiter.await(10, TimeUnit.SECONDS);
         } catch (InterruptedException | TimeoutException exception) {
-            System.out.println("CATCH");
             Assert.fail(exception.getMessage());
         } finally {
             client.close();
-            System.out.println("FINALLY");
             testThread.interrupt();
         }
     }

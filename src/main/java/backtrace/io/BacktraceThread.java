@@ -9,9 +9,9 @@ import java.util.concurrent.CountDownLatch;
 public class BacktraceThread extends Thread {
     private static final transient Logger LOGGER = LoggerFactory.getLogger(BacktraceThread.class);
     private final static String THREAD_NAME = "backtrace-daemon";
-    private Backtrace backtrace;
+    private final Backtrace backtrace;
     private volatile boolean running = true;
-    private CountDownLatch closing = new CountDownLatch(1);
+    private final CountDownLatch closing = new CountDownLatch(1);
 
     /**
      * Creates new thread for handling and sending error reports passed to queue

@@ -32,22 +32,19 @@ class Backtrace {
      * Handles the queue of incoming error reports
      */
     void handleBacktraceMessage() {
-        try {
-            System.out.println("awaitNewMessage");
-            this.queue.awaitNewMessage();
-            System.out.println("new message!");
-            BacktraceMessage message = queue.poll();
-            System.out.println("new message: " + message.getBacktraceData().getReport().getMessage());
-            if (message != null) {
+        if (queue.isEmpty()) {
+            this.queue.unlock();
+            this.queue.queueIsEmpty();
+        }
 
+        try {
+            this.queue.awaitNewMessage();
+            BacktraceMessage message = queue.poll();
+            if (message != null) {
                 processSingleBacktraceMessage(message);
             }
         } catch (Exception e) {
             LOGGER.error("Exception during pipeline for message from queue..", e);
-        }
-
-        if (queue.isEmpty()) {
-            this.queue.unlock();
         }
     }
 

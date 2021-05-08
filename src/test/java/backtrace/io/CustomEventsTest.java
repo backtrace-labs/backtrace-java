@@ -183,7 +183,6 @@ public class CustomEventsTest {
             @Override
             public BacktraceResult onRequest(BacktraceData data) {
                 try {
-                    System.out.println("Waiting on request");
                     Thread.sleep(10000);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -270,7 +269,6 @@ public class CustomEventsTest {
         } finally {
             backtraceClient.close();
         }
-        System.out.println(outputAttributes.size());
         Assert.assertNotEquals(0, outputAttributes.size());
         Assert.assertTrue(outputAttributes.containsKey(attributeKey));
         Assert.assertEquals(attributeValue, outputAttributes.get(attributeKey));

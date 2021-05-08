@@ -23,10 +23,14 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
      * @param message error report
      */
     void addWithLock(BacktraceMessage message) {
-        System.out.println("add with lock");
+        LOGGER.debug("Lock processing semaphore");
         this.lock();
-        System.out.println("add message");
+
+        LOGGER.debug("Add message to the queue with lock");
         this.add(message);
+
+        LOGGER.debug("Queue not empty - release lock");
+        this.queueNotEmpty();
     }
 
     /**
@@ -34,10 +38,6 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
      */
     void unlock() {
         LOGGER.debug("Releasing semaphore..");
-
-        if(notEmptyQueue.getCount() == 0) {
-            notEmptyQueue.countUp();
-        }
 
         if (lock.getCount() == 0) {
             return;
@@ -48,23 +48,34 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
     }
 
     /**
+     * Lock semaphore because queue is empty
+     */
+    void queueIsEmpty() {
+        if(notEmptyQueue.getCount() == 0) {
+            LOGGER.debug("Queue is empty - locking thread semaphore");
+            notEmptyQueue.countUp();
+        }
+    }
+
+    /**
+     * Unlocking processing because queue is not empty
+     */
+    private void queueNotEmpty() {
+        if(notEmptyQueue.getCount() == 1) {
+            LOGGER.debug("Queue is not empty - releasing semaphore");
+            notEmptyQueue.countDown();
+        }
+    }
+
+    /**
      * Lock semaphore to inform that at least one of messages are processing
      */
     private void lock() {
-        System.out.println("lock");
-        System.out.println("notEmptyQueue.getCount()");
-        if(notEmptyQueue.getCount() == 1) {
-            System.out.println("notEmptyQueue.getCount() == 1");
-            notEmptyQueue.countDown();
-        }
-
         if (lock.getCount() > 0) {
-            System.out.println("lock.getCount() > 0");
             return;
         }
 
         if (lock.getCount() == 0){
-            System.out.println("lock.countUp()");
             LOGGER.debug("Locking semaphore..");
             lock.countUp();
             LOGGER.debug("Semaphore locked..");
@@ -83,13 +94,12 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
     }
 
     void close() {
-        if(notEmptyQueue.getCount() == 1) {
-            notEmptyQueue.countDown();
-        }
+        LOGGER.debug("Closing queue - releasing semaphore");
+        queueNotEmpty();
     }
 
     /**
-     * Wait until all messages in queue will be sent
+     * Wait until new message will be added to the queue
      *
      * @throws InterruptedException if the current thread is interrupted while waiting
      */

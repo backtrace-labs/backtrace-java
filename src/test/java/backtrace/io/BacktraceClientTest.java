@@ -33,7 +33,6 @@ public class BacktraceClientTest {
 
         boolean isBacktraceThreadRunningAfterClose = isBacktraceThreadRunning();
 
-        System.out.println(isBacktraceThreadRunning);
         // THEN
         Assert.assertTrue(isBacktraceThreadRunning);
         Assert.assertFalse(isBacktraceThreadRunningAfterClose);
