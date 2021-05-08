@@ -36,7 +36,7 @@ public class BacktraceClientThreadsInformationTest {
         client.send("test-message");
         // THEN
         try {
-            waiter.await(50, TimeUnit.SECONDS);
+            waiter.await(5, TimeUnit.SECONDS);
         } catch (Exception exception) {
             waiter.fail(exception);
         } finally {
@@ -66,7 +66,7 @@ public class BacktraceClientThreadsInformationTest {
 
         // THEN
         try {
-            waiter.await(50, TimeUnit.SECONDS);
+            waiter.await(5, TimeUnit.SECONDS);
         } catch (Exception exception) {
             waiter.fail(exception);
         } finally {

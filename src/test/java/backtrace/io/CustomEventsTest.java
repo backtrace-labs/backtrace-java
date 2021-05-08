@@ -301,7 +301,7 @@ public class CustomEventsTest {
         backtraceClient.send(report);
 
         try {
-            waiter.await(50, TimeUnit.SECONDS);
+            waiter.await(5, TimeUnit.SECONDS);
         } catch (Exception exception) {
             waiter.fail(exception);
         } finally {
