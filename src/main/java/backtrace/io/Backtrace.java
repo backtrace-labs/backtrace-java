@@ -34,15 +34,14 @@ class Backtrace {
     void handleBacktraceMessage() {
         if (queue.isEmpty()) {
             System.out.println("Queue is empty - unlock");
-            this.queue.unlock();
             System.out.println("Queue is empty - queueisEmpty");
             this.queue.queueIsEmpty();
+            this.queue.unlock();
         }
 
         System.out.println("Queue is NOT empty");
 
         try {
-
             System.out.println("Await new message");
             this.queue.awaitNewMessage();
             BacktraceMessage message = queue.poll();

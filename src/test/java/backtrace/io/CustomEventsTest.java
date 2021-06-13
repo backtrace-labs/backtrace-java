@@ -227,8 +227,8 @@ public class CustomEventsTest {
         }
 
         Assert.assertEquals(iterations, result.size());
-        Assert.assertEquals(new Integer(1) , result.get(0));
-        Assert.assertEquals(new Integer(iterations), result.get(iterations - 1));
+        Assert.assertEquals(Integer.valueOf(1), result.get(0));
+        Assert.assertEquals(Integer.valueOf(iterations), result.get(iterations - 1));
     }
 
     @Test
