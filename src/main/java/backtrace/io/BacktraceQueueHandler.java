@@ -31,7 +31,6 @@ class BacktraceQueueHandler {
      */
     void send(BacktraceReport report, Map<String, Object> attributes, OnServerResponseEvent callback, boolean allThreads) {
         BacktraceData backtraceData = new BacktraceData(report, attributes, allThreads);
-        System.out.println("Sending new message (add with lock): " + report.getMessage());
         queue.addWithLock(new BacktraceMessage(backtraceData, callback));
     }
 
@@ -41,7 +40,6 @@ class BacktraceQueueHandler {
      * @throws InterruptedException if the current thread is interrupted while waiting
      */
     void close() throws InterruptedException {
-        System.out.println("Closing queue handler");
         if(!this.thread.isAlive()){
             return;
         }
@@ -55,7 +53,6 @@ class BacktraceQueueHandler {
      * @throws InterruptedException if the current thread is interrupted while waiting
      */
     void await() throws InterruptedException {
-        System.out.println("Backtrace queue handler await");
         this.queue.await();
     }
 

@@ -54,10 +54,8 @@ public class BacktraceThread extends Thread {
     @Override
     public void run() {
         while (running) {
-            System.out.println("Backtrace thread - handle backtrace message");
             backtrace.handleBacktraceMessage();
         }
-        System.out.println("Backtrace thread - closing count down");
         this.closing.countDown();
         LOGGER.info("BacktraceThread has completed the run method");
     }

@@ -24,17 +24,13 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
      * @param message error report
      */
     void addWithLock(BacktraceMessage message) {
-        System.out.println("addWithLock");
         LOGGER.debug("Lock processing semaphore");
-        System.out.println("Lock processing semaphore");
         this.lock();
 
         LOGGER.debug("Add message to the queue with lock");
-        System.out.println("Add message to the queue with lock");
         this.add(message);
 
         LOGGER.debug("Queue not empty - release lock");
-        System.out.println("Queue not empty - release lock");
         this.queueNotEmpty();
     }
 
@@ -43,7 +39,6 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
      */
     void unlock() {
         LOGGER.debug("Releasing semaphore..");
-        System.out.println("Releasing semaphore.. " + processingLock.getCount());
 
         if (processingLock.getCount() == 1) {
             processingLock.countDown();
@@ -59,7 +54,6 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
      */
     void queueIsEmpty() {
         LOGGER.debug("Queue is empty, notEmptyQueue counter: " + notEmptyQueueLock.getCount());
-        System.out.println("Queue is empty, notEmptyQueue counter: " + notEmptyQueueLock.getCount());
         if(notEmptyQueueLock.getCount() == 0) {
             LOGGER.debug("Queue is empty - locking thread semaphore");
             notEmptyQueueLock.countUp();
@@ -71,7 +65,6 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
      */
     private void queueNotEmpty() {
         LOGGER.debug("Queue is NOT empty, notEmptyQueue counter: " + notEmptyQueueLock.getCount());
-        System.out.println("Queue is NOT empty, notEmptyQueue counter: " + notEmptyQueueLock.getCount());
         if(notEmptyQueueLock.getCount() == 1) {
             LOGGER.debug("Queue is not empty - releasing semaphore");
             notEmptyQueueLock.countDown();
@@ -84,10 +77,8 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
     private void lock() {
         if (processingLock.getCount() == 0){
             LOGGER.debug("Locking semaphore..");
-            System.out.println("Locking semaphore.. " + processingLock.getCount());
             processingLock.countUp();
             LOGGER.debug("Semaphore locked..");
-            System.out.println("Semaphore locked.. " + processingLock.getCount());
         }
     }
 
@@ -98,10 +89,8 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
      */
     void await() throws InterruptedException {
         LOGGER.debug("Waiting for the semaphore");
-        System.out.println("Waiting for the semaphore " + processingLock.getCount());
         processingLock.await();
         LOGGER.debug("The semaphore has been released " + processingLock.getCount());
-        System.out.println("The semaphore has been released");
     }
 
     boolean isClosing() {
@@ -110,7 +99,6 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
 
     void close() {
         LOGGER.debug("Closing queue - releasing semaphore");
-        System.out.println("Closing queue - releasing semaphore " + processingLock.getCount());
         if(closingLock.getCount() == 1) {
             closingLock.countDown();
         }
@@ -124,10 +112,8 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
      */
     void awaitNewMessage() throws InterruptedException {
         LOGGER.debug("Waiting until queue will not be empty");
-        System.out.println("Waiting until queue will not be empty " + notEmptyQueueLock.getCount());
         notEmptyQueueLock.await();
         LOGGER.debug("Queue is not empty");
-        System.out.println("Queue is not empty " + notEmptyQueueLock.getCount());
     }
 
 
@@ -143,10 +129,8 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
     boolean await(long timeout,
                   TimeUnit unit) throws InterruptedException {
         LOGGER.debug("Waiting for the semaphore");
-        System.out.println("Waiting for the semaphore " + processingLock.getCount());
         boolean result = processingLock.await(timeout, unit);
         LOGGER.debug("The semaphore has been released " + processingLock.getCount());
-        System.out.println("The semaphore has been released");
         return result;
     }
 }
