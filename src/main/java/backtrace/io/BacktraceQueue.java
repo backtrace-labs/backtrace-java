@@ -14,8 +14,8 @@ import java.util.concurrent.TimeUnit;
 class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
 
     private static final transient Logger LOGGER = LoggerFactory.getLogger(BacktraceQueue.class);
-    private final CountLatch processingLock = new CountLatch(0, 0);
-    private final CountLatch notEmptyQueueLock = new CountLatch(1, 0);
+    private final CountLatch processingLock = new CountLatch(0, 0); // state 1 if processing
+    private final CountLatch notEmptyQueueLock = new CountLatch(1, 0); // state 1 if queue is empty
 
     /**
      * Add message to queue with locking semaphore to inform that at least one of messages are processing
@@ -113,7 +113,9 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
     void awaitNewMessage() throws InterruptedException {
         LOGGER.debug("Waiting until queue will not be empty");
         System.out.println("Waiting until queue will not be empty " + notEmptyQueueLock.getCount());
-        notEmptyQueueLock.await();
+        if(processingLock.getCount() == 1) {
+            notEmptyQueueLock.await();
+        }
         LOGGER.debug("Queue is not empty");
         System.out.println("Queue is not empty " + notEmptyQueueLock.getCount());
     }
