@@ -1,12 +1,8 @@
 package backtrace.io;
 
-import backtrace.io.data.report.BacktraceStackFrame;
 import backtrace.io.data.report.BacktraceStackTrace;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class StackTraceTest {
 

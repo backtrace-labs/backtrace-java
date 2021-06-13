@@ -17,9 +17,9 @@ import java.util.UUID;
  */
 class Attributes {
     private static final transient Logger LOGGER = LoggerFactory.getLogger(backtrace.io.data.Attributes.class);
-    
+
     private static final String MACHINE_ID = generateMachineId();
-    
+
     /**
      * Gets built-in primitive attributes
      */

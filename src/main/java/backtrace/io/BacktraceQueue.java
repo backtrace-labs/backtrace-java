@@ -54,7 +54,7 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
      */
     void queueIsEmpty() {
         LOGGER.debug("Queue is empty, notEmptyQueue counter: " + notEmptyQueueLock.getCount());
-        if(notEmptyQueueLock.getCount() == 0) {
+        if (notEmptyQueueLock.getCount() == 0) {
             LOGGER.debug("Queue is empty - locking thread semaphore");
             notEmptyQueueLock.countUp();
         }
@@ -65,7 +65,7 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
      */
     private void queueNotEmpty() {
         LOGGER.debug("Queue is NOT empty, notEmptyQueue counter: " + notEmptyQueueLock.getCount());
-        if(notEmptyQueueLock.getCount() == 1) {
+        if (notEmptyQueueLock.getCount() == 1) {
             LOGGER.debug("Queue is not empty - releasing semaphore");
             notEmptyQueueLock.countDown();
         }
@@ -75,7 +75,7 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
      * Lock semaphore to inform that at least one of messages are processing
      */
     private void lock() {
-        if (processingLock.getCount() == 0){
+        if (processingLock.getCount() == 0) {
             LOGGER.debug("Locking semaphore..");
             processingLock.countUp();
             LOGGER.debug("Semaphore locked..");
@@ -99,7 +99,7 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
 
     void close() {
         LOGGER.debug("Closing queue - releasing semaphore");
-        if(closingLock.getCount() == 1) {
+        if (closingLock.getCount() == 1) {
             closingLock.countDown();
         }
         queueNotEmpty();

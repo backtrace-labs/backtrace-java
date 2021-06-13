@@ -5,17 +5,16 @@ import backtrace.io.data.BacktraceReport;
 import backtrace.io.events.BeforeSendEvent;
 import backtrace.io.events.OnServerResponseEvent;
 import backtrace.io.events.RequestHandler;
-import backtrace.io.helpers.CountLatch;
 import backtrace.io.helpers.FileHelper;
 import backtrace.io.http.BacktraceResult;
 import net.jodah.concurrentunit.Waiter;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 
@@ -25,7 +24,7 @@ public class CustomEventsTest {
     private BacktraceConfig config;
 
     @Before
-    public void init() throws Exception{
+    public void init() throws Exception {
         this.cleanDatabaseDir();
         config = new BacktraceConfig("url", "token");
         config.setDatabasePath(this.databasePath);
@@ -135,7 +134,6 @@ public class CustomEventsTest {
     }
 
 
-
     @Test
     public void multipleAwait() throws InterruptedException {
         // GIVEN
@@ -153,7 +151,7 @@ public class CustomEventsTest {
         backtraceClient.send("");
         backtraceClient.send("");
         backtraceClient.await(5, TimeUnit.SECONDS);
-        final int counterAfterFirstAwait =  result.size();
+        final int counterAfterFirstAwait = result.size();
 
         backtraceClient.send("");
         backtraceClient.send("");
@@ -187,11 +185,10 @@ public class CustomEventsTest {
         backtraceClient.send("");
 
         // THEN
-        try{
+        try {
             boolean result = backtraceClient.await(2, TimeUnit.SECONDS);
             Assert.assertFalse(result);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             Assert.fail(e.toString());
         } finally {
             backtraceClient.close();

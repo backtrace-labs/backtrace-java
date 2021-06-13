@@ -70,11 +70,11 @@ public class BacktraceClientTest {
         Assert.assertFalse(isBacktraceThreadRunningAfterClose);
     }
 
-    private boolean isBacktraceThreadRunning(){
+    private boolean isBacktraceThreadRunning() {
         Set<Thread> threads = Thread.getAllStackTraces().keySet();
 
         for (Thread t : threads) {
-            if (t == null){
+            if (t == null) {
                 continue;
             }
             if (t.getName().equals(THREAD_NAME)) {

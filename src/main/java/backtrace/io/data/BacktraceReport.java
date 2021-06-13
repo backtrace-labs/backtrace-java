@@ -180,14 +180,14 @@ public class BacktraceReport implements Serializable {
      * Creates new instance of Backtrace report to sending a report
      * with user message, application exception and attributes
      *
-     * @param message         Custom client message
-     * @param exception       Current exception
-     * @param attributes      Additional information about application state
+     * @param message    Custom client message
+     * @param exception  Current exception
+     * @param attributes Additional information about application state
      */
     public BacktraceReport(
             String message,
             Exception exception,
-            Map<String, Object> attributes){
+            Map<String, Object> attributes) {
         this(message, exception, attributes, null);
     }
 
@@ -202,7 +202,7 @@ public class BacktraceReport implements Serializable {
     public BacktraceReport(
             String message,
             Exception exception,
-            List<String> attachmentPaths){
+            List<String> attachmentPaths) {
         this(message, exception, null, attachmentPaths);
     }
 
@@ -210,12 +210,12 @@ public class BacktraceReport implements Serializable {
      * Creates new instance of Backtrace report to sending a report
      * with message and application exception
      *
-     * @param message         Custom client message
-     * @param exception       Current exception
+     * @param message   Custom client message
+     * @param exception Current exception
      */
     public BacktraceReport(
             String message,
-            Exception exception){
+            Exception exception) {
         this(message, exception, null, null);
     }
 

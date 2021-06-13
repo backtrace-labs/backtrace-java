@@ -38,7 +38,7 @@ class Backtrace {
         }
 
         try {
-            if(this.queue.isClosing()) {
+            if (this.queue.isClosing()) {
                 return;
             }
             this.queue.awaitNewMessage();

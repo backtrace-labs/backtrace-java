@@ -1,7 +1,6 @@
 package backtrace.io.data;
 
 import backtrace.io.data.report.ThreadInformation;
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -49,7 +48,7 @@ public class BacktraceDataTest {
     }
 
     @Test
-    public void gatherInformationAboutAllThreads(){
+    public void gatherInformationAboutAllThreads() {
         // GIVEN
         final BacktraceReport report = new BacktraceReport("");
 
@@ -62,7 +61,7 @@ public class BacktraceDataTest {
     }
 
     @Test
-    public void gatherInformationOnlyAboutMainThread(){
+    public void gatherInformationOnlyAboutMainThread() {
         // GIVEN
         final boolean allThreads = false;
         final BacktraceReport report = new BacktraceReport("");
