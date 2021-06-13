@@ -33,17 +33,25 @@ class Backtrace {
      */
     void handleBacktraceMessage() {
         if (queue.isEmpty()) {
+            System.out.println("Queue is empty - unlock");
             this.queue.unlock();
+            System.out.println("Queue is empty - queueisEmpty");
             this.queue.queueIsEmpty();
         }
 
+        System.out.println("Queue is NOT empty");
+
         try {
+
+            System.out.println("Await new message");
             this.queue.awaitNewMessage();
             BacktraceMessage message = queue.poll();
             if (message != null) {
+                System.out.println("Message is not null " + message.getBacktraceData().getReport().getMessage());
                 processSingleBacktraceMessage(message);
             }
         } catch (Exception e) {
+            System.out.println(e);
             LOGGER.error("Exception during pipeline for message from queue..", e);
         }
     }

@@ -73,21 +73,13 @@ public class CustomEventsTest {
         // GIVEN
         final BacktraceClient backtraceClient = new BacktraceClient(config);
         final Waiter waiter = new Waiter();
-        final RequestHandler customRequestHandler = new RequestHandler() {
-            @Override
-            public BacktraceResult onRequest(BacktraceData data) {
-                return BacktraceResult.onSuccess(data.getReport(), message);
-            }
-        };
+        final RequestHandler customRequestHandler = data -> BacktraceResult.onSuccess(data.getReport(), message);
         backtraceClient.setCustomRequestHandler(customRequestHandler);
 
         // WHEN
-        OnServerResponseEvent callback = new OnServerResponseEvent() {
-            @Override
-            public void onEvent(BacktraceResult backtraceResult) {
-                Assert.assertEquals(message, backtraceResult.getMessage());
-                waiter.resume();
-            }
+        OnServerResponseEvent callback = backtraceResult -> {
+            Assert.assertEquals(message, backtraceResult.getMessage());
+            waiter.resume();
         };
 
         backtraceClient.send(this.message, callback);
