@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
 
     private static final transient Logger LOGGER = LoggerFactory.getLogger(BacktraceQueue.class);
-    private final CountLatch processingLock = new CountLatch(0, 0); // state 1 if processing
+    private final CountLatch processingLock = new CountLatch(0, 0); // state 1 if should process message
     private final CountLatch notEmptyQueueLock = new CountLatch(1, 0); // state 1 if queue is empty
     private final CountLatch closingLock = new CountLatch(1, 0); // state 0 if closing
 
