@@ -43,6 +43,9 @@ class Backtrace {
 
         try {
             System.out.println("Await new message");
+            if(this.queue.isClosing()) {
+                return;
+            }
             this.queue.awaitNewMessage();
             BacktraceMessage message = queue.poll();
             if (message != null) {

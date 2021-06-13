@@ -16,6 +16,7 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
     private static final transient Logger LOGGER = LoggerFactory.getLogger(BacktraceQueue.class);
     private final CountLatch processingLock = new CountLatch(0, 0); // state 1 if processing
     private final CountLatch notEmptyQueueLock = new CountLatch(1, 0); // state 1 if queue is empty
+    private final CountLatch closingLock = new CountLatch(1, 0); // state 0 if closing
 
     /**
      * Add message to queue with locking semaphore to inform that at least one of messages are processing
@@ -47,6 +48,10 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
         if (processingLock.getCount() == 1) {
             processingLock.countDown();
         }
+    }
+
+    boolean shouldHandleMessages() {
+        return processingLock.getCount() == 1;
     }
 
     /**
@@ -99,9 +104,16 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
         System.out.println("The semaphore has been released");
     }
 
+    boolean isClosing() {
+        return closingLock.getCount() == 0;
+    }
+
     void close() {
         LOGGER.debug("Closing queue - releasing semaphore");
         System.out.println("Closing queue - releasing semaphore " + processingLock.getCount());
+        if(closingLock.getCount() == 1) {
+            closingLock.countDown();
+        }
         queueNotEmpty();
     }
 
@@ -113,9 +125,7 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
     void awaitNewMessage() throws InterruptedException {
         LOGGER.debug("Waiting until queue will not be empty");
         System.out.println("Waiting until queue will not be empty " + notEmptyQueueLock.getCount());
-        if(processingLock.getCount() == 1) {
-            notEmptyQueueLock.await();
-        }
+        notEmptyQueueLock.await();
         LOGGER.debug("Queue is not empty");
         System.out.println("Queue is not empty " + notEmptyQueueLock.getCount());
     }
