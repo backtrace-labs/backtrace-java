@@ -33,7 +33,6 @@ public class BacktraceClientTest {
 
         boolean isBacktraceThreadRunningAfterClose = isBacktraceThreadRunning();
 
-        System.out.println(isBacktraceThreadRunning);
         // THEN
         Assert.assertTrue(isBacktraceThreadRunning);
         Assert.assertFalse(isBacktraceThreadRunningAfterClose);
@@ -62,19 +61,20 @@ public class BacktraceClientTest {
         boolean isBacktraceThreadRunning = isBacktraceThreadRunning();
         backtraceClient.send("test-message");
         backtraceClient.close();
+
         boolean isBacktraceThreadRunningAfterClose = isBacktraceThreadRunning();
-        waiter.await();
+        waiter.await(5, TimeUnit.SECONDS);
 
         // THEN
         Assert.assertTrue(isBacktraceThreadRunning);
         Assert.assertFalse(isBacktraceThreadRunningAfterClose);
     }
 
-    private boolean isBacktraceThreadRunning(){
+    private boolean isBacktraceThreadRunning() {
         Set<Thread> threads = Thread.getAllStackTraces().keySet();
 
         for (Thread t : threads) {
-            if (t == null){
+            if (t == null) {
                 continue;
             }
             if (t.getName().equals(THREAD_NAME)) {

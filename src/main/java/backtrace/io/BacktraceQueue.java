@@ -1,8 +1,6 @@
 package backtrace.io;
 
 import backtrace.io.helpers.CountLatch;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
@@ -13,9 +11,9 @@ import java.util.concurrent.TimeUnit;
  */
 class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
 
-    private static final transient Logger LOGGER = LoggerFactory.getLogger(BacktraceQueue.class);
-    private final CountLatch lock = new CountLatch(0, 0);
-    private final CountLatch notEmptyQueue = new CountLatch(1, 0);
+    private final CountLatch processingLock = new CountLatch(0, 0); // state 1 if should process message
+    private final CountLatch notEmptyQueueLock = new CountLatch(1, 0); // state 1 if queue is empty
+    private final CountLatch closingLock = new CountLatch(1, 0); // state 0 if closing
 
     /**
      * Add message to queue with locking semaphore to inform that at least one of messages are processing
@@ -24,41 +22,50 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
      */
     void addWithLock(BacktraceMessage message) {
         this.lock();
+
         this.add(message);
+
+        this.queueNotEmpty();
     }
 
     /**
      * Unlock semaphore to inform that all messages from queue are sent
      */
     void unlock() {
-        LOGGER.debug("Releasing semaphore..");
-
-        if(notEmptyQueue.getCount() == 0) {
-            notEmptyQueue.countUp();
+        if (processingLock.getCount() == 1) {
+            processingLock.countDown();
         }
+    }
 
-        if (lock.getCount() == 0) {
-            return;
+    boolean shouldHandleMessages() {
+        return processingLock.getCount() == 1;
+    }
+
+    /**
+     * Lock semaphore because queue is empty
+     */
+    void queueIsEmpty() {
+        if (notEmptyQueueLock.getCount() == 0) {
+            notEmptyQueueLock.countUp();
         }
+    }
 
-        lock.countDown();
+    /**
+     * Unlocking processing because queue is not empty
+     */
+    private void queueNotEmpty() {
+        if (notEmptyQueueLock.getCount() == 1) {
+            notEmptyQueueLock.countDown();
+        }
     }
 
     /**
      * Lock semaphore to inform that at least one of messages are processing
      */
     private void lock() {
-        if(notEmptyQueue.getCount() == 1) {
-            notEmptyQueue.countDown();
+        if (processingLock.getCount() == 0) {
+            processingLock.countUp();
         }
-
-        if (lock.getCount() != 0) {
-            return;
-        }
-        
-        LOGGER.debug("Locking semaphore..");
-        lock.countUp();
-        LOGGER.debug("Semaphore locked..");
     }
 
     /**
@@ -67,26 +74,27 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
      * @throws InterruptedException if the current thread is interrupted while waiting
      */
     void await() throws InterruptedException {
-        LOGGER.debug("Waiting for the semaphore");
-        lock.await();
-        LOGGER.debug("The semaphore has been released");
+        processingLock.await();
+    }
+
+    boolean isClosing() {
+        return closingLock.getCount() == 0;
     }
 
     void close() {
-        if(notEmptyQueue.getCount() == 1) {
-            notEmptyQueue.countDown();
+        if (closingLock.getCount() == 1) {
+            closingLock.countDown();
         }
+        queueNotEmpty();
     }
 
     /**
-     * Wait until all messages in queue will be sent
+     * Wait until new message will be added to the queue
      *
      * @throws InterruptedException if the current thread is interrupted while waiting
      */
     void awaitNewMessage() throws InterruptedException {
-        LOGGER.debug("Waiting until queue will not be empty");
-        notEmptyQueue.await();
-        LOGGER.debug("Queue is not empty");
+        notEmptyQueueLock.await();
     }
 
 
@@ -101,9 +109,7 @@ class BacktraceQueue extends ConcurrentLinkedQueue<BacktraceMessage> {
      */
     boolean await(long timeout,
                   TimeUnit unit) throws InterruptedException {
-        LOGGER.debug("Waiting for the semaphore");
-        boolean result = lock.await(timeout, unit);
-        LOGGER.debug("The semaphore has been released");
+        boolean result = processingLock.await(timeout, unit);
         return result;
     }
 }

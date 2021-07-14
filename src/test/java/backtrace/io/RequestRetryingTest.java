@@ -31,7 +31,7 @@ public class RequestRetryingTest {
     private Integer httpStatusCode;
     private boolean retry;
 
-    public RequestRetryingTest(BacktraceResultStatus serverResultStatus, Integer httpStatusCode, boolean retry){
+    public RequestRetryingTest(BacktraceResultStatus serverResultStatus, Integer httpStatusCode, boolean retry) {
         this.serverResultStatus = serverResultStatus;
         this.httpStatusCode = httpStatusCode;
         this.retry = retry;

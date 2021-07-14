@@ -3,7 +3,6 @@ package backtrace.io.data;
 import backtrace.io.data.report.SourceCode;
 import backtrace.io.data.report.SourceCodeData;
 import backtrace.io.data.report.ThreadData;
-
 import backtrace.io.data.report.ThreadInformation;
 import backtrace.io.helpers.FileHelper;
 import com.google.gson.annotations.SerializedName;
@@ -127,7 +126,7 @@ public class BacktraceData implements Serializable {
      * @param clientAttributes Attributes which should be added to BacktraceData object
      */
     public BacktraceData(BacktraceReport report, Map<String, Object> clientAttributes) {
-        this(report,clientAttributes, true);
+        this(report, clientAttributes, true);
     }
 
     /**
@@ -203,6 +202,7 @@ public class BacktraceData implements Serializable {
 
     /**
      * Sets information about all threads
+     *
      * @param allThreads if true information about all threads will be gathered
      */
     private void setThreadsInformation(boolean allThreads) {

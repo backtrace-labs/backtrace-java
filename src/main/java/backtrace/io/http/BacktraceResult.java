@@ -109,8 +109,8 @@ public class BacktraceResult {
     /**
      * Returns result when error occurs while sending data to API
      *
-     * @param report    executed report
-     * @param exception current exception
+     * @param report         executed report
+     * @param exception      current exception
      * @param httpStatusCode returned http status code
      * @return BacktraceResult with exception information
      */
