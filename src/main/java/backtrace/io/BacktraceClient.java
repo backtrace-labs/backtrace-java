@@ -138,6 +138,9 @@ public class BacktraceClient {
      * @throws InterruptedException if the current thread is interrupted while waiting
      */
     public void close() throws InterruptedException {
+        if (this.config.isAwaitMessagesOnClose()) {
+            this.await();
+        }
         this.backtrace.close();
     }
 
