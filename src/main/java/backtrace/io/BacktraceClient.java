@@ -5,12 +5,15 @@ import backtrace.io.data.BacktraceReport;
 import backtrace.io.events.BeforeSendEvent;
 import backtrace.io.events.OnServerResponseEvent;
 import backtrace.io.events.RequestHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class BacktraceClient {
+    private static final transient Logger LOGGER = LoggerFactory.getLogger(BacktraceClient.class);
     private BacktraceQueueHandler backtrace;
     private BacktraceConfig config;
     private final Map<String, Object> customAttributes;
@@ -133,12 +136,23 @@ public class BacktraceClient {
     }
 
     /**
-     * Stop Backtrace Thread and wait until last message will be sent
+     * Stop Backtrace Thread and wait until current processing message will be sent
      *
      * @throws InterruptedException if the current thread is interrupted while waiting
      */
     public void close() throws InterruptedException {
-        if (this.config.isAwaitMessagesOnClose()) {
+        this.close(this.config.isAwaitMessagesOnClose());
+    }
+
+    /**
+     * Stop Backtrace Thread and wait until current processing message will be sent
+     *
+     * @param await if true wait until all added messages will be sent
+     * @throws InterruptedException if the current thread is interrupted while waiting
+     */
+    public void close(boolean await) throws InterruptedException {
+        LOGGER.debug("Closing Backtrace Client - awaiting: " + await);
+        if (await) {
             this.await();
         }
         this.backtrace.close();
