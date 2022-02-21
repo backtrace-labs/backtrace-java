@@ -26,7 +26,7 @@ dependencies {
 <dependency>
   <groupId>com.github.backtrace-labs.backtrace-java</groupId>
   <artifactId>backtrace-java</artifactId>
-  <version>0.9.3</version>
+  <version>0.9.4</version>
 </dependency>
 ```
 

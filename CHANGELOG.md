@@ -1,5 +1,8 @@
 # Backtrace Java Release Notes
 
+## Version 0.9.4 - 21.02.2022
+- Add option to await on closing Backtrace Client
+
 ## Version 0.9.3 - 14.07.2021
 - Improve the queue handling to eliminate rare deadlocks occurred during closing BacktraceClient
 

@@ -119,7 +119,7 @@ class Attributes {
             String macAddress = sb.toString();
             String hex = macAddress.replace(":", "").replace("-", "");
             return UUID.nameUUIDFromBytes(hex.getBytes()).toString();
-        } catch (SocketException | UnknownHostException exception) {
+        } catch (Exception exception) {
             LOGGER.debug(String.format("%s %s", "Exception occurs during generating machine id", exception.getMessage()));
         }
         return UUID.randomUUID().toString();

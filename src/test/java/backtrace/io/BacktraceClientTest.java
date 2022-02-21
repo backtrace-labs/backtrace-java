@@ -70,6 +70,38 @@ public class BacktraceClientTest {
         Assert.assertFalse(isBacktraceThreadRunningAfterClose);
     }
 
+    @Test
+    public void sendAllMessagesOnBacktraceClientClose() throws InterruptedException, TimeoutException {
+        // GIVEN
+        final int messages = 5;
+        final BacktraceConfig backtraceConfig = new BacktraceConfig("https://backtrace.io/");
+        backtraceConfig.setAwaitMessagesOnClose(true);
+        final Waiter waiter = new Waiter();
+        backtraceConfig.setRequestHandler(data -> {
+            try {
+                Thread.sleep(500);
+                waiter.resume();
+            } catch (InterruptedException e) {
+                waiter.fail(e);
+            }
+            return BacktraceResult.onSuccess(data.getReport(), data.getReport().getMessage());
+        });
+        BacktraceClient backtraceClient = new BacktraceClient(backtraceConfig);
+
+        // WHEN
+        boolean isBacktraceThreadRunning = isBacktraceThreadRunning();
+        for (int i = 0; i < messages; i++) {
+            backtraceClient.send("test-message: " + i);
+        }
+        backtraceClient.close();
+        boolean isBacktraceThreadRunningAfterClose = isBacktraceThreadRunning();
+
+        // THEN
+        waiter.await(1, TimeUnit.SECONDS, messages);
+        Assert.assertTrue(isBacktraceThreadRunning);
+        Assert.assertFalse(isBacktraceThreadRunningAfterClose);
+    }
+
     private boolean isBacktraceThreadRunning() {
         Set<Thread> threads = Thread.getAllStackTraces().keySet();
 

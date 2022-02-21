@@ -12,6 +12,7 @@ public class BacktraceConfig {
     private volatile RequestHandler requestHandler;
     private volatile BeforeSendEvent beforeSendEvent;
     private volatile boolean gatherAllThreads = false;
+    private volatile boolean awaitMessagesOnClose = false;
 
     /**
      * Creates Backtrace credentials instance
@@ -86,6 +87,14 @@ public class BacktraceConfig {
 
     public void setGatherAllThreads(boolean gatherAllThreads) {
         this.gatherAllThreads = gatherAllThreads;
+    }
+
+    public boolean isAwaitMessagesOnClose() {
+        return awaitMessagesOnClose;
+    }
+
+    public void setAwaitMessagesOnClose(boolean awaitMessagesOnClose) {
+        this.awaitMessagesOnClose = awaitMessagesOnClose;
     }
 
     void setDatabasePath(String databasePath) {
