@@ -17,7 +17,7 @@ We are working closely with users for their initial rollouts of backtrace-java. 
 * Gradle
 ```
 dependencies {
-    implementation 'com.github.backtrace-labs.backtrace-java:backtrace-java:0.9.3'
+    implementation 'com.github.backtrace-labs.backtrace-java:backtrace-java:0.9.4'
 }
 ```
 
