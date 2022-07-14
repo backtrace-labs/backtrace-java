@@ -11,13 +11,13 @@ public class AttributesTest {
     @Test
     public void createAttributes() {
         // GIVEN
-        Map<String, Object> clientAttributes = new HashMap<>() {{
+        final Map<String, Object> clientAttributes = new HashMap<>() {{
             put("client-attr-1", "1");
             put("client-attr-2", null);
             put(null, null);
         }};
 
-        Map<String, Object> reportAttributes = new HashMap<>() {{
+        final Map<String, Object> reportAttributes = new HashMap<>() {{
             put("report-attr-1", new HashMap<>() {{
                         put("inner-attr-1", "test");
                         put(null, null);
@@ -27,10 +27,10 @@ public class AttributesTest {
             put(null, null);
         }};
 
-        BacktraceReport report = new BacktraceReport("message", reportAttributes);
+        final BacktraceReport report = new BacktraceReport("message", reportAttributes);
 
         // WHEN
-        Attributes result = new Attributes(report, clientAttributes);
+        final Attributes result = new Attributes(report, clientAttributes);
 
         // THEN
         Assert.assertEquals(result.getAttributes().get("client-attr-1"), "1");
@@ -39,7 +39,7 @@ public class AttributesTest {
 
         Assert.assertNull(result.getAttributes().get("report-attr-2"));
 
-        Map<String, Object> innerMap = (Map<String, Object>) result.getComplexAttributes().get("report-attr-1");
+        final Map<String, Object> innerMap = (Map<String, Object>) result.getComplexAttributes().get("report-attr-1");
         Assert.assertEquals(innerMap.get("inner-attr-1"), "test");
         Assert.assertNull(innerMap.get(null));
     }
