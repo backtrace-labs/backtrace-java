@@ -49,6 +49,10 @@ class Attributes {
         return attributes;
     }
 
+    Map<String, Object> getComplexAttributes() {
+        return complexAttributes;
+    }
+
     /**
      * Sets information about exception (message and classifier)
      *
@@ -133,10 +137,10 @@ class Attributes {
      * @param clientAttributes Client's attributes (report and client)
      */
     private void splitClientAttributes(BacktraceReport report, Map<String, Object> clientAttributes) {
-        Map<String, Object> attributes = BacktraceReport.concatAttributes(report, clientAttributes);
+        final Map<String, Object> attributes = BacktraceReport.concatAttributes(report, clientAttributes);
         for (Map.Entry<String, Object> entry : attributes.entrySet()) {
-            Object value = entry.getValue();
-            Class type = value.getClass();
+            final Object value = entry.getValue();
+            final Class type = value == null ? Object.class : value.getClass();
             if (type.isPrimitive() || value instanceof String || type.isEnum()) {
                 this.attributes.put(entry.getKey(), value);
             } else {
