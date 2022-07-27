@@ -17,16 +17,16 @@ test {
 }
 
 dependencies {
-    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'com.google.code.gson:gson:2.9.0'
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-    implementation 'com.google.guava:guava:28.0-jre'
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+    implementation 'com.google.guava:guava:31.1-jre'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.36'
     // Use JUnit test framework
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.powermock:powermock-core:2.0.9'
     testImplementation 'org.powermock:powermock-api-mockito2:2.0.9'
     testImplementation 'org.powermock:powermock-module-junit4:2.0.9'
-    testImplementation 'net.jodah:concurrentunit:0.4.4'
+    testImplementation 'net.jodah:concurrentunit:0.4.6'
 }
 
 jacocoTestReport {
