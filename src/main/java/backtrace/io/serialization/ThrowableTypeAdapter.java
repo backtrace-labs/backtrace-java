@@ -22,16 +22,16 @@ public class ThrowableTypeAdapter implements JsonSerializer<Throwable> {
             json.add("cause", cause);
         }
 
-		json.add("stackTrace", getStackTrace(src, context));
+        json.add("stackTrace", getStackTrace(src, context));
         return json;
     }
 
-	private JsonArray getStackTrace(Throwable src, JsonSerializationContext context) {
-		JsonArray trace = new JsonArray();
-		Arrays.stream(src.getStackTrace()).forEach(stackTraceElement -> {
-			trace.add(context.serialize(stackTraceElement));
-		});
-		return trace;
-	}
+    private JsonArray getStackTrace(Throwable src, JsonSerializationContext context) {
+        JsonArray trace = new JsonArray();
+        Arrays.stream(src.getStackTrace()).forEach(stackTraceElement -> {
+            trace.add(context.serialize(stackTraceElement));
+        });
+        return trace;
+    }
 
 }
