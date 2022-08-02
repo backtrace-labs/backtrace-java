@@ -19,9 +19,6 @@ public class StackTraceElementTypeAdapter implements JsonSerializer<StackTraceEl
 
     private JsonElement toJson(StackTraceElement src) {
         JsonObject json = new JsonObject();
-        json.addProperty("classLoaderName", src.getClassLoaderName());
-        json.addProperty("moduleName", src.getModuleName());
-        json.addProperty("moduleVersion", src.getModuleVersion());
         json.addProperty("declaringClass", src.getClassName());
         json.addProperty("methodName", src.getMethodName());
         json.addProperty("fileName", src.getFileName());
