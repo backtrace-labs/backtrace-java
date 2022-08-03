@@ -11,14 +11,14 @@ public class AttributesTest {
     @Test
     public void createAttributes() {
         // GIVEN
-        final Map<String, Object> clientAttributes = new HashMap<>() {{
+        final Map<String, Object> clientAttributes = new HashMap<String, Object>() {{
             put("client-attr-1", "1");
             put("client-attr-2", null);
             put(null, null);
         }};
 
-        final Map<String, Object> reportAttributes = new HashMap<>() {{
-            put("report-attr-1", new HashMap<>() {{
+        final Map<String, Object> reportAttributes = new HashMap<String, Object>() {{
+            put("report-attr-1", new HashMap<String, Object>() {{
                         put("inner-attr-1", "test");
                         put(null, null);
                     }}
