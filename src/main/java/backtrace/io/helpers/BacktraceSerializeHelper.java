@@ -1,5 +1,7 @@
 package backtrace.io.helpers;
 
+import backtrace.io.serialization.StackTraceElementTypeAdapter;
+import backtrace.io.serialization.ThrowableTypeAdapter;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -10,6 +12,12 @@ import com.google.gson.GsonBuilder;
  */
 public class BacktraceSerializeHelper {
 
+    private static final Gson gson = new GsonBuilder()
+            .registerTypeHierarchyAdapter(Throwable.class, new ThrowableTypeAdapter())
+            .registerTypeHierarchyAdapter(StackTraceElement.class, new StackTraceElementTypeAdapter())
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES)
+            .create();
+
     /**
      * Serialize given object to JSON string
      *
@@ -17,7 +25,6 @@ public class BacktraceSerializeHelper {
      * @return serialized object in JSON string format
      */
     public static String toJson(Object object) {
-        Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES).create();
         return gson.toJson(object);
     }
 
@@ -31,6 +38,6 @@ public class BacktraceSerializeHelper {
      * or if {@code json} is empty.
      */
     public static <T> T fromJson(String json, Class<T> type) {
-        return new Gson().fromJson(json, type);
+        return gson.fromJson(json, type);
     }
 }
