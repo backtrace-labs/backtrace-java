@@ -1,5 +1,11 @@
 # Backtrace Java Release Notes
 
+## Version 0.9.5 - 03.08.2022
+- Fix null attributes
+- Fix gson reflection bug
+- Update dependencies
+- Upgrade gradle wrapper
+
 ## Version 0.9.4 - 21.02.2022
 - Add option to await on closing Backtrace Client
 
