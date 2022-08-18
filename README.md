@@ -5,7 +5,7 @@ We are working closely with users for their initial rollouts of backtrace-java. 
 
 [Backtrace](http://backtrace.io/)'s integration with Java applications which allows customers to capture and report handled and unhandled java exceptions to their Backtrace instance, instantly offering the ability to prioritize and debug software errors.
 
-[![Build Status](https://travis-ci.org/backtrace-labs/backtrace-java.png?branch=master)](https://travis-ci.org/backtrace-labs/backtrace-java)
+[![Build Status](https://github.com/backtrace-labs/backtrace-java/actions/workflows/main.yml/badge.svg)](https://github.com/backtrace-labs/backtrace-java/actions)
 
 # Features Summary <a name="features-summary"></a>
 * Light-weight Java client library that quickly submits exceptions to your Backtrace dashboard. Can include callstack, system metadata, custom metadata and file attachments if needed.
@@ -17,7 +17,7 @@ We are working closely with users for their initial rollouts of backtrace-java. 
 * Gradle
 ```
 dependencies {
-    implementation 'com.github.backtrace-labs.backtrace-java:backtrace-java:0.9.5'
+    implementation 'com.github.backtrace-labs.backtrace-java:backtrace-java:<latest-version>'
 }
 ```
 
@@ -26,7 +26,7 @@ dependencies {
 <dependency>
   <groupId>com.github.backtrace-labs.backtrace-java</groupId>
   <artifactId>backtrace-java</artifactId>
-  <version>0.9.5</version>
+  <version><latest-version></version>
 </dependency>
 ```
 
