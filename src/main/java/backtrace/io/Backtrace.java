@@ -59,16 +59,18 @@ class Backtrace {
     private void processSingleBacktraceMessage(BacktraceMessage backtraceMessage) {
         BacktraceData backtraceData = backtraceMessage.getBacktraceData();
 
-        if (backtraceData == null) {
-            LOGGER.warn("BacktraceData in queue is null");
-            return;
+        if (config.getDatabaseConfig().isDatabaseEnabled()) {
+            this.database.saveReport(backtraceData);
         }
-
-        this.database.saveReport(backtraceData);
-        LOGGER.debug("Message from current report: " + backtraceData.getReport().getMessage());
+        
         if (config.getBeforeSendEvent() != null) {
             LOGGER.debug("Custom before sending event");
             backtraceData = config.getBeforeSendEvent().onEvent(backtraceData);
+        }
+        
+        if (backtraceData == null) {
+            LOGGER.warn("BacktraceData in queue is null");
+            return;
         }
 
         BacktraceResult result = this.sendReport(backtraceData);
