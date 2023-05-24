@@ -1,6 +1,6 @@
 # Backtrace Java Release Notes
 
-## Version 0.9.6 - 14.05.2023
+## Version 0.9.6 - 24.05.2023
 - Update dependencies (GSON and slf4j-api)
 
 ## Version 0.9.5 - 03.08.2022
