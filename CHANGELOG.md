@@ -1,5 +1,8 @@
 # Backtrace Java Release Notes
 
+## Version 0.9.7 - 05.07.2023
+- Remove 'com.google.guava:guava' library
+
 ## Version 0.9.6 - 24.05.2023
 - Update dependencies (GSON and slf4j-api)
 
