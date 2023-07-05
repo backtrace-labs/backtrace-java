@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-
 /**
  * Helper class for access to files
  */
@@ -93,6 +92,15 @@ public class FileHelper {
                 return o1.getAbsoluteFile().compareTo(o2.getAbsoluteFile());
             }
         };
+    }
+
+    public static String getFileExtension(File file) {
+        final String name = file.getName();
+        final int lastIndexOf = name.lastIndexOf(".");
+        if (lastIndexOf == -1) {
+            return ""; // empty extension
+        }
+        return name.substring(lastIndexOf + 1);
     }
 
 }
