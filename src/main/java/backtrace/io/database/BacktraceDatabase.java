@@ -5,7 +5,6 @@ import backtrace.io.BacktraceMessage;
 import backtrace.io.data.BacktraceData;
 import backtrace.io.data.BacktraceReport;
 import backtrace.io.helpers.FileHelper;
-import com.google.common.io.Files;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -124,7 +123,7 @@ public class BacktraceDatabase {
         List<File> databaseFiles = new ArrayList<>();
 
         for (final File f : files) {
-            String extension = Files.getFileExtension(f.getAbsolutePath());
+            String extension = FileHelper.getFileExtension(f);
 
             if (!fileExtension.equals(extension)) {
                 LOGGER.warn(String.format("File extension (%s) in database directory does not match to database files extension (%s)", fileExtension, extension));

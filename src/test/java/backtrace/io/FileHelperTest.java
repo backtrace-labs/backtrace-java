@@ -63,4 +63,64 @@ public class FileHelperTest {
         Assert.assertEquals(1, attachments.size());
         Assert.assertEquals(this.absolutePath, attachments.get(0));
     }
+
+    @Test
+    public void verifyCorrectPathExtension() {
+        // GIVEN
+        File sampleFile = new File("./test-dir/file.txt");
+
+        // WHEN
+        String result = FileHelper.getFileExtension(sampleFile);
+
+        // THEN
+        Assert.assertEquals("txt", result);
+    }
+
+    @Test
+    public void verifyCorrectPathMultipleDotsExtension() {
+        // GIVEN
+        File sampleFile = new File("./test-dir/file.test.txt.pdf");
+
+        // WHEN
+        String result = FileHelper.getFileExtension(sampleFile);
+
+        // THEN
+        Assert.assertEquals("pdf", result);
+    }
+
+    @Test
+    public void verifyEmptyExtension() {
+        // GIVEN
+        File sampleFile = new File("./test-dir/file");
+
+        // WHEN
+        String result = FileHelper.getFileExtension(sampleFile);
+
+        // THEN
+        Assert.assertEquals("", result);
+    }
+
+    @Test
+    public void verifyDirPath() {
+        // GIVEN
+        File sampleFile = new File("./test-dir");
+
+        // WHEN
+        String result = FileHelper.getFileExtension(sampleFile);
+
+        // THEN
+        Assert.assertEquals("", result);
+    }
+
+    @Test
+    public void verifyEmptyString() {
+        // GIVEN
+        File sampleFile = new File("");
+
+        // WHEN
+        String result = FileHelper.getFileExtension(sampleFile);
+
+        // THEN
+        Assert.assertEquals("", result);
+    }
 }
