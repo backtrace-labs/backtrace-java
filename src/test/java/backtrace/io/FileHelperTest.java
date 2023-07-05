@@ -101,6 +101,18 @@ public class FileHelperTest {
     }
 
     @Test
+    public void verifyDirPath() {
+        // GIVEN
+        File sampleFile = new File("./test-dir");
+
+        // WHEN
+        String result = FileHelper.getFileExtension(sampleFile);
+
+        // THEN
+        Assert.assertEquals("", result);
+    }
+
+    @Test
     public void verifyEmptyString() {
         // GIVEN
         File sampleFile = new File("");
